@@ -14,8 +14,6 @@ import net.minecraft.world.phys.Vec3
 import java.util.*
 
 object AaronExtensions {
-	val Boolean?.isTrue: Boolean
-		inline get() = this == true
 
 	val Entity.isClientSide: Boolean
 		get() = this.level().isClientSide
@@ -29,6 +27,8 @@ object AaronExtensions {
 	fun RandomSource.nextRange(min: Double, max: Double): Double = Mth.lerp(nextDouble(), min, max)
 	fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
 	fun Player.status(message: Component) = this.displayClientMessage(message, true)
+	fun Boolean?.isTrue(): Boolean = this == true
+	fun Boolean?.isNotTrue(): Boolean = this != true
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
 		return if (this.hasUUID(key)) this.getUUID(key) else null
