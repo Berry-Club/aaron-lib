@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
 import com.mojang.blaze3d.systems.RenderSystem
-import dev.aaronhowser.mods.aaron.menu.ScreenTextures
+import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -96,7 +96,7 @@ class MultiStageSpriteButton(
 
 		fun addStage(
 			message: Component,
-			sprite: ScreenTextures.Sprite
+			sprite: ScreenSprite
 		): Builder {
 			addStage(
 				message = message,

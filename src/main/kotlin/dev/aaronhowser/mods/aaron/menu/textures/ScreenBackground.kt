@@ -1,0 +1,25 @@
+package dev.aaronhowser.mods.aaron.menu.textures
+
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.resources.ResourceLocation
+
+open class ScreenBackground(
+	private val texture: ResourceLocation,
+	val width: Int,
+	val height: Int,
+	private val canvasSize: Int = 256
+) {
+	fun render(guiGraphics: GuiGraphics, leftPos: Int, topPos: Int) {
+		guiGraphics.blit(
+			this.texture,
+			leftPos,
+			topPos,
+			0f,
+			0f,
+			this.width,
+			this.height,
+			this.canvasSize,
+			this.canvasSize
+		)
+	}
+}

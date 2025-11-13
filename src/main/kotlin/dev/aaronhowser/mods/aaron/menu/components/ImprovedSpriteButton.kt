@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
 import com.mojang.blaze3d.systems.RenderSystem
-import dev.aaronhowser.mods.aaron.menu.ScreenTextures
+import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
@@ -28,7 +28,7 @@ class ImprovedSpriteButton(
 		y: Int,
 		width: Int,
 		height: Int,
-		menuSprite: ScreenTextures.Sprite,
+		menuSprite: ScreenSprite,
 		onPress: OnPress,
 		message: Component = Component.empty(),
 		font: Font
