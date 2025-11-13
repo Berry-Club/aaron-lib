@@ -2,8 +2,12 @@ package dev.aaronhowser.mods.aaron
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.NonNullList
+import net.minecraft.core.Registry
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
@@ -20,5 +24,12 @@ object AaronExtraCodecs {
 
 	val STACK_LIST_STREAM_CODEC: StreamCodec<ByteBuf, NonNullList<ItemStack>> =
 		ByteBufCodecs.fromCodec(NonNullList.codecOf(ItemStack.OPTIONAL_CODEC))
+
+	fun <T> tagKeyStreamCodec(registry: ResourceKey<out Registry<T>>): StreamCodec<ByteBuf, TagKey<T>> {
+		return ResourceLocation.STREAM_CODEC.map(
+			{ TagKey.create(registry, it) },
+			{ it.location() }
+		)
+	}
 
 }
