@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib
+package dev.aaronhowser.mods.aaron
 
 import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf

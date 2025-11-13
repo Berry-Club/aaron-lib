@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib.menu
+package dev.aaronhowser.mods.aaron.menu
 
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation

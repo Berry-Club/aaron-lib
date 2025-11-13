@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib.menu.components
+package dev.aaronhowser.mods.aaron.menu.components
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.Font

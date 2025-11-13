@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib
+package dev.aaronhowser.mods.aaron
 
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod

@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib.menu.components
+package dev.aaronhowser.mods.aaron.menu.components
 
 import net.minecraft.world.Container
 import net.minecraft.world.inventory.Slot

@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib
+package dev.aaronhowser.mods.aaron
 
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i

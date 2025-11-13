@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib
+package dev.aaronhowser.mods.aaron
 
 import com.mojang.authlib.GameProfile
 import net.minecraft.server.level.ServerLevel

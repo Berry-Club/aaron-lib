@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaronlib.menu
+package dev.aaronhowser.mods.aaron.menu
 
 interface ScreenWithStrings {
 

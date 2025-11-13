@@ -1,7 +1,7 @@
-package dev.aaronhowser.mods.aaronlib.menu.components
+package dev.aaronhowser.mods.aaron.menu.components
 
 import com.mojang.blaze3d.systems.RenderSystem
-import dev.aaronhowser.mods.aaronlib.menu.ScreenTextures
+import dev.aaronhowser.mods.aaron.menu.ScreenTextures
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
