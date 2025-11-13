@@ -1,13 +1,11 @@
 package dev.aaronhowser.mods.aaron
 
-import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.NonNullList
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
-import java.util.*
 
 object ExtraCodecs {
 
@@ -19,16 +17,6 @@ object ExtraCodecs {
 			buffer.writeDouble(value.z)
 		}
 	}
-
-	val UUID_CODEC: Codec<UUID> = Codec.STRING.xmap(
-		UUID::fromString,
-		UUID::toString
-	)
-
-	val UUID_STREAM_CODEC: StreamCodec<ByteBuf, UUID> = ByteBufCodecs.STRING_UTF8.map(
-		UUID::fromString,
-		UUID::toString
-	)
 
 	val STACK_LIST_STREAM_CODEC: StreamCodec<ByteBuf, NonNullList<ItemStack>> =
 		ByteBufCodecs.fromCodec(NonNullList.codecOf(ItemStack.OPTIONAL_CODEC))
