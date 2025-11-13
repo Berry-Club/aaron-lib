@@ -7,7 +7,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar
 
 interface ModPacketRegistrar {
 
-	private fun <T : ModPacket> toClient(
+	fun <T : ModPacket> toClient(
 		registrar: PayloadRegistrar,
 		packetType: CustomPacketPayload.Type<T>,
 		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>,
@@ -18,7 +18,7 @@ interface ModPacketRegistrar {
 		) { packet, context -> packet.receiveOnClient(context) }
 	}
 
-	private fun <T : ModPacket> toServer(
+	fun <T : ModPacket> toServer(
 		registrar: PayloadRegistrar,
 		packetType: CustomPacketPayload.Type<T>,
 		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>
