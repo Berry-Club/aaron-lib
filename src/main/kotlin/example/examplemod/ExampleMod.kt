@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.minecraft.client.Minecraft
 import net.neoforged.bus.api.SubscribeEvent
@@ -32,63 +31,64 @@ import kotlin.time.Duration.Companion.seconds
 @Mod(ExampleMod.ID)
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 object ExampleMod {
-    const val ID = "examplemod"
+	const val ID = "examplemod"
 
-    // the logger for our mod
-    val LOGGER: Logger = LogManager.getLogger(ID)
+	// the logger for our mod
+	val LOGGER: Logger = LogManager.getLogger(ID)
 
-    init {
-        LOGGER.log(Level.INFO, "Hello world!")
+	init {
+		LOGGER.log(Level.INFO, "Hello world!")
 
-        // Register the KDeferredRegister to the mod-specific event bus
-        ModBlocks.REGISTRY.register(MOD_BUS)
+		// Register the KDeferredRegister to the mod-specific event bus
+		ModBlocks.REGISTRY.register(MOD_BUS)
 
-        val obj = runForDist(
-            clientTarget = {
-                MOD_BUS.addListener(::onClientSetup)
-                Minecraft.getInstance()
-            },
-            serverTarget = {
-                MOD_BUS.addListener(::onServerSetup)
-                "test"
-            })
+		val obj = runForDist(
+			clientTarget = {
+				MOD_BUS.addListener(::onClientSetup)
+				Minecraft.getInstance()
+			},
+			serverTarget = {
+				MOD_BUS.addListener(::onServerSetup)
+				"test"
+			})
 
-        println(obj)
+		println(obj)
 
-        @Serializable
-        data class MySerializedThing(
-            val name: String,
-            val number: Int
-        )
-        val testObject = MySerializedThing("KotlinForForge", 712)
-        val json = Json.encodeToString(testObject)
-        LOGGER.log(Level.INFO, "--- JSON: $json")
+		@Serializable
+		data class MySerializedThing(
+			val name: String,
+			val number: Int
+		)
 
-        CoroutineScope(Dispatchers.Default).launch {
-            LOGGER.log(Level.INFO, "Before delay")
-            delay(5.seconds)
-            LOGGER.log(Level.INFO, "After 5 seconds")
-        }
-    }
+		val testObject = MySerializedThing("KotlinForForge", 712)
+		val json = Json.encodeToString(testObject)
+		LOGGER.log(Level.INFO, "--- JSON: $json")
 
-    /**
-     * This is used for initializing client specific
-     * things such as renderers and keymaps
-     * Fired on the mod specific event bus.
-     */
-    private fun onClientSetup(event: FMLClientSetupEvent) {
-        LOGGER.log(Level.INFO, "Initializing client...")
-    }
+		CoroutineScope(Dispatchers.Default).launch {
+			LOGGER.log(Level.INFO, "Before delay")
+			delay(5.seconds)
+			LOGGER.log(Level.INFO, "After 5 seconds")
+		}
+	}
 
-    /**
-     * Fired on the global Forge bus.
-     */
-    private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
-        LOGGER.log(Level.INFO, "Server starting...")
-    }
+	/**
+	 * This is used for initializing client specific
+	 * things such as renderers and keymaps
+	 * Fired on the mod specific event bus.
+	 */
+	private fun onClientSetup(event: FMLClientSetupEvent) {
+		LOGGER.log(Level.INFO, "Initializing client...")
+	}
 
-    @SubscribeEvent
-    fun onCommonSetup(event: FMLCommonSetupEvent) {
-        LOGGER.log(Level.INFO, "Hello! This is working!")
-    }
+	/**
+	 * Fired on the global Forge bus.
+	 */
+	private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
+		LOGGER.log(Level.INFO, "Server starting...")
+	}
+
+	@SubscribeEvent
+	fun onCommonSetup(event: FMLCommonSetupEvent) {
+		LOGGER.log(Level.INFO, "Hello! This is working!")
+	}
 }
