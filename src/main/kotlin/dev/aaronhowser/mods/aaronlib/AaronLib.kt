@@ -1,0 +1,25 @@
+package dev.aaronhowser.mods.aaronlib
+
+import net.neoforged.fml.ModContainer
+import net.neoforged.fml.common.Mod
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+
+@Mod(AaronLib.MOD_ID)
+class AaronLib(
+	modContainer: ModContainer
+) {
+
+	init {
+		LOGGER.log(Level.INFO, "Aaron.")
+		LOGGER.log(Level.INFO, "Arriving.")
+		LOGGER.log(Level.INFO, "On the scene.")
+	}
+
+	companion object {
+		const val MOD_ID = "aaron"
+		val LOGGER: Logger = LogManager.getLogger(MOD_ID)
+	}
+
+}
