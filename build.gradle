@@ -12,9 +12,9 @@ plugins {
 def ENV = System.getenv()
 def isLocal = !ENV.containsKey("GITHUB_RUN_NUMBER")
 
-def archiveName = "${mod_id.replace("_", "-")}-${minecraft_version}"
+def archiveName = "${mod_id.replace("_", "-")}"
 
-version = "${mod_version}-${isLocal ? "local.${Instant.now().epochSecond}" : "build.${ENV.GITHUB_RUN_NUMBER}"}"
+version = "${minecraft_version}-${mod_version}-${isLocal ? "local.${Instant.now().epochSecond}" : "build.${ENV.GITHUB_RUN_NUMBER}"}"
 group = project.mod_group_id
 base.archivesName = archiveName
 
