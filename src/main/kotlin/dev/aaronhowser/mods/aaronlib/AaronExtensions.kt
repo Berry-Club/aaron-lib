@@ -21,7 +21,7 @@ val Entity.isClientSide: Boolean
 val Level.isServerSide: Boolean
 	get() = !this.isClientSide
 
-fun CompoundTag.getUuidOrNull(key: String): UUID? {//
+fun CompoundTag.getUuidOrNull(key: String): UUID? {
 	return if (this.hasUUID(key)) this.getUUID(key) else null
 }
 
