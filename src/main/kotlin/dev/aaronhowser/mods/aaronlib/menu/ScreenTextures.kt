@@ -30,7 +30,7 @@ object ScreenTextures {
 	}
 
 	open class Sprite(
-		private val texture: ResourceLocation,
+		val texture: ResourceLocation,
 		val width: Int,
 		val height: Int
 	) {
