@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation
 
 object ScreenTextures {
 
-	sealed class Background(
+	open class Background(
 		private val texture: ResourceLocation,
 		val width: Int,
 		val height: Int,
@@ -29,7 +29,7 @@ object ScreenTextures {
 
 	}
 
-	sealed class Sprite(
+	open class Sprite(
 		private val texture: ResourceLocation,
 		val width: Int,
 		val height: Int
