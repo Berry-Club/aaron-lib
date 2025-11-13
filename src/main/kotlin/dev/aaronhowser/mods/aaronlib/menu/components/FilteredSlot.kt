@@ -1,0 +1,17 @@
+package dev.aaronhowser.mods.aaronlib.menu.components
+
+import net.minecraft.world.Container
+import net.minecraft.world.inventory.Slot
+import net.minecraft.world.item.ItemStack
+
+class FilteredSlot(
+	container: Container,
+	slotIndex: Int,
+	x: Int,
+	y: Int,
+	val insertPredicate: (ItemStack) -> Boolean = { true }
+) : Slot(container, slotIndex, x, y) {
+
+	override fun mayPlace(stack: ItemStack): Boolean = insertPredicate(stack)
+
+}
