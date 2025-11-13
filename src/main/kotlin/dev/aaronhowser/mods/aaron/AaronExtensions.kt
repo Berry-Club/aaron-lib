@@ -29,6 +29,7 @@ object AaronExtensions {
 	fun RandomSource.nextRange(min: Double, max: Double): Double = Mth.lerp(nextDouble(), min, max)
 	fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
 	fun Player.status(message: Component) = this.displayClientMessage(message, true)
+
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
 		return if (this.hasUUID(key)) this.getUUID(key) else null
 	}
@@ -36,4 +37,8 @@ object AaronExtensions {
 	fun Vec3i.toVec3(): Vec3 {
 		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
 	}
+
+	@Suppress("UNCHECKED_CAST")
+	fun <T> Any?.cast(): T = this as T
+
 }
