@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.neoforged.fml.loading.FMLEnvironment
 
-object ClientUtil {
+object AaronClientUtil {
 
 	@JvmStatic
 	val localLevel: Level?

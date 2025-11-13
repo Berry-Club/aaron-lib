@@ -7,7 +7,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
-object ExtraCodecs {
+object AaronExtraCodecs {
 
 	val VEC3_STREAM_CODEC: StreamCodec<ByteBuf, Vec3> = object : StreamCodec<ByteBuf, Vec3> {
 		override fun decode(buffer: ByteBuf): Vec3 = Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble())
