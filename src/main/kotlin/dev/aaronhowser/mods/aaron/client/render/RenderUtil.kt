@@ -165,7 +165,7 @@ object RenderUtil {
 		val vertexConsumer = Minecraft.getInstance()
 			.renderBuffers()
 			.bufferSource()
-			.getBuffer(ModRenderTypes.linesThroughWalls())
+			.getBuffer(AaronRenderTypes.linesThroughWalls())
 
 		val pose = poseStack.last()
 
@@ -229,7 +229,7 @@ object RenderUtil {
 		val vertexConsumer = Minecraft.getInstance()
 			.renderBuffers()
 			.bufferSource()
-			.getBuffer(ModRenderTypes.quadsThroughWalls())
+			.getBuffer(AaronRenderTypes.quadsThroughWalls())
 
 		poseStack.pushPose()
 		poseStack.translate(posX.toDouble(), posY.toDouble(), posZ.toDouble())

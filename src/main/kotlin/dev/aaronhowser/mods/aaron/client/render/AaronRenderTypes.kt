@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.aaron.client.render
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import dev.aaronhowser.mods.aaron.AaronLib
-import dev.aaronhowser.mods.irregular_implements.IrregularImplements
 import net.minecraft.client.renderer.RenderStateShard.*
 import net.minecraft.client.renderer.RenderType
 import java.util.*
