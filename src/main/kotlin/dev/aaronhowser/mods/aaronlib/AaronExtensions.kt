@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaronlib
 
 import net.minecraft.core.Direction
+import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
 import java.util.UUID
 
 val Boolean?.isTrue: Boolean
@@ -28,4 +30,7 @@ fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
 fun Player.status(message: Component) = this.displayClientMessage(message, true)
 fun CompoundTag.getUuidOrNull(key: String): UUID? {
 	return if (this.hasUUID(key)) this.getUUID(key) else null
+}
+fun Vec3i.toVec3(): Vec3 {
+	return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
 }
