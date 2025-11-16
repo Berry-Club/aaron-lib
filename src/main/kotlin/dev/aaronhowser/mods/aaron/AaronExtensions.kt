@@ -9,6 +9,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import java.util.*
@@ -21,6 +22,7 @@ object AaronExtensions {
 	val Level.isServerSide: Boolean
 		get() = !this.isClientSide
 
+	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
 	fun DyeColor.getDyeName(): String = this.getName()
 	fun Direction.getDirectionName(): String = this.getName()
 	fun RandomSource.nextRange(min: Float, max: Float): Float = Mth.lerp(nextFloat(), min, max)
