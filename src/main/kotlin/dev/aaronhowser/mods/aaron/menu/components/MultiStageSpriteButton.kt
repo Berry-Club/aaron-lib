@@ -8,7 +8,6 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import java.util.function.Supplier
-import kotlin.collections.first
 
 class MultiStageSpriteButton(
 	x: Int = 0,

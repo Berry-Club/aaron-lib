@@ -4,7 +4,6 @@ import com.google.common.collect.HashMultimap
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.tick.ServerTickEvent
-import kotlin.toString
 
 @EventBusSubscriber(
 	modid = AaronLib.MOD_ID

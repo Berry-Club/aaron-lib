@@ -16,7 +16,6 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.fluids.FluidStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import kotlin.collections.iterator
 import kotlin.math.sqrt
 
 object RenderUtil {

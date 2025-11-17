@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.aaron
 import com.mojang.authlib.GameProfile
 import net.minecraft.server.level.ServerLevel
 import net.neoforged.neoforge.common.util.FakePlayer
-import kotlin.collections.getOrPut
 
 object BetterFakePlayerFactory {
 

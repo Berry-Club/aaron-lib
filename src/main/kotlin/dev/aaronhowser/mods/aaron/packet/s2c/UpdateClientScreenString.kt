@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.aaron.packet.s2c
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.menu.ScreenWithStrings
 import dev.aaronhowser.mods.aaron.packet.ModPacket
-import dev.aaronhowser.mods.irregular_implements.util.OtherUtil
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.network.codec.ByteBufCodecs
