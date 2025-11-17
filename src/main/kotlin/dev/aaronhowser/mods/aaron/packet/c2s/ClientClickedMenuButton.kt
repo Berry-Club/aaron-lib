@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron.packet.c2s
 
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.packet.ModPacket
-import dev.aaronhowser.mods.irregular_implements.menu.MenuWithButtons
+import dev.aaronhowser.mods.aaron.menu.MenuWithButtons
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
