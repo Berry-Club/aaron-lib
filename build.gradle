@@ -223,13 +223,13 @@ unifiedPublishing {
 				id = project.curseforge_id
 			}
 		}
-//
-//		if (ENV.MODRINTH_TOKEN) {
-//			modrinth {
-//				token = ENV.MODRINTH_TOKEN
-//				id = project.modrinth_id
-//			}
-//		}
+
+		if (ENV.MODRINTH_TOKEN) {
+			modrinth {
+				token = ENV.MODRINTH_TOKEN
+				id = project.modrinth_id
+			}
+		}
 
 	}
 }
