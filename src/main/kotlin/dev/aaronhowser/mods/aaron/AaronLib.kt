@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron
 
+import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
 import org.apache.logging.log4j.Level
@@ -20,6 +21,8 @@ class AaronLib(
 	companion object {
 		const val MOD_ID = "aaron"
 		val LOGGER: Logger = LogManager.getLogger(MOD_ID)
+
+		fun modResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
 	}
 
 }
