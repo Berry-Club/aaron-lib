@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.irregular_implements.menu
+package dev.aaronhowser.mods.aaron.menu
 
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.AbstractContainerMenu

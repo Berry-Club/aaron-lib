@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.irregular_implements.menu
+package dev.aaronhowser.mods.aaron.menu
 
 interface MenuWithStrings {
 
