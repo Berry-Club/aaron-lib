@@ -16,11 +16,10 @@ import java.util.*
 
 object AaronExtensions {
 
-	val Entity.isClientSide: Boolean
-		get() = this.level().isClientSide
+	val Level.isServerSide: Boolean get() = !this.isClientSide
 
-	val Level.isServerSide: Boolean
-		get() = !this.isClientSide
+	val Entity.isClientSide: Boolean get() = this.level().isClientSide
+	val Entity.isServerSide: Boolean get() = this.level().isServerSide
 
 	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
 	fun DyeColor.getDyeName(): String = this.getName()
