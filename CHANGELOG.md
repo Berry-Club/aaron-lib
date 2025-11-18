@@ -1,3 +1,9 @@
+# 1.1.0
+
+### Added
+
+- Entity.isServerSide
+
 # 1.0.1
 
 ### Fixed
