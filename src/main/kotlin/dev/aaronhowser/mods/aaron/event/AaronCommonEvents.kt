@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.event
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.packet.AaronPacketRegister
 import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.getScheduler
+import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.getSchedulerRaw
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
@@ -27,7 +28,7 @@ object AaronCommonEvents {
 
 	@SubscribeEvent
 	fun afterLevelTick(event: LevelTickEvent.Post) {
-		event.level.getScheduler().tick()
+		event.level.getSchedulerRaw()?.tick()
 	}
 
 }
