@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(Level.class)
 public abstract class LevelMixin implements SchedulerHolder {
 
-	@Shadow
-	public abstract long getGameTime();
-
 	@Unique
 	private ScheduledTaskHandler aaron$scheduledTaskHandler;
+
+	@Shadow
+	public abstract long getGameTime();
 
 	@Override
 	public ScheduledTaskHandler aaron$getScheduledTaskHandler() {
