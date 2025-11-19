@@ -102,9 +102,4 @@ abstract class AaronRecipeProvider(
 		return shapedRecipe(output, 1, patterns, definitions, unlockedByName, unlockedByCriterion)
 	}
 
-	companion object {
-		protected fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
-		protected fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
-	}
-
 }

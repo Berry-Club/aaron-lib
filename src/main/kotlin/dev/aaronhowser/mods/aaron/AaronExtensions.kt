@@ -4,12 +4,16 @@ import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
+import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import java.util.*
@@ -30,6 +34,8 @@ object AaronExtensions {
 	fun Player.status(message: Component) = this.displayClientMessage(message, true)
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
+	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
+	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
 		return if (this.hasUUID(key)) this.getUUID(key) else null
