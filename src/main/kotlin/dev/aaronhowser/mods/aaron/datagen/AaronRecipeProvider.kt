@@ -43,7 +43,7 @@ abstract class AaronRecipeProvider(
 	protected fun ing(item: ItemLike) = IngredientType.ItemLikeIng(item)
 	protected fun ing(itemStack: ItemStack) = IngredientType.ItemStackIng(itemStack)
 
-	private fun <T : IngredientType> shapedRecipe(
+	protected fun <T : IngredientType> shapedRecipe(
 		output: ItemStack,
 		patterns: String,
 		definitions: Map<Char, T>,
@@ -67,7 +67,7 @@ abstract class AaronRecipeProvider(
 		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
 	}
 
-	private fun <T : IngredientType> shapedRecipe(
+	protected fun <T : IngredientType> shapedRecipe(
 		output: ItemLike,
 		count: Int,
 		patterns: String,
@@ -92,7 +92,7 @@ abstract class AaronRecipeProvider(
 		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
 	}
 
-	private fun <T : IngredientType> shapedRecipe(
+	protected fun <T : IngredientType> shapedRecipe(
 		output: ItemLike,
 		patterns: String,
 		definitions: Map<Char, T>,
@@ -103,8 +103,8 @@ abstract class AaronRecipeProvider(
 	}
 
 	companion object {
-		private fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
-		private fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
+		protected fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
+		protected fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 	}
 
 }
