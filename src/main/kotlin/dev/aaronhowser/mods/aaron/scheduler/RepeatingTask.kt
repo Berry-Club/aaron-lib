@@ -4,7 +4,7 @@ fun interface RepeatingTask {
 
 	/**
 	 * @param ticksRunning The number of ticks this task has been running for
-	 * @return true if the task is complete
+	 * @return true if the task should repeat
 	 */
 	fun run(ticksRunning: Int): Boolean
 

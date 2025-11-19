@@ -8,7 +8,7 @@ class ScheduledTask(
 	val at: Long
 ) {
 
-	val currentTick: MutableInt = MutableInt(0)
+	val ticksRunning: MutableInt = MutableInt(0)
 
 	/**
 	 * @return true if the task is complete
@@ -18,7 +18,7 @@ class ScheduledTask(
 			return false
 		}
 
-		val tick = currentTick.incrementAndGet()
+		val tick = ticksRunning.incrementAndGet()
 		return !task.run(tick)
 	}
 
