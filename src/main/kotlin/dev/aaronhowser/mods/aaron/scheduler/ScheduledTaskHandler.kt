@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.scheduler
 import java.util.*
 import java.util.function.LongSupplier
 
+// https://github.com/MBG-Minecraft/vidlib/blob/main/src/main/java/dev/latvian/mods/vidlib/util/ScheduledTask.java
 class ScheduledTaskHandler(
 	val levelTime: LongSupplier
 ) {
