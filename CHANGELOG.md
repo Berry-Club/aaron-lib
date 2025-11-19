@@ -4,6 +4,10 @@
 
 - Entity.isServerSide
 
+### Changed
+
+- Schedulers are now per Level, rather than just a singular static global one
+
 # 1.0.1
 
 ### Fixed
