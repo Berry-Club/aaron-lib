@@ -7,6 +7,8 @@
 ### Changed
 
 - Schedulers are now per Level, rather than just a singular static global one
+  - Access from SchedulerExtensions class
+  - This was fairly directly ripped out of Lat's VidLib
 
 # 1.0.1
 
