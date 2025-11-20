@@ -3,6 +3,7 @@
 ### Added
 
 - Helpers for registration classes
+- More packet stuff
 
 # 1.1.0
 
