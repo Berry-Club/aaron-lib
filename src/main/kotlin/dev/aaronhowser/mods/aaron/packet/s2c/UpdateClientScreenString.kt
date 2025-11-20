@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron.packet.s2c
 
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.menu.ScreenWithStrings
-import dev.aaronhowser.mods.aaron.packet.ModPacket
+import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.network.codec.ByteBufCodecs
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 class UpdateClientScreenString(
 	val stringId: Int,
 	val newString: String
-) : ModPacket() {
+) : AaronPacket() {
 
 	override fun handleOnClient(context: IPayloadContext) {
 		val screen = Minecraft.getInstance().screen ?: return

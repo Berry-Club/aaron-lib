@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron.packet.c2s
 
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.menu.MenuWithButtons
-import dev.aaronhowser.mods.aaron.packet.ModPacket
+import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -12,7 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 
 class ClientClickedMenuButton(
 	private val buttonId: Int
-) : ModPacket() {
+) : AaronPacket() {
 
 	override fun handleOnServer(context: IPayloadContext) {
 		val player = context.player() as? ServerPlayer ?: return

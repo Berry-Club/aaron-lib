@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
-abstract class ModPacket : CustomPacketPayload {
+abstract class AaronPacket : CustomPacketPayload {
 
 	protected open fun handleOnClient(context: IPayloadContext) {
 		throw kotlin.UnsupportedOperationException("Packet $this cannot be received on the client!")

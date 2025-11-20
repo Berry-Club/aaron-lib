@@ -5,9 +5,9 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.neoforged.neoforge.network.registration.PayloadRegistrar
 
-interface ModPacketRegistrar {
+interface AaronPacketRegistrar {
 
-	fun <T : ModPacket> toClient(
+	fun <T : AaronPacket> toClient(
 		registrar: PayloadRegistrar,
 		packetType: CustomPacketPayload.Type<T>,
 		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>,
@@ -18,7 +18,7 @@ interface ModPacketRegistrar {
 		) { packet, context -> packet.receiveOnClient(context) }
 	}
 
-	fun <T : ModPacket> toServer(
+	fun <T : AaronPacket> toServer(
 		registrar: PayloadRegistrar,
 		packetType: CustomPacketPayload.Type<T>,
 		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>
