@@ -1,3 +1,9 @@
+# 1.2.0
+
+### Added
+
+- Helpers for registration classes
+
 # 1.1.0
 
 ### Added
