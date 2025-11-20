@@ -27,6 +27,30 @@ abstract class AaronItemRegistry {
 		return getItemRegistry().registerItem(id) { Item(properties()) }
 	}
 
+	protected fun <I : Item> register(
+		id: String,
+		builder: (Item.Properties) -> I,
+		properties: () -> Item.Properties = { Item.Properties() }
+	): DeferredItem<I> {
+		return getItemRegistry().registerItem(id) { builder(properties()) }
+	}
+
+	protected fun <I : Item> register(
+		id: String,
+		builder: (Item.Properties) -> I,
+		properties: Item.Properties
+	): DeferredItem<I> {
+		return getItemRegistry().registerItem(id) { builder(properties) }
+	}
+
+	protected fun registerItemNameBlockItem(
+		id: String,
+		block: DeferredBlock<out Block>,
+		properties: Item.Properties = Item.Properties()
+	): DeferredItem<ItemNameBlockItem> {
+		return getItemRegistry().registerItem(id) { ItemNameBlockItem(block.get(), properties) }
+	}
+
 	protected fun registerSpawnEgg(
 		name: String,
 		entityType: () -> EntityType<out Mob>,
@@ -45,22 +69,6 @@ abstract class AaronItemRegistry {
 					properties()
 				)
 			}
-	}
-
-	protected fun <I : Item> register(
-		id: String,
-		builder: (Item.Properties) -> I,
-		properties: () -> Item.Properties = { Item.Properties() }
-	): DeferredItem<I> {
-		return getItemRegistry().registerItem(id) { builder(properties()) }
-	}
-
-	protected fun registerItemNameBlockItem(
-		id: String,
-		block: DeferredBlock<out Block>,
-		properties: Item.Properties = Item.Properties()
-	): DeferredItem<ItemNameBlockItem> {
-		return getItemRegistry().registerItem(id) { ItemNameBlockItem(block.get(), properties) }
 	}
 
 }
