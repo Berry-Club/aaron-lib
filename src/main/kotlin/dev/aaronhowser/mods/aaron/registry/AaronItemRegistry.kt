@@ -1,8 +1,12 @@
 package dev.aaronhowser.mods.aaron.registry
 
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.Mob
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.level.block.Block
+import net.neoforged.neoforge.common.DeferredSpawnEggItem
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -21,6 +25,26 @@ abstract class AaronItemRegistry {
 
 	protected fun basic(id: String, properties: () -> Item.Properties): DeferredItem<Item> {
 		return getItemRegistry().registerItem(id) { Item(properties()) }
+	}
+
+	protected fun registerSpawnEgg(
+		name: String,
+		entityType: () -> EntityType<out Mob>,
+		backgroundColor: Int,
+		highlightColor: Int,
+		properties: () -> Item.Properties = { Item.Properties() }
+	): DeferredItem<SpawnEggItem> {
+		return getItemRegistry()
+			.registerItem(
+				name
+			) {
+				DeferredSpawnEggItem(
+					entityType,
+					backgroundColor,
+					highlightColor,
+					properties()
+				)
+			}
 	}
 
 	protected fun <I : Item> register(
