@@ -10,6 +10,7 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
+import java.util.function.Supplier
 
 abstract class AaronItemRegistry {
 
@@ -27,6 +28,10 @@ abstract class AaronItemRegistry {
 		return getItemRegistry().registerItem(id) { Item(properties()) }
 	}
 
+	protected fun basic(id: String, properties: Supplier<Item.Properties>): DeferredItem<Item> {
+		return getItemRegistry().registerItem(id) { Item(properties.get()) }
+	}
+
 	protected fun <I : Item> register(
 		id: String,
 		builder: (Item.Properties) -> I,
@@ -41,6 +46,14 @@ abstract class AaronItemRegistry {
 		properties: Item.Properties
 	): DeferredItem<I> {
 		return getItemRegistry().registerItem(id) { builder(properties) }
+	}
+
+	protected fun <I : Item> register(
+		id: String,
+		builder: (Item.Properties) -> I,
+		properties: Supplier<Item.Properties>
+	): DeferredItem<I> {
+		return getItemRegistry().registerItem(id) { builder(properties.get()) }
 	}
 
 	protected fun registerItemNameBlockItem(
