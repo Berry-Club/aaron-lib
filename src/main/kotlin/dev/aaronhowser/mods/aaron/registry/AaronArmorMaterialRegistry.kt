@@ -10,6 +10,7 @@ import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.ArmorMaterial
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
+import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import java.util.function.Supplier
 
@@ -18,7 +19,7 @@ abstract class AaronArmorMaterialRegistry {
 	abstract fun getArmorMaterialRegistry(): DeferredRegister<ArmorMaterial>
 
 	private inner class Builder(
-		id: String
+		private val path: String
 	) {
 		private val armorMap: MutableMap<ArmorItem.Type, Int> = mutableMapOf()
 
@@ -30,8 +31,8 @@ abstract class AaronArmorMaterialRegistry {
 		private val layers = mutableListOf<ArmorMaterial.Layer>()
 
 		init {
-			val registryName = getArmorMaterialRegistry().namespace
-			layers.add(ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(registryName, id)))
+			val id = ResourceLocation.fromNamespaceAndPath(getArmorMaterialRegistry().namespace, path)
+			layers.add(ArmorMaterial.Layer(id))
 		}
 
 		fun enchantValue(value: Int): Builder {
@@ -93,6 +94,10 @@ abstract class AaronArmorMaterialRegistry {
 				toughness,
 				knockbackResist
 			)
+		}
+
+		fun register(): DeferredHolder<ArmorMaterial, ArmorMaterial> {
+			return getArmorMaterialRegistry().register(path, ::build)
 		}
 	}
 
