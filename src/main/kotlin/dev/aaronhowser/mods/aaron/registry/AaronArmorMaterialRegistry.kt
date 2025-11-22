@@ -32,7 +32,7 @@ abstract class AaronArmorMaterialRegistry {
 
 		init {
 			val id = ResourceLocation.fromNamespaceAndPath(getArmorMaterialRegistry().namespace, path)
-			layers.add(ArmorMaterial.Layer(id))
+			addLayer(ArmorMaterial.Layer(id))
 		}
 
 		fun enchantValue(value: Int): Builder {
