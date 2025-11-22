@@ -2,6 +2,7 @@
 
 ### Added
 
+- AaronUtil.getCachedUuid(playerUsernameString)
 - Helpers for registration classes
 - More packet stuff
 
