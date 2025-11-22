@@ -33,6 +33,9 @@ object AaronExtensions {
 	fun RandomSource.nextRange(min: Double, max: Double): Double = Mth.lerp(nextDouble(), min, max)
 	fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
 	fun Player.status(message: Component) = this.displayClientMessage(message, true)
+	fun Player.status(message: String) = this.status(Component.literal(message))
+	fun Player.tell(message: Component) = this.displayClientMessage(message, false)
+	fun Player.tell(message: String) = this.tell(Component.literal(message))
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
