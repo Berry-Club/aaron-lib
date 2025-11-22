@@ -18,7 +18,7 @@ abstract class AaronArmorMaterialRegistry {
 
 	abstract fun getArmorMaterialRegistry(): DeferredRegister<ArmorMaterial>
 
-	private inner class Builder(
+	protected inner class Builder(
 		private val path: String
 	) {
 		private val armorMap: MutableMap<ArmorItem.Type, Int> = mutableMapOf()
