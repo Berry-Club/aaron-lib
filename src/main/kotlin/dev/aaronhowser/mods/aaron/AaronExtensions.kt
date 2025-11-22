@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron
 
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.TagKey
@@ -36,6 +37,17 @@ object AaronExtensions {
 	fun Boolean?.isNotTrue(): Boolean = this != true
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
+
+	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+		val stack = this.asItem().defaultInstance
+		stack.set(componentType, component)
+		return stack
+	}
+
+	fun <T> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+		this.set(componentType, component)
+		return this
+	}
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
 		return if (this.hasUUID(key)) this.getUUID(key) else null

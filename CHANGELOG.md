@@ -5,6 +5,7 @@
 - AaronUtil.getCachedUuid(playerUsernameString)
 - Helpers for registration classes
 - More packet stuff
+- Data Component functions
 
 # 1.1.0
 
