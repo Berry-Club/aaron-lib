@@ -1,23 +1,27 @@
 package dev.aaronhowser.mods.aaron.datagen
 
+import com.google.gson.JsonObject
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.advancements.RequirementsStrategy
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger
+import net.minecraft.data.recipes.CraftingRecipeBuilder
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeBuilder
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.CraftingBookCategory
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.RecipeSerializer
 import java.util.function.Consumer
 
-class RecipeWithItemStackOutputBuilder(
+open class RecipeWithItemStackOutputBuilder(
 	private val category: RecipeCategory = RecipeCategory.MISC,
 	private val result: ItemStack
-) : RecipeBuilder {
+) : CraftingRecipeBuilder(), RecipeBuilder {
 
 	private val rows: MutableList<String> = mutableListOf()
 	private val definitions: MutableMap<Char, Ingredient> = mutableMapOf()
@@ -92,6 +96,28 @@ class RecipeWithItemStackOutputBuilder(
 		require(result.count > 0) { "Result count must be at least 1 for shaped recipe $pRecipeId!" }
 		require(rows.size != 1 && rows[0].length != 1) { "Shaped recipe $pRecipeId is 1x1, use a shapeless recipe instead!" }
 		require(advancement.criteria.isNotEmpty()) { "No way to unlock shaped recipe $pRecipeId!" }
+	}
+
+	protected class Result(
+		category: CraftingBookCategory
+	) : CraftingResult(category) {
+
+		override fun getId(): ResourceLocation {
+			TODO("Not yet implemented")
+		}
+
+		override fun getType(): RecipeSerializer<*> {
+			TODO("Not yet implemented")
+		}
+
+		override fun serializeAdvancement(): JsonObject? {
+			TODO("Not yet implemented")
+		}
+
+		override fun getAdvancementId(): ResourceLocation? {
+			TODO("Not yet implemented")
+		}
+
 	}
 
 }
