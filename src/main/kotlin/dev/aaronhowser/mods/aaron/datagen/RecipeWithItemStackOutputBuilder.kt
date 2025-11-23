@@ -1,11 +1,13 @@
 package dev.aaronhowser.mods.aaron.datagen
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.advancements.RequirementsStrategy
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.recipes.CraftingRecipeBuilder
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeBuilder
@@ -99,25 +101,56 @@ open class RecipeWithItemStackOutputBuilder(
 	}
 
 	protected class Result(
-		category: CraftingBookCategory
+		category: CraftingBookCategory,
+		private val id: ResourceLocation,
+		private val result: ItemStack,
+		private val group: String,
+		private val pattern: List<String>,
+		private val definitions: Map<Char, Ingredient>,
+		private val advancement: Advancement.Builder,
+		private val advancementId: ResourceLocation,
+		private val showNotification: Boolean
 	) : CraftingResult(category) {
 
-		override fun getId(): ResourceLocation {
-			TODO("Not yet implemented")
-		}
+		override fun getId(): ResourceLocation = id
+		override fun serializeAdvancement(): JsonObject = advancement.serializeToJson()
+		override fun getAdvancementId(): ResourceLocation = advancementId
 
 		override fun getType(): RecipeSerializer<*> {
 			TODO("Not yet implemented")
 		}
 
-		override fun serializeAdvancement(): JsonObject? {
-			TODO("Not yet implemented")
-		}
+		override fun serializeRecipeData(pJson: JsonObject) {
+			super.serializeRecipeData(pJson)
 
-		override fun getAdvancementId(): ResourceLocation? {
-			TODO("Not yet implemented")
-		}
+			if (group.isNotEmpty()) {
+				pJson.addProperty("group", group)
+			}
 
+			val pattern = JsonArray()
+			for (row in this.pattern) {
+				pattern.add(row)
+			}
+			pJson.add("pattern", pattern)
+
+			val definitions = JsonObject()
+			for ((symbol, ingredient) in this.definitions) {
+				definitions.add(symbol.toString(), ingredient.toJson())
+			}
+			pJson.add("key", definitions)
+
+			val result = JsonObject()
+			result.addProperty("item", BuiltInRegistries.ITEM.getKey(this.result.item).toString())
+			if (this.result.count > 1) {
+				result.addProperty("count", this.result.count)
+			}
+			if (this.result.hasTag()) {
+				result.addProperty("nbt", this.result.tag.toString())
+			}
+			pJson.add("result", result)
+
+			pJson.addProperty("show_notification", showNotification)
+		}
 	}
 
 }
