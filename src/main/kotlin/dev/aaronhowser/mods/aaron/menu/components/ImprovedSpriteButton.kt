@@ -72,7 +72,14 @@ class ImprovedSpriteButton(
 		guiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
 		RenderSystem.enableBlend()
 		RenderSystem.enableDepthTest()
-		guiGraphics.blitSprite(SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight())
+		guiGraphics.blitNineSliced(
+			WIDGETS_LOCATION,
+			this.x, this.y,
+			this.getWidth(), this.getHeight(),
+			20, 4,
+			200, 20,
+			0, this.getTextureY()
+		)
 		guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
 		val i = fgColor
 		this.renderString(guiGraphics, minecraft.font, i or (Mth.ceil(this.alpha * 255.0f) shl 24))
