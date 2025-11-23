@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron.datagen
 
 import dev.aaronhowser.mods.aaron.AaronExtensions.asIngredient
 import net.minecraft.advancements.Criterion
-import net.minecraft.core.HolderLookup
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance
 import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeProvider
@@ -13,12 +13,10 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ItemLike
-import java.util.concurrent.CompletableFuture
 
 abstract class AaronRecipeProvider(
-	output: PackOutput,
-	registries: CompletableFuture<HolderLookup.Provider>
-) : RecipeProvider(output, registries) {
+	output: PackOutput
+) : RecipeProvider(output) {
 
 	protected sealed class IngredientType {
 		data class TagKeyIng(val tagKey: TagKey<Item>) : IngredientType()
@@ -29,12 +27,7 @@ abstract class AaronRecipeProvider(
 			return when (this) {
 				is TagKeyIng -> tagKey.asIngredient()
 				is ItemLikeIng -> item.asIngredient()
-				is ItemStackIng -> if (itemStack.isComponentsPatchEmpty) {
-					Ingredient.of(itemStack)
-				} else {
-					DataComponentIngredient.of(false, itemStack)
-				}
-
+				is ItemStackIng -> itemStack.asIngredient()
 			}
 		}
 	}
@@ -48,7 +41,7 @@ abstract class AaronRecipeProvider(
 		patterns: String,
 		definitions: Map<Char, T>,
 		unlockedByName: String = "has_log",
-		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
+		unlockedByCriterion: AbstractCriterionTriggerInstance = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
 		var temp = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
 

@@ -39,6 +39,7 @@ object AaronExtensions {
 	fun Boolean?.isNotTrue(): Boolean = this != true
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
+	fun ItemStack.asIngredient(): Ingredient = Ingredient.of(this)
 
 	fun RandomSource.chance(chance: Number): Boolean {
 		return this.nextDouble() <= chance.toDouble()
