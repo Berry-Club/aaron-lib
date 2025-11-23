@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.aaron.client.render
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import dev.aaronhowser.mods.aaron.AaronLib
-import net.minecraft.client.renderer.RenderStateShard.*
+import net.minecraft.client.renderer.RenderStateShard.LineStateShard
 import net.minecraft.client.renderer.RenderType
 import java.util.*
 
@@ -19,14 +19,14 @@ object AaronRenderTypes {
 			true,
 			false,
 			RenderType.CompositeState.builder()
-				.setShaderState(RENDERTYPE_LINES_SHADER)
+				.setShaderState(RenderType.RENDERTYPE_LINES_SHADER)
 				.setLineState(LineStateShard(OptionalDouble.empty()))
-				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setOutputState(ITEM_ENTITY_TARGET)
-				.setCullState(NO_CULL)
-				.setDepthTestState(NO_DEPTH_TEST)
-				.setWriteMaskState(COLOR_WRITE)
+				.setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+				.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+				.setOutputState(RenderType.ITEM_ENTITY_TARGET)
+				.setCullState(RenderType.NO_CULL)
+				.setDepthTestState(RenderType.NO_DEPTH_TEST)
+				.setWriteMaskState(RenderType.COLOR_WRITE)
 				.createCompositeState(false)
 		)
 
@@ -40,11 +40,11 @@ object AaronRenderTypes {
 			false,
 			true,
 			RenderType.CompositeState.builder()
-				.setShaderState(POSITION_COLOR_SHADER)
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setCullState(NO_CULL)
-				.setDepthTestState(NO_DEPTH_TEST)
-				.setWriteMaskState(COLOR_WRITE)
+				.setShaderState(RenderType.POSITION_COLOR_SHADER)
+				.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+				.setCullState(RenderType.NO_CULL)
+				.setDepthTestState(RenderType.NO_DEPTH_TEST)
+				.setWriteMaskState(RenderType.COLOR_WRITE)
 				.createCompositeState(false)
 		)
 
