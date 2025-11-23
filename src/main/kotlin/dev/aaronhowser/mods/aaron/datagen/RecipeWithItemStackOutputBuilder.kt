@@ -64,9 +64,8 @@ open class RecipeWithItemStackOutputBuilder(
 		return this
 	}
 
-	override fun getResult(): Item {
-		TODO("Not yet implemented")
-	}
+	override fun getResult(): Item = error("Purposefully unimplemented")
+	fun getResultStack(): ItemStack = result
 
 	override fun save(pFinishedRecipeConsumer: Consumer<FinishedRecipe>, pRecipeId: ResourceLocation) {
 		ensureValid(pRecipeId)
@@ -126,9 +125,7 @@ open class RecipeWithItemStackOutputBuilder(
 		override fun serializeAdvancement(): JsonObject = advancement.serializeToJson()
 		override fun getAdvancementId(): ResourceLocation = advancementId
 
-		override fun getType(): RecipeSerializer<*> {
-			TODO("Not yet implemented")
-		}
+		override fun getType(): RecipeSerializer<*> = RecipeSerializer.SHAPED_RECIPE
 
 		override fun serializeRecipeData(pJson: JsonObject) {
 			super.serializeRecipeData(pJson)
