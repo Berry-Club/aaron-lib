@@ -32,7 +32,7 @@ minecraft {
 		copyIdeResources = true
 
 		client {
-			workingDirectory project.file('run')
+			workingDirectory project.file('runs/client')
 
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
@@ -46,7 +46,7 @@ minecraft {
 		}
 
 		server {
-			workingDirectory project.file('run/server')
+			workingDirectory project.file('runs/server')
 
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
@@ -60,7 +60,7 @@ minecraft {
 		}
 
 		gameTestServer {
-			workingDirectory project.file('run/server')
+			workingDirectory project.file('runs/server')
 
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
@@ -74,7 +74,7 @@ minecraft {
 		}
 
 		data {
-			workingDirectory project.file('run')
+			workingDirectory project.file('runs/client')
 
 			property 'forge.logging.markers', 'REGISTRIES'
 			property 'forge.logging.console.level', 'debug'
