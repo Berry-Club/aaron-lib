@@ -76,7 +76,17 @@ open class RecipeWithItemStackOutputBuilder(
 			.requirements(RequirementsStrategy.OR)
 
 		pFinishedRecipeConsumer.accept(
-
+			Result(
+				determineBookCategory(category),
+				pRecipeId,
+				result,
+				group ?: "",
+				rows,
+				definitions,
+				advancement,
+				pRecipeId.withPrefix("recipes/" + category.folderName + "/"),
+				showNotification
+			)
 		)
 	}
 
