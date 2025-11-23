@@ -12,6 +12,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.inventory.InventoryMenu
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions
+import net.minecraftforge.fluids.FluidStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.sqrt
@@ -66,7 +68,7 @@ object RenderUtil {
 		renderRays(
 			poseStack = poseStack,
 			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderType.dragonRays()),
+			vertexConsumer = bufferSource.getBuffer(RenderType.dragonExplosionAlpha(ResourceLocation("textures/entity/enderdragon/dragon_exploding.png"))),
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -88,7 +90,7 @@ object RenderUtil {
 		renderRays(
 			poseStack = poseStack,
 			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderType.dragonRaysDepth()),
+			vertexConsumer = bufferSource.getBuffer(RenderType.dragonExplosionAlpha(ResourceLocation("textures/entity/enderdragon/dragon_exploding.png"))),
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -135,19 +137,19 @@ object RenderUtil {
 			vec2.set(HALF_SQRT_3 * rayWidth, rayLength, -0.5F * rayWidth)
 			vec3.set(0.0F, rayLength, rayWidth)
 
-			val pose = poseStack.last()
+			val mat = poseStack.last().pose()
 
-			vertexConsumer.addVertex(pose, vec0).setColor(centerColor)
-			vertexConsumer.addVertex(pose, vec1).setColor(outerColor)
-			vertexConsumer.addVertex(pose, vec2).setColor(outerColor)
+			vertexConsumer.vertex(mat, vec0.x, vec0.y, vec0.z).color(centerColor)
+			vertexConsumer.vertex(mat, vec1.x, vec1.y, vec1.z).color(outerColor)
+			vertexConsumer.vertex(mat, vec2.x, vec2.y, vec2.z).color(outerColor)
 
-			vertexConsumer.addVertex(pose, vec0).setColor(centerColor)
-			vertexConsumer.addVertex(pose, vec2).setColor(outerColor)
-			vertexConsumer.addVertex(pose, vec3).setColor(outerColor)
+			vertexConsumer.vertex(mat, vec0.x, vec0.y, vec0.z).color(centerColor)
+			vertexConsumer.vertex(mat, vec2.x, vec2.y, vec2.z).color(outerColor)
+			vertexConsumer.vertex(mat, vec3.x, vec3.y, vec3.z).color(outerColor)
 
-			vertexConsumer.addVertex(pose, vec0).setColor(centerColor)
-			vertexConsumer.addVertex(pose, vec3).setColor(outerColor)
-			vertexConsumer.addVertex(pose, vec1).setColor(outerColor)
+			vertexConsumer.vertex(mat, vec0.x, vec0.y, vec0.z).color(centerColor)
+			vertexConsumer.vertex(mat, vec3.x, vec3.y, vec3.z).color(outerColor)
+			vertexConsumer.vertex(mat, vec1.x, vec1.y, vec1.z).color(outerColor)
 		}
 
 		poseStack.popPose()
@@ -343,12 +345,16 @@ object RenderUtil {
 		light: Int = 15728880,
 		overlay: Int = OverlayTexture.NO_OVERLAY,
 	) {
-		consumer.addVertex(pose.pose(), x, y, z)
-			.setColor(color)
-			.setUv(u, v)
-			.setOverlay(overlay)
-			.setLight(light)
-			.setNormal(pose, normalX, normalY, normalZ)
+		val mat = pose.pose()
+		val normal = pose.normal()
+
+		consumer.vertex(mat, x, y, z)
+			.color(color)
+			.uv(u, v)
+			.uv2(light)
+			.overlayCoords(overlay)
+			.normal(normal, normalX, normalY, normalZ)
+			.endVertex()
 	}
 
 	fun addVertex(
@@ -363,12 +369,16 @@ object RenderUtil {
 		normalY: Float = 1f,
 		normalZ: Float = 0f,
 	) {
-		consumer.addVertex(pose.pose(), x, y, z)
-			.setColor(color)
-			.setUv(u, v)
-			.setUv1(u1, v1)
-			.setUv2(u2, v2)
-			.setNormal(pose, normalX, normalY, normalZ)
+		val mat = pose.pose()
+		val normal = pose.normal()
+
+		consumer.vertex(mat, x, y, z)
+			.color(color)
+			.uv(u, v)
+			.uv2(u1, v1)
+			.uv2(u2, v2)
+			.normal(normal, normalX, normalY, normalZ)
+			.endVertex()
 	}
 
 	fun getColorFromFluid(fluidStack: FluidStack): Int {
