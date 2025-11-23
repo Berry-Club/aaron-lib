@@ -24,10 +24,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_21
 
 minecraft {
-	// Change to your preferred mappings
 	mappings channel: mapping_channel, version: mapping_version
-	// Add your AccessTransformer
-	 accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
 	runs {
 		// REQUIRED for processResources to work in dev
