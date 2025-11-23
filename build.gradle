@@ -21,7 +21,9 @@ base.archivesName = archiveName
 println("Building version: ${version}")
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_17
+compileKotlin {
+	kotlinOptions.jvmTarget = "17"
+}
 
 minecraft {
 	mappings channel: mapping_channel, version: mapping_version
