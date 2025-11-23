@@ -1,32 +1,37 @@
 package dev.aaronhowser.mods.aaron.packet
 
 import net.minecraft.core.BlockPos
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.network.NetworkEvent
 import net.neoforged.neoforge.network.PacketDistributor
-import net.neoforged.neoforge.network.handling.IPayloadContext
+import java.util.function.Supplier
 
-abstract class AaronPacket : CustomPacketPayload {
+abstract class AaronPacket {
 
-	protected open fun handleOnClient(context: IPayloadContext) {
-		throw kotlin.UnsupportedOperationException("Packet $this cannot be received on the client!")
+	abstract fun encode(buffer: FriendlyByteBuf)
+
+	protected open fun handleOnClient(context: NetworkEvent.Context) {
+		throw UnsupportedOperationException("Packet $this cannot be received on the client!")
 	}
 
-	protected open fun handleOnServer(context: IPayloadContext) {
-		throw kotlin.UnsupportedOperationException("Packet $this cannot be received on the server!")
+	protected open fun handleOnServer(context: NetworkEvent.Context) {
+		throw UnsupportedOperationException("Packet $this cannot be received on the server!")
 	}
 
-	fun receiveOnClient(context: IPayloadContext) {
+	fun receiveOnClient(ctx: Supplier<NetworkEvent.Context>) {
+		val context = ctx.get()
 		context.enqueueWork {
 			handleOnClient(context)
 		}
 	}
 
-	fun receiveOnServer(context: IPayloadContext) {
+	fun receiveOnServer(ctx: Supplier<NetworkEvent.Context>) {
+		val context = ctx.get()
 		context.enqueueWork {
 			handleOnServer(context)
 		}
