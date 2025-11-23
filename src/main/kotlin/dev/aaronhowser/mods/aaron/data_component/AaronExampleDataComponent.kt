@@ -6,10 +6,10 @@ import dev.aaronhowser.mods.aaron.AaronLib
 
 data class AaronExampleDataComponent(
 	val exampleInt: Int
-) : PseudoDataComponent() {
+) : PseudoDataComponent<AaronExampleDataComponent, AaronExampleDataComponent.Type>() {
 
-	class Type : PseudoDataComponent.Type(AaronLib.modResource("example")) {
-		override fun <T : PseudoDataComponent> getCodec(): Codec<T> = CODEC
+	class Type : PseudoDataComponent.Type<AaronExampleDataComponent>(AaronLib.modResource("example")) {
+		override fun getCodec(): Codec<AaronExampleDataComponent> = CODEC
 
 		companion object {
 			val CODEC: Codec<AaronExampleDataComponent> =
@@ -24,6 +24,6 @@ data class AaronExampleDataComponent(
 		}
 	}
 
-	override val type: PseudoDataComponent.Type = Type()
+	override val type: Type = Type()
 
 }
