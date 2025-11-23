@@ -5,7 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.AaronLib
 
 data class AaronExampleDataComponent(
-	val exampleInt: Int
+	val exampleInt: Int,
+	val doubles: List<Double>
 ) : PseudoDataComponent<AaronExampleDataComponent, AaronExampleDataComponent.Type>() {
 
 	class Type : PseudoDataComponent.Type<AaronExampleDataComponent>(AaronLib.modResource("example")) {
@@ -17,7 +18,10 @@ data class AaronExampleDataComponent(
 					instance.group(
 						Codec.INT
 							.fieldOf("example_int")
-							.forGetter(AaronExampleDataComponent::exampleInt)
+							.forGetter(AaronExampleDataComponent::exampleInt),
+						Codec.DOUBLE.listOf()
+							.fieldOf("doubles")
+							.forGetter(AaronExampleDataComponent::doubles)
 					).apply(instance, ::AaronExampleDataComponent)
 				}
 
