@@ -39,12 +39,15 @@ class ImprovedSpriteButton(
 
 		val i = this.x + this.getWidth() / 2 - this.spriteWidth / 2
 		val j = this.y + this.getHeight() / 2 - this.spriteHeight / 2
-		guiGraphics.blitSprite(
+
+		renderTexture(
+			guiGraphics,
 			sprite,
-			i,
-			j,
-			this.spriteWidth,
-			this.spriteHeight
+			i, j,
+			0, 0,
+			0,
+			spriteWidth, spriteHeight,
+			spriteWidth, spriteHeight,
 		)
 
 		if (isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
