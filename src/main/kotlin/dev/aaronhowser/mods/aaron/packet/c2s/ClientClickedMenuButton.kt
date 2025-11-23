@@ -1,23 +1,22 @@
 package dev.aaronhowser.mods.aaron.packet.c2s
 
-import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.menu.MenuWithButtons
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
-import io.netty.buffer.ByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.network.codec.StreamCodec
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload
-import net.minecraft.server.level.ServerPlayer
-import net.neoforged.neoforge.network.handling.IPayloadContext
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraftforge.network.NetworkEvent
 
 class ClientClickedMenuButton(
 	private val buttonId: Int
 ) : AaronPacket() {
 
-	override fun handleOnServer(context: IPayloadContext) {
-		val player = context.player() as? ServerPlayer ?: return
-		val playerMenu = player.containerMenu
+	override fun encode(buffer: FriendlyByteBuf) {
+		buffer.writeVarInt(buttonId)
+	}
 
+	override fun handleOnServer(context: NetworkEvent.Context) {
+		val player = context.sender ?: return
+
+		val playerMenu = player.containerMenu
 		if (!playerMenu.stillValid(player)) return
 
 		if (playerMenu is MenuWithButtons) {
@@ -25,18 +24,4 @@ class ClientClickedMenuButton(
 		}
 	}
 
-	override fun type(): CustomPacketPayload.Type<ClientClickedMenuButton> {
-		return TYPE
-	}
-
-	companion object {
-		val TYPE: CustomPacketPayload.Type<ClientClickedMenuButton> =
-			CustomPacketPayload.Type(AaronLib.modResource("client_clicked_menu_button"))
-
-		val STREAM_CODEC: StreamCodec<ByteBuf, ClientClickedMenuButton> =
-			StreamCodec.composite(
-				ByteBufCodecs.VAR_INT, ClientClickedMenuButton::buttonId,
-				::ClientClickedMenuButton
-			)
-	}
 }

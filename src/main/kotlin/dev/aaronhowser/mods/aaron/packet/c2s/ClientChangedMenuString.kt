@@ -1,44 +1,27 @@
 package dev.aaronhowser.mods.aaron.packet.c2s
 
-import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.menu.MenuWithStrings
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
-import io.netty.buffer.ByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.network.codec.StreamCodec
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload
-import net.minecraft.server.level.ServerPlayer
-import net.neoforged.neoforge.network.handling.IPayloadContext
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraftforge.network.NetworkEvent
 
 class ClientChangedMenuString(
 	val stringId: Int,
 	val newString: String
 ) : AaronPacket() {
 
-	override fun handleOnServer(context: IPayloadContext) {
-		val player = context.player() as? ServerPlayer ?: return
-		val playerMenu = player.containerMenu
+	override fun encode(buffer: FriendlyByteBuf) {
+		buffer.writeVarInt(stringId)
+		buffer.writeUtf(newString)
+	}
 
+	override fun handleOnServer(context: NetworkEvent.Context) {
+		val player = context.sender ?: return
+
+		val playerMenu = player.containerMenu
 		if (playerMenu is MenuWithStrings) {
 			playerMenu.receiveString(stringId, newString)
 		}
-	}
-
-	override fun type(): CustomPacketPayload.Type<ClientChangedMenuString> {
-		return TYPE
-	}
-
-	companion object {
-		val TYPE: CustomPacketPayload.Type<ClientChangedMenuString> =
-			CustomPacketPayload.Type(AaronLib.modResource("client_changed_menu_string"))
-
-		val STREAM_CODEC: StreamCodec<ByteBuf, ClientChangedMenuString> =
-			StreamCodec.composite(
-				ByteBufCodecs.VAR_INT, ClientChangedMenuString::stringId,
-				ByteBufCodecs.STRING_UTF8, ClientChangedMenuString::newString,
-				::ClientChangedMenuString
-			)
-
 	}
 
 }
