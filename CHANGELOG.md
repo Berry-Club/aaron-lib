@@ -1,3 +1,9 @@
+# 1.3.0
+
+### Added
+
+- RandomSource.chance
+
 # 1.2.0
 
 ### Added

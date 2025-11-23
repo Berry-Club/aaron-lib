@@ -41,6 +41,10 @@ object AaronExtensions {
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 
+	fun RandomSource.chance(chance: Double): Boolean {
+		return this.nextDouble() < chance
+	}
+
 	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		val stack = this.asItem().defaultInstance
 		stack.set(componentType, component)
