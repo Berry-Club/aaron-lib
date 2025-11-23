@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.aaron
 
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
-import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.TagKey
@@ -43,17 +42,6 @@ object AaronExtensions {
 
 	fun RandomSource.chance(chance: Number): Boolean {
 		return this.nextDouble() <= chance.toDouble()
-	}
-
-	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
-		val stack = this.asItem().defaultInstance
-		stack.set(componentType, component)
-		return stack
-	}
-
-	fun <T> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
-		this.set(componentType, component)
-		return this
 	}
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
