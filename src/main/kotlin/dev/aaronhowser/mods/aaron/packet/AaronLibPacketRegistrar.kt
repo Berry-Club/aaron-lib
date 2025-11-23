@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.aaron.packet.s2c.UpdateClientScreenString
 import net.minecraftforge.network.NetworkRegistry
 import net.minecraftforge.network.simple.SimpleChannel
 
-object AaronPacketRegister : AaronPacketRegistrar {
+object AaronLibPacketRegistrar : AaronPacketRegistrar() {
 
 	private const val PROTOCOL_VERSION = "1"
 
@@ -19,8 +19,10 @@ object AaronPacketRegister : AaronPacketRegistrar {
 			PROTOCOL_VERSION::equals
 		)
 
+	override fun getChannel(): SimpleChannel = CHANNEL
+
 	fun registerPackets() {
-		
+
 	}
 
 	fun registerPayloads(event: RegisterPayloadHandlersEvent) {
