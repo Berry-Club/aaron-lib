@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.aaron.datagen
 
 import dev.aaronhowser.mods.aaron.AaronExtensions.asIngredient
-import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance
+import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeProvider
@@ -43,7 +43,7 @@ abstract class AaronRecipeProvider(
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: AbstractCriterionTriggerInstance = has(ItemTags.LOGS)
 	): RecipeWithItemStackOutputBuilder {
-		var temp = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
+		var temp = RecipeWithItemStackOutputBuilder(RecipeCategory.MISC, output)
 
 		for (pattern in patterns.split(",")) {
 			temp = temp.pattern(pattern)
@@ -54,6 +54,8 @@ abstract class AaronRecipeProvider(
 				is IngredientType.TagKeyIng -> temp.define(definition.key, ing.getIngredient())
 				is IngredientType.ItemLikeIng -> temp.define(definition.key, ing.getIngredient())
 				is IngredientType.ItemStackIng -> temp.define(definition.key, ing.getIngredient())
+
+				else -> temp
 			}
 		}
 
@@ -66,7 +68,7 @@ abstract class AaronRecipeProvider(
 		patterns: String,
 		definitions: Map<Char, T>,
 		unlockedByName: String = "has_log",
-		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
+		unlockedByCriterion: InventoryChangeTrigger.TriggerInstance = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
 		var temp = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, count)
 
@@ -79,6 +81,7 @@ abstract class AaronRecipeProvider(
 				is IngredientType.TagKeyIng -> temp.define(definition.key, ing.getIngredient())
 				is IngredientType.ItemLikeIng -> temp.define(definition.key, ing.getIngredient())
 				is IngredientType.ItemStackIng -> temp.define(definition.key, ing.getIngredient())
+				else -> temp
 			}
 		}
 
@@ -90,7 +93,7 @@ abstract class AaronRecipeProvider(
 		patterns: String,
 		definitions: Map<Char, T>,
 		unlockedByName: String = "has_log",
-		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
+		unlockedByCriterion: InventoryChangeTrigger.TriggerInstance = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
 		return shapedRecipe(output, 1, patterns, definitions, unlockedByName, unlockedByCriterion)
 	}
