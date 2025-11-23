@@ -12,8 +12,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.inventory.InventoryMenu
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions
-import net.neoforged.neoforge.fluids.FluidStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.sqrt

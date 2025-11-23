@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.aaron
 
-import net.neoforged.neoforge.common.UsernameCache
+import net.minecraftforge.common.UsernameCache
 import java.util.*
 
 object AaronUtil {

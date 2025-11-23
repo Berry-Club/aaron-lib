@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron
 
 import com.mojang.authlib.GameProfile
 import net.minecraft.server.level.ServerLevel
-import net.neoforged.neoforge.common.util.FakePlayer
+import net.minecraftforge.common.util.FakePlayer
 
 object BetterFakePlayerFactory {
 

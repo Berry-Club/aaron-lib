@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.aaron.client
 import net.minecraft.client.Minecraft
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.neoforged.fml.loading.FMLEnvironment
+import net.minecraftforge.fml.loading.FMLEnvironment
 
 object AaronClientUtil {
 
