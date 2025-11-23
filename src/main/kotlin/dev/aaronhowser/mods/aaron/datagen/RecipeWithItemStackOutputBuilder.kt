@@ -1,0 +1,97 @@
+package dev.aaronhowser.mods.aaron.datagen
+
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.AdvancementRewards
+import net.minecraft.advancements.CriterionTriggerInstance
+import net.minecraft.advancements.RequirementsStrategy
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger
+import net.minecraft.data.recipes.FinishedRecipe
+import net.minecraft.data.recipes.RecipeBuilder
+import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Ingredient
+import java.util.function.Consumer
+
+class RecipeWithItemStackOutputBuilder(
+	private val category: RecipeCategory = RecipeCategory.MISC,
+	private val result: ItemStack
+) : RecipeBuilder {
+
+	private val rows: MutableList<String> = mutableListOf()
+	private val definitions: MutableMap<Char, Ingredient> = mutableMapOf()
+	private val advancement: Advancement.Builder = Advancement.Builder.recipeAdvancement()
+
+	private var group: String? = null
+	private var showNotification: Boolean = true
+
+	fun define(symbol: Char, ingredient: Ingredient): RecipeWithItemStackOutputBuilder {
+		require(!symbol.isWhitespace()) { "Symbol '$symbol' is whitespace!" }
+		require(!definitions.containsKey(symbol)) { "Symbol '$symbol' is already defined!" }
+
+		definitions[symbol] = ingredient
+		return this
+	}
+
+	fun pattern(row: String): RecipeWithItemStackOutputBuilder {
+		if (rows.isNotEmpty()) {
+			require(row.length == rows[0].length) { "Row '$row' is not the correct width!" }
+		}
+
+		rows.add(row)
+		return this
+	}
+
+	fun showNotification(show: Boolean): RecipeWithItemStackOutputBuilder {
+		showNotification = show
+		return this
+	}
+
+	override fun unlockedBy(pCriterionName: String, pCriterionTrigger: CriterionTriggerInstance): RecipeWithItemStackOutputBuilder {
+		advancement.addCriterion(pCriterionName, pCriterionTrigger)
+		return this
+	}
+
+	override fun group(pGroupName: String?): RecipeWithItemStackOutputBuilder {
+		group = pGroupName
+		return this
+	}
+
+	override fun getResult(): Item {
+		TODO("Not yet implemented")
+	}
+
+	override fun save(pFinishedRecipeConsumer: Consumer<FinishedRecipe>, pRecipeId: ResourceLocation) {
+		ensureValid(pRecipeId)
+		advancement.parent(RecipeBuilder.ROOT_RECIPE_ADVANCEMENT)
+			.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
+			.rewards(AdvancementRewards.Builder.recipe(pRecipeId))
+			.requirements(RequirementsStrategy.OR)
+
+		pFinishedRecipeConsumer.accept(
+
+		)
+	}
+
+	private fun ensureValid(pRecipeId: ResourceLocation) {
+		require(rows.isNotEmpty()) { "No pattern is defined for shaped recipe $pRecipeId!" }
+		require(definitions.isNotEmpty()) { "No symbols are defined for shaped recipe $pRecipeId!" }
+
+		val patternSymbols = rows.flatMap { it.toList() }.toSet().filter { !it.isWhitespace() }
+		val definedSymbols = definitions.keys
+
+		for (symbol in patternSymbols) {
+			require(definedSymbols.contains(symbol)) { "Symbol '$symbol' used in pattern but not defined for shaped recipe $pRecipeId!" }
+		}
+
+		for (symbol in definedSymbols) {
+			require(patternSymbols.contains(symbol)) { "Symbol '$symbol' defined but not used in pattern for shaped recipe $pRecipeId!" }
+		}
+
+		require(result.count > 0) { "Result count must be at least 1 for shaped recipe $pRecipeId!" }
+		require(rows.size != 1 && rows[0].length != 1) { "Shaped recipe $pRecipeId is 1x1, use a shapeless recipe instead!" }
+		require(advancement.criteria.isNotEmpty()) { "No way to unlock shaped recipe $pRecipeId!" }
+	}
+
+}

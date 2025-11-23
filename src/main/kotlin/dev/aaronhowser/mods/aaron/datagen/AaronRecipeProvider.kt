@@ -42,7 +42,7 @@ abstract class AaronRecipeProvider(
 		definitions: Map<Char, T>,
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: AbstractCriterionTriggerInstance = has(ItemTags.LOGS)
-	): ShapedRecipeBuilder {
+	): RecipeWithItemStackOutputBuilder {
 		var temp = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
 
 		for (pattern in patterns.split(",")) {
