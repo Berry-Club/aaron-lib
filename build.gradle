@@ -20,8 +20,8 @@ base.archivesName = archiveName
 
 println("Building version: ${version}")
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_21
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_17
 
 minecraft {
 	mappings channel: mapping_channel, version: mapping_version
