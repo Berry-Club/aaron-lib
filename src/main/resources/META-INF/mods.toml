@@ -1,7 +1,5 @@
-# Make sure this is set to "kotlinforforge"
 modLoader = "kotlinforforge"
-# Make sure this is set to the appropriate version range
-loaderVersion = "${forge_version_range}"
+loaderVersion = "${kff_version_range}"
 license = '${mod_license}'
 
 [[mods]]
@@ -15,21 +13,21 @@ accessTransformers = "META-INF/accesstransformer.cfg"
 
 [[dependencies.${ mod_id }]]
 modId = "forge"
-type = "required"
+mandatory = true
 versionRange = "${forge_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${ mod_id }]]
 modId = "minecraft"
-type = "required"
+mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${ mod_id }]]
 modId = "kotlinforforge"
-type = "required"
+mandatory = true
 versionRange = "${kff_version_range}"
 ordering = "NONE"
 side = "BOTH"
