@@ -41,8 +41,8 @@ object AaronExtensions {
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 
-	fun RandomSource.chance(chance: Double): Boolean {
-		return this.nextDouble() <= chance
+	fun RandomSource.chance(chance: Number): Boolean {
+		return this.nextDouble() <= chance.toDouble()
 	}
 
 	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
