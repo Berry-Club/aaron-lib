@@ -1,16 +1,13 @@
 package dev.aaronhowser.mods.aaron
 
 import net.minecraft.resources.ResourceLocation
-import net.minecraftforge.fml.ModContainer
 import net.minecraftforge.fml.common.Mod
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
 @Mod(AaronLib.MOD_ID)
-class AaronLib(
-	modContainer: ModContainer
-) {
+class AaronLib {
 
 	init {
 		LOGGER.log(Level.INFO, "Aaron.")
