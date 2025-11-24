@@ -140,7 +140,8 @@ repositories {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
-	implementation "thedarkcolour:kotlinforforge-neoforge:${kff_version}"
+
+	implementation "thedarkcolour:kotlinforforge:${kff_version}"
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
