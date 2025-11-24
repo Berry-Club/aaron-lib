@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "dev.aaronhowser.mods.aaron.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "modid.refmap.json",
+	"mixins": [
+		"LevelMixin"
+	],
+	"client": [
+	],
+	"minVersion": "0.8"
+}
