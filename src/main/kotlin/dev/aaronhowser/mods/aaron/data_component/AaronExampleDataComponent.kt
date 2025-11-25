@@ -9,25 +9,22 @@ data class AaronExampleDataComponent(
 	val doubles: List<Double>
 ) : PseudoDataComponent<AaronExampleDataComponent, AaronExampleDataComponent.Type>() {
 
-	class Type : PseudoDataComponent.Type<AaronExampleDataComponent>(AaronLib.modResource("example")) {
+	object Type : PseudoDataComponent.Type<AaronExampleDataComponent>(AaronLib.modResource("example")) {
+		val CODEC: Codec<AaronExampleDataComponent> =
+			RecordCodecBuilder.create { instance ->
+				instance.group(
+					Codec.INT
+						.fieldOf("example_int")
+						.forGetter(AaronExampleDataComponent::exampleInt),
+					Codec.DOUBLE.listOf()
+						.fieldOf("doubles")
+						.forGetter(AaronExampleDataComponent::doubles)
+				).apply(instance, ::AaronExampleDataComponent)
+			}
+
 		override fun getCodec(): Codec<AaronExampleDataComponent> = CODEC
-
-		companion object {
-			val CODEC: Codec<AaronExampleDataComponent> =
-				RecordCodecBuilder.create { instance ->
-					instance.group(
-						Codec.INT
-							.fieldOf("example_int")
-							.forGetter(AaronExampleDataComponent::exampleInt),
-						Codec.DOUBLE.listOf()
-							.fieldOf("doubles")
-							.forGetter(AaronExampleDataComponent::doubles)
-					).apply(instance, ::AaronExampleDataComponent)
-				}
-
-		}
 	}
 
-	override val type: Type = Type()
+	override val type: Type = Type
 
 }

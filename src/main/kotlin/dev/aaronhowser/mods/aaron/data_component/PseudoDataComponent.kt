@@ -11,7 +11,12 @@ abstract class PseudoDataComponent<
 		T : PseudoDataComponent.Type<C>
 		> {
 
-	abstract class Type<C : PseudoDataComponent<C, *>>(val id: ResourceLocation) {
+	/**
+	 * Extend this with only singletons
+	 */
+	abstract class Type<C : PseudoDataComponent<C, *>>(
+		val id: ResourceLocation
+	) {
 		abstract fun getCodec(): Codec<C>
 	}
 
@@ -29,9 +34,9 @@ abstract class PseudoDataComponent<
 			this.getOrCreateTag().put(component.type.id.toString(), encoded)
 		}
 
-		fun <C : PseudoDataComponent<C, T>, T : Type<C>> ItemStack.loadComponent(id: ResourceLocation, type: T): C? {
+		fun <C : PseudoDataComponent<C, T>, T : Type<C>> ItemStack.loadComponent(type: T): C? {
 			val tag = this.tag ?: return null
-			val nbt = tag.get(id.toString()) ?: return null
+			val nbt = tag.get(type.id.toString()) ?: return null
 
 			val pair = type
 				.getCodec()
