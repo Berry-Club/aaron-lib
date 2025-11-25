@@ -24,4 +24,11 @@ class ClientClickedMenuButton(
 		}
 	}
 
+	companion object {
+		fun decode(buffer: FriendlyByteBuf): ClientClickedMenuButton {
+			val buttonId = buffer.readVarInt()
+			return ClientClickedMenuButton(buttonId)
+		}
+	}
+
 }

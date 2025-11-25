@@ -24,4 +24,12 @@ class UpdateClientScreenString(
 		}
 	}
 
+	companion object {
+		fun decode(buffer: FriendlyByteBuf): UpdateClientScreenString {
+			val stringId = buffer.readVarInt()
+			val newString = buffer.readUtf()
+			return UpdateClientScreenString(stringId, newString)
+		}
+	}
+
 }

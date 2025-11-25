@@ -24,4 +24,12 @@ class ClientChangedMenuString(
 		}
 	}
 
+	companion object {
+		fun decode(buffer: FriendlyByteBuf): ClientChangedMenuString {
+			val stringId = buffer.readVarInt()
+			val newString = buffer.readUtf()
+			return ClientChangedMenuString(stringId, newString)
+		}
+	}
+
 }

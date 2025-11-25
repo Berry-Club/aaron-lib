@@ -5,12 +5,15 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.chunk.LevelChunk
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.network.PacketDistributor
 import net.minecraftforge.network.simple.SimpleChannel
 
 abstract class AaronPacketRegistrar {
 
 	abstract fun getChannel(): SimpleChannel
+
+	abstract fun registerPackets(event: FMLCommonSetupEvent)
 
 	fun messageServer(packet: AaronPacket) {
 		getChannel().sendToServer(packet)
