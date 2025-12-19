@@ -26,24 +26,25 @@ object AaronExtensions {
 	val Entity.isClientSide: Boolean get() = this.level().isClientSide
 	val Entity.isServerSide: Boolean get() = this.level().isServerSide
 
-	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
-	fun DyeColor.getDyeName(): String = this.getName()
-	fun Direction.getDirectionName(): String = this.getName()
-	fun RandomSource.nextRange(min: Float, max: Float): Float = Mth.lerp(nextFloat(), min, max)
-	fun RandomSource.nextRange(min: Double, max: Double): Double = Mth.lerp(nextDouble(), min, max)
-	fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
 	fun Player.status(message: Component) = this.displayClientMessage(message, true)
 	fun Player.status(message: String) = this.status(Component.literal(message))
 	fun Player.tell(message: Component) = this.displayClientMessage(message, false)
 	fun Player.tell(message: String) = this.tell(Component.literal(message))
+
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
+
+	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
+	fun DyeColor.getDyeName(): String = this.getName()
+	fun Direction.getDirectionName(): String = this.getName()
+
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 
-	fun RandomSource.chance(chance: Number): Boolean {
-		return this.nextDouble() <= chance.toDouble()
-	}
+	fun RandomSource.nextRange(min: Float, max: Float): Float = Mth.lerp(nextFloat(), min, max)
+	fun RandomSource.nextRange(min: Double, max: Double): Double = Mth.lerp(nextDouble(), min, max)
+	fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
+	fun RandomSource.chance(chance: Number): Boolean = nextDouble() <= chance.toDouble()
 
 	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		val stack = this.asItem().defaultInstance
