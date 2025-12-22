@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron
 
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.TagKey
@@ -41,12 +42,25 @@ object AaronExtensions {
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
-	fun ItemStack.asIngredient(): Ingredient = Ingredient.of(this)
 
 	fun RandomSource.nextRange(min: Float, max: Float): Float = Mth.lerp(nextFloat(), min, max)
 	fun RandomSource.nextRange(min: Double, max: Double): Double = Mth.lerp(nextDouble(), min, max)
 	fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
 	fun RandomSource.chance(chance: Number): Boolean = nextDouble() <= chance.toDouble()
+
+	fun Number.toDegrees(): Double = Math.toDegrees(this.toDouble())
+	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
+
+	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+		val stack = this.asItem().defaultInstance
+		stack.set(componentType, component)
+		return stack
+	}
+
+	fun <T> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+		this.set(componentType, component)
+		return this
+	}
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
 		return if (this.hasUUID(key)) this.getUUID(key) else null
