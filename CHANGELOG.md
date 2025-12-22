@@ -1,3 +1,9 @@
+# 1.4.0
+
+### Added
+
+- Vec2 codec and stream codec
+
 # 1.3.1
 
 ### Added
