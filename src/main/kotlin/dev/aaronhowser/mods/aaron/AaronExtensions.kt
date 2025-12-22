@@ -9,6 +9,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
@@ -28,8 +29,9 @@ object AaronExtensions {
 
 	fun Player.status(message: Component) = this.displayClientMessage(message, true)
 	fun Player.status(message: String) = this.status(Component.literal(message))
-	fun Player.tell(message: Component) = this.displayClientMessage(message, false)
-	fun Player.tell(message: String) = this.tell(Component.literal(message))
+
+	fun LivingEntity.tell(message: Component) = this.sendSystemMessage(message)
+	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
