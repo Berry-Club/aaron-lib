@@ -48,6 +48,9 @@ object AaronExtensions {
 	fun RandomSource.nextRange(min: Int, max: Int): Int = nextInt(max - min) + min
 	fun RandomSource.chance(chance: Number): Boolean = nextDouble() <= chance.toDouble()
 
+	fun Number.toDegrees(): Double = Math.toDegrees(this.toDouble())
+	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
+
 	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		val stack = this.asItem().defaultInstance
 		stack.set(componentType, component)

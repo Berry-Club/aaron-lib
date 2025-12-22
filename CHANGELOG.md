@@ -3,6 +3,8 @@
 ### Added
 
 - `/aaron heal`
+- Number.toDegrees()
+- Number.toRadians()
 
 # 1.3.0
 
@@ -28,8 +30,8 @@
 ### Changed
 
 - Schedulers are now per Level, rather than just a singular static global one
-  - Access from SchedulerExtensions class
-  - This was fairly directly ripped out of Lat's VidLib
+	- Access from SchedulerExtensions class
+	- This was fairly directly ripped out of Lat's VidLib
 
 # 1.0.1
 
