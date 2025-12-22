@@ -36,7 +36,7 @@ object AaronExtraCodecs {
 		)
 	}
 
-	val VECTOR3D_CODEC: Codec<Vector2d> =
+	val VECTOR2D_CODEC: Codec<Vector2d> =
 		Codec.DOUBLE
 			.listOf()
 			.comapFlatMap(
