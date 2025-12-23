@@ -5,6 +5,12 @@
 - `/aaron heal`
 - Number.toDegrees()
 - Number.toRadians()
+- Style.withHoverText
+- Style.withHoverText
+- Style.withClickToRunCommand
+- Style.withClickToSuggestCommand
+- Style.withClickToOpenUrl
+- Style.withClickToCopyToClipboard
 
 # 1.3.0
 
