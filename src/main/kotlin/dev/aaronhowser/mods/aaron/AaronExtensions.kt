@@ -4,7 +4,10 @@ import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.HoverEvent
+import net.minecraft.network.chat.Style
 import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
@@ -72,5 +75,12 @@ object AaronExtensions {
 
 	@Suppress("UNCHECKED_CAST")
 	fun <T> Any?.cast(): T = this as T
+
+	fun Style.withHoverText(component: Component): Style = withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, component))
+	fun Style.withHoverText(text: String): Style = withHoverText(Component.literal(text))
+	fun Style.withClickToRunCommand(command: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
+	fun Style.withClickToSuggestCommand(command: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command))
+	fun Style.withClickToOpenUrl(url: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, url))
+	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text))
 
 }
