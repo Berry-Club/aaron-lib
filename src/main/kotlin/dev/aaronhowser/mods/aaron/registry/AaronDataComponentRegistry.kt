@@ -37,6 +37,10 @@ abstract class AaronDataComponentRegistry {
 		return register(name, Codec.LONG, ByteBufCodecs.VAR_LONG)
 	}
 
+	protected fun string(name: String): DeferredHolder<DataComponentType<*>, DataComponentType<String>> {
+		return register(name, Codec.STRING, ByteBufCodecs.STRING_UTF8)
+	}
+
 	protected fun <T> register(
 		name: String,
 		codec: Codec<T>,
