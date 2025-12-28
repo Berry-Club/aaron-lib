@@ -11,6 +11,7 @@
 - Style.withClickToSuggestCommand
 - Style.withClickToOpenUrl
 - Style.withClickToCopyToClipboard
+- ItemStack.isItem
 
 # 1.3.0
 
