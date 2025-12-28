@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron
 
 import net.minecraft.core.Direction
+import net.minecraft.core.Holder
 import net.minecraft.core.Vec3i
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.CompoundTag
@@ -44,6 +45,10 @@ object AaronExtensions {
 	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
 	fun DyeColor.getDyeName(): String = this.getName()
 	fun Direction.getDirectionName(): String = this.getName()
+
+	fun ItemStack.isItem(item: Holder<Item>): Boolean = this.`is`(item)
+	fun ItemStack.isItem(item: Item): Boolean = this.`is`(item)
+	fun ItemStack.isItem(tag: TagKey<Item>): Boolean = this.`is`(tag)
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
