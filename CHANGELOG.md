@@ -12,6 +12,8 @@
 - Style.withClickToOpenUrl
 - Style.withClickToCopyToClipboard
 - ItemStack.isItem
+- BlockBehavior.BlockStateBase.isBlock
+- Holder<T>.isHolder
 
 # 1.3.0
 
