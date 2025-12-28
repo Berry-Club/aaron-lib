@@ -9,6 +9,8 @@ import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.Style
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
@@ -49,6 +51,10 @@ object AaronExtensions {
 	fun ItemStack.isItem(item: Holder<Item>): Boolean = this.`is`(item)
 	fun ItemStack.isItem(item: Item): Boolean = this.`is`(item)
 	fun ItemStack.isItem(tag: TagKey<Item>): Boolean = this.`is`(tag)
+
+	fun <T> Holder<T>.isHolder(location: ResourceLocation): Boolean = this.`is`(location)
+	fun <T> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
+	fun <T> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
