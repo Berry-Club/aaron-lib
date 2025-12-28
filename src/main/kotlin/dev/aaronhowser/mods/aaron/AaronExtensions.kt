@@ -49,7 +49,7 @@ object AaronExtensions {
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
 
-	fun ItemStack.isNotEmpty(): Boolean = !this.isEmptyd
+	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
 	fun DyeColor.getDyeName(): String = this.getName()
 	fun Direction.getDirectionName(): String = this.getName()
 
