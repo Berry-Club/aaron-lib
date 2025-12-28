@@ -14,6 +14,9 @@
 - ItemStack.isItem
 - BlockBehavior.BlockStateBase.isBlock
 - Holder<T>.isHolder
+- DamageSource.isDamageSource
+- EntityType<*>.isEntity
+- Entity.isEntity
 
 # 1.3.0
 
