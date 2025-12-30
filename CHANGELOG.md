@@ -6,6 +6,7 @@
 - Either.isLeft
 - Either.isRight
 - AaronUtil.cleanEntityNbt
+- Entity.getMinimalTag
 
 # 1.4.0
 

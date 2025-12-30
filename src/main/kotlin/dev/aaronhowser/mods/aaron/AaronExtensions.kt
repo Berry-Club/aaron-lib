@@ -131,4 +131,11 @@ object AaronExtensions {
 	fun Either<*, *>.isLeft(): Boolean = this.left().isPresent
 	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
 
+	fun Entity.getMinimalTag(stripUniqueness: Boolean = true): CompoundTag {
+		val nbt = CompoundTag()
+		this.save(nbt)
+		AaronUtil.cleanEntityNbt(nbt, stripUniqueness)
+		return nbt
+	}
+
 }

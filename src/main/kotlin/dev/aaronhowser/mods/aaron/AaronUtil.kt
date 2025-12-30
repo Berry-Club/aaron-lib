@@ -17,27 +17,34 @@ object AaronUtil {
 		return null
 	}
 
-	fun cleanEntityNbt(compoundTag: CompoundTag) {
-		val badTags = listOf(
-			"HurtByTimestamp",
-			"Sitting",
-			"FallFlying",
-			"PortalCooldown",
-			"FallDistance",
-			"InLove",
-			"DeathTime",
-			"UUID",
-			"Age",
-			"ForcedAge",
-			"Motion",
-			"Air",
-			"OnGround",
-			"Rotation",
-			"Pos",
-			"HurtTime",
-			"Owner",
-			"id"
-		)
+	fun cleanEntityNbt(compoundTag: CompoundTag, stripUniqueness: Boolean = false) {
+		val badTags = buildList {
+			addAll(
+				listOf(
+					"HurtByTimestamp",
+					"Sitting",
+					"FallFlying",
+					"PortalCooldown",
+					"FallDistance",
+					"InLove",
+					"DeathTime",
+					"ForcedAge",
+					"Motion",
+					"Air",
+					"OnGround",
+					"Rotation",
+					"Pos",
+					"HurtTime"
+				)
+			)
+
+			if (stripUniqueness) {
+				add("id")
+				add("UUID")
+				add("Owner")
+				add("Age")
+			}
+		}
 
 		for (tag in badTags) {
 			compoundTag.remove(tag)
