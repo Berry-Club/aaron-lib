@@ -3,6 +3,8 @@
 - weakMutableSet()
 - Entity.isMovingHorizontally()
 - Player.giveOrDropStack
+- Either.isLeft
+- Either.isRight
 
 # 1.4.0
 
