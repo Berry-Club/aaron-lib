@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.registries.DeferredBlock
 import java.util.*
+import kotlin.math.abs
 
 object AaronExtensions {
 
@@ -75,7 +76,11 @@ object AaronExtensions {
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 
-	fun Entity.isMoving(): Boolean = this.deltaMovement.lengthSqr() > 0.01
+	fun Entity.isMovingHorizontally(): Boolean {
+		val velocity = this.deltaMovement
+		val averageHorizontalSpeed = (abs(velocity.x) + abs(velocity.z)) / 2.0
+		return averageHorizontalSpeed > 0.015
+	}
 
 	fun RandomSource.nextRange(min: Float, max: Float): Float = Mth.lerp(nextFloat(), min, max)
 	fun RandomSource.nextRange(min: Double, max: Double): Double = Mth.lerp(nextDouble(), min, max)

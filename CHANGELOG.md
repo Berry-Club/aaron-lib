@@ -1,7 +1,7 @@
 # 1.5.0
 
 - weakMutableSet()
-- Entity.isMoving()
+- Entity.isMovingHorizontally()
 
 # 1.4.0
 
