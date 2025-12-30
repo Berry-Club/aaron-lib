@@ -2,6 +2,7 @@
 
 - weakMutableSet()
 - Entity.isMovingHorizontally()
+- Player.giveOrDropStack
 
 # 1.4.0
 

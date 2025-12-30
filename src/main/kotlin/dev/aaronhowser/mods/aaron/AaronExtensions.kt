@@ -19,6 +19,7 @@ import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
@@ -32,7 +33,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.registries.DeferredBlock
 import java.util.*
-import kotlin.math.abs
 
 object AaronExtensions {
 
@@ -97,6 +97,14 @@ object AaronExtensions {
 	fun <T> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		this.set(componentType, component)
 		return this
+	}
+
+	fun Player.giveOrDropStack(itemStack: ItemStack): Boolean {
+		if (this.inventory.add(itemStack)) return true
+
+		val entity = ItemEntity(level(), this.x, this.y, this.z, itemStack)
+		entity.setNoPickUpDelay()
+		return this.level().addFreshEntity(entity)
 	}
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
