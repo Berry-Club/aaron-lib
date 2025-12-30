@@ -1,6 +1,7 @@
 # 1.5.0
 
 - weakMutableSet()
+- Entity.isMoving()
 
 # 1.4.0
 
