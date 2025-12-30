@@ -5,6 +5,7 @@
 - Player.giveOrDropStack
 - Either.isLeft
 - Either.isRight
+- AaronUtil.cleanEntityNbt
 
 # 1.4.0
 
