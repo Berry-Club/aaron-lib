@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron
 
+import com.mojang.datafixers.util.Either
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.Vec3i
@@ -126,5 +127,8 @@ object AaronExtensions {
 	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text))
 
 	fun DeferredBlock<*>.defaultBlockState(): BlockState = this.get().defaultBlockState()
+
+	fun Either<*, *>.isLeft(): Boolean = this.left().isPresent
+	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
 
 }
