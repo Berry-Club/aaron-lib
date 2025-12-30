@@ -77,9 +77,7 @@ object AaronExtensions {
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 
 	fun Entity.isMovingHorizontally(): Boolean {
-		val velocity = this.deltaMovement
-		val averageHorizontalSpeed = (abs(velocity.x) + abs(velocity.z)) / 2.0
-		return averageHorizontalSpeed > 0.015
+		return this.deltaMovement.horizontalDistance() > 0.015
 	}
 
 	fun RandomSource.nextRange(min: Float, max: Float): Float = Mth.lerp(nextFloat(), min, max)
