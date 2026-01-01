@@ -25,12 +25,17 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.item.alchemy.PotionContents
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.registries.DeferredBlock
 import java.util.*
@@ -150,6 +155,22 @@ object AaronExtensions {
 
 	fun ItemStack.isNotFull(): Boolean {
 		return this.count < this.maxStackSize
+	}
+
+	fun Entity.getPovResult(range: Number): BlockHitResult {
+		return this.level().clip(
+			ClipContext(
+				this.eyePosition,
+				this.eyePosition.add(this.lookAngle.scale(range.toDouble())),
+				ClipContext.Block.OUTLINE,
+				ClipContext.Fluid.NONE,
+				this
+			)
+		)
+	}
+
+	fun Holder<Potion>.getAsStack(): ItemStack {
+		return PotionContents.createItemStack(Items.POTION, this)
 	}
 
 }

@@ -11,6 +11,8 @@
 - List<ItemStack>.totalCount
 - ItemStack.isNotFull
 - AaronUtil.flattenStacks
+- Entity.getPovResult
+- Holder<Potion>.getAsStack()
 
 # 1.4.0
 
