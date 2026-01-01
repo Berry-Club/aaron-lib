@@ -7,6 +7,8 @@
 - Either.isRight
 - AaronUtil.cleanEntityNbt
 - Entity.getMinimalTag
+- ItemLike.getDefaultInstance
+- List<ItemStack>.totalCount
 
 # 1.4.0
 
