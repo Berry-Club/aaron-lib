@@ -89,6 +89,8 @@ object AaronExtensions {
 	fun Number.toDegrees(): Double = Math.toDegrees(this.toDouble())
 	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
 
+	fun ItemLike.getDefaultInstance(): ItemStack = this.asItem().defaultInstance
+
 	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		val stack = this.asItem().defaultInstance
 		stack.set(componentType, component)
@@ -136,6 +138,14 @@ object AaronExtensions {
 		this.save(nbt)
 		AaronUtil.cleanEntityNbt(nbt, stripUniqueness)
 		return nbt
+	}
+
+	fun List<ItemStack>.totalCount(): Int {
+		var total = 0
+		for (stack in this) {
+			total += stack.count
+		}
+		return total
 	}
 
 }
