@@ -148,4 +148,8 @@ object AaronExtensions {
 		return total
 	}
 
+	fun ItemStack.isNotFull(): Boolean {
+		return this.count < this.maxStackSize
+	}
+
 }

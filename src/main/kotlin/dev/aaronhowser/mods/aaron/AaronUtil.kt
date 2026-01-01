@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron
 
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.common.UsernameCache
 import java.util.*
 
@@ -49,6 +50,30 @@ object AaronUtil {
 		for (tag in badTags) {
 			compoundTag.remove(tag)
 		}
+	}
+
+	fun flattenStacks(input: List<ItemStack>): List<ItemStack> {
+		val output = mutableListOf<ItemStack>()
+		val inputCopy = input.filterNot(ItemStack::isEmpty).map(ItemStack::copy)
+
+		for (stack in inputCopy) {
+			if (stack.isEmpty) continue
+
+			val matchingStack = output.firstOrNull { ItemStack.isSameItemSameComponents(it, stack) }
+
+			if (matchingStack != null) {
+				while (!stack.isEmpty && matchingStack.count < matchingStack.maxStackSize) {
+					stack.shrink(1)
+					matchingStack.grow(1)
+				}
+			}
+
+			if (!stack.isEmpty) {
+				output.add(stack)
+			}
+		}
+
+		return output
 	}
 
 }

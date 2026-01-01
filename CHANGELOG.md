@@ -9,6 +9,8 @@
 - Entity.getMinimalTag
 - ItemLike.getDefaultInstance
 - List<ItemStack>.totalCount
+- ItemStack.isNotFull
+- AaronUtil.flattenStacks
 
 # 1.4.0
 
