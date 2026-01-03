@@ -1,18 +1,21 @@
 # 1.5.0
 
 - weakMutableSet()
-- Entity.isMovingHorizontally()
-- Player.giveOrDropStack
-- Either.isLeft
-- Either.isRight
-- AaronUtil.cleanEntityNbt
-- Entity.getMinimalTag
-- ItemLike.getDefaultInstance
-- List<ItemStack>.totalCount
-- ItemStack.isNotFull
-- AaronUtil.flattenStacks
-- Entity.getPovResult
-- Holder<Potion>.getAsStack()
+- Entity#isMovingHorizontally()
+- Player#giveOrDropStack
+- Either#isLeft
+- Either#isRight
+- AaronUtil#cleanEntityNbt
+- Entity#getMinimalTag
+- ItemLike#getDefaultInstance
+- List<ItemStack>#totalCount
+- ItemStack#isNotFull
+- AaronUtil#flattenStacks
+- Entity#getPovResult
+- Holder<Potion>#getAsStack()
+- AaronExtraCodecs.UINT_CODEC
+- AaronExtraCodecs.UINT_STREAM_CODEC
+- AaronDataComponentRegistry#uint
 
 # 1.4.0
 

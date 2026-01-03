@@ -1,6 +1,9 @@
 package dev.aaronhowser.mods.aaron
 
+import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
+import com.mojang.serialization.DynamicOps
 import io.netty.buffer.ByteBuf
 import net.minecraft.Util
 import net.minecraft.core.NonNullList
@@ -54,5 +57,11 @@ object AaronExtraCodecs {
 				buffer.writeDouble(value.y)
 			}
 		}
+
+	val UINT_CODEC: Codec<UInt> =
+		Codec.INT.xmap(Int::toUInt, UInt::toInt)
+
+	val UINT_STREAM_CODEC: StreamCodec<ByteBuf, UInt> =
+		ByteBufCodecs.VAR_INT.map(Int::toUInt, UInt::toInt)
 
 }
