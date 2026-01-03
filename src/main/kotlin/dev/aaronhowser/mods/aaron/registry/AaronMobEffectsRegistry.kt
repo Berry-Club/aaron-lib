@@ -13,8 +13,4 @@ abstract class AaronMobEffectsRegistry {
 		return getMobEffectRegistry().register(id, supplier)
 	}
 
-	fun <T : MobEffect> register(id: String, mobEffect: T): DeferredHolder<MobEffect, T> {
-		return register(id) { mobEffect }
-	}
-
 }
