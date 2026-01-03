@@ -9,11 +9,11 @@ abstract class AaronMobEffectsRegistry {
 
 	abstract fun getMobEffectRegistry(): DeferredRegister<MobEffect>
 
-	fun register(id: String, supplier: Supplier<MobEffect>): DeferredHolder<MobEffect, MobEffect> {
+	fun <T : MobEffect> register(id: String, supplier: Supplier<T>): DeferredHolder<MobEffect, T> {
 		return getMobEffectRegistry().register(id, supplier)
 	}
 
-	fun register(id: String, mobEffect: MobEffect): DeferredHolder<MobEffect, MobEffect> {
+	fun <T : MobEffect> register(id: String, mobEffect: T): DeferredHolder<MobEffect, T> {
 		return register(id) { mobEffect }
 	}
 
