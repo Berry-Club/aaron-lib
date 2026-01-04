@@ -17,6 +17,7 @@
 - AaronExtraCodecs.UINT_STREAM_CODEC
 - AaronDataComponentRegistry#uint
 - AaronMobEffectsRegistry
+- AaronAdvancementSubProvider
 
 # 1.4.0
 
