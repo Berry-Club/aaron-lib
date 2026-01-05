@@ -162,6 +162,12 @@ object AaronExtensions {
 
 	fun Holder<*>.getLocationOrNull(): ResourceLocation? = this.unwrapKey().getOrNull()?.location()
 
+	fun <C : PseudoDataComponent<C, *>> RegistryObject<out Item>.withComponent(component: C): ItemStack {
+		val stack = this.get().defaultInstance
+		stack.setComponent(component)
+		return stack
+	}
+
 	fun <C : PseudoDataComponent<C, *>> ItemLike.withComponent(component: C): ItemStack {
 		val stack = this.asItem().defaultInstance
 		stack.setComponent(component)
