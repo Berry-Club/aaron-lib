@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.aaron
 
 import com.mojang.datafixers.util.Either
+import dev.aaronhowser.mods.aaron.data_component.PseudoDataComponent
+import dev.aaronhowser.mods.aaron.data_component.PseudoDataComponent.Companion.setComponent
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderSet
@@ -159,5 +161,16 @@ object AaronExtensions {
 	}
 
 	fun Holder<*>.getLocationOrNull(): ResourceLocation? = this.unwrapKey().getOrNull()?.location()
+
+	fun <C : PseudoDataComponent<C, *>> ItemLike.withComponent(component: C): ItemStack {
+		val stack = this.asItem().defaultInstance
+		stack.setComponent(component)
+		return stack
+	}
+
+	fun <C : PseudoDataComponent<C, *>> ItemStack.withComponent(component: C): ItemStack {
+		this.setComponent(component)
+		return this
+	}
 
 }
