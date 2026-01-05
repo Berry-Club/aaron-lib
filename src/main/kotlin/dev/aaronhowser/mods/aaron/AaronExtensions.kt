@@ -58,7 +58,7 @@ object AaronExtensions {
 	fun Direction.getDirectionName(): String = this.getName()
 
 	fun ItemStack.isItem(item: Holder<Item>): Boolean = this.`is`(item)
-	fun ItemStack.isItem(item: RegistryObject<Item>): Boolean = this.`is`(item.get())
+	fun <T : Item> ItemStack.isItem(item: RegistryObject<T>): Boolean = this.`is`(item.get())
 	fun ItemStack.isItem(item: Item): Boolean = this.`is`(item)
 	fun ItemStack.isItem(tag: TagKey<Item>): Boolean = this.`is`(tag)
 
