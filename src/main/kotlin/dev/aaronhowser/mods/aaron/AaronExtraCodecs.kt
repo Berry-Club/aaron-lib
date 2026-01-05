@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.aaron
 import com.mojang.serialization.Codec
 import net.minecraft.Util
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import org.joml.Vector2d
 
 object AaronExtraCodecs {
@@ -19,7 +18,7 @@ object AaronExtraCodecs {
 	val UINT_CODEC: Codec<UInt> =
 		Codec.INT.xmap(Int::toUInt, UInt::toInt)
 
-	val COMPONENT_CODEC: Codec<MutableComponent> =
+	val COMPONENT_CODEC: Codec<Component> =
 		Codec.STRING
 			.xmap(
 				{ str -> Component.Serializer.fromJson(str) },
