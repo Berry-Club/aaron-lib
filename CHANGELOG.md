@@ -20,6 +20,7 @@
 - AaronAdvancementSubProvider
 - Holder<*>#getLocationOrNull
 - RegistryObject<out Item>#getDefaultInstance()
+- AaronExtraCodecs.COMPONENT_CODEC
 
 # 1.4.0
 
