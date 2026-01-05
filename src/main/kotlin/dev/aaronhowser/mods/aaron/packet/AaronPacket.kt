@@ -18,16 +18,26 @@ abstract class AaronPacket {
 
 	fun receiveOnClient(ctx: Supplier<NetworkEvent.Context>) {
 		val context = ctx.get()
+		var handled = false
+
 		context.enqueueWork {
 			handleOnClient(context)
+			handled = true
 		}
+
+		context.packetHandled = handled
 	}
 
 	fun receiveOnServer(ctx: Supplier<NetworkEvent.Context>) {
 		val context = ctx.get()
+		var handled = false
+
 		context.enqueueWork {
 			handleOnServer(context)
+			handled = true
 		}
+
+		context.packetHandled = handled
 	}
 
 }
