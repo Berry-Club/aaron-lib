@@ -18,7 +18,7 @@
 - AaronDataComponentRegistry#uint
 - AaronMobEffectsRegistry
 - AaronAdvancementSubProvider
-- Holder<*>#locationOrNull
+- Holder<*>#getLocationOrNull
 
 # 1.4.0
 

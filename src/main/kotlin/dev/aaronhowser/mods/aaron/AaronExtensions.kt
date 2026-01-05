@@ -157,6 +157,6 @@ object AaronExtensions {
 		)
 	}
 
-	fun Holder<*>.locationOrNull(): ResourceLocation? = this.unwrapKey().getOrNull()?.location()
+	fun Holder<*>.getLocationOrNull(): ResourceLocation? = this.unwrapKey().getOrNull()?.location()
 
 }
