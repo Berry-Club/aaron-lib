@@ -3,8 +3,8 @@ package dev.aaronhowser.mods.aaron
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
+import net.minecraft.core.HolderSet
 import net.minecraft.core.Vec3i
-import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
@@ -25,9 +25,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.world.item.alchemy.Potion
-import net.minecraft.world.item.alchemy.PotionContents
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
@@ -37,7 +34,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.registries.DeferredBlock
+import net.minecraftforge.registries.RegistryObject
 import java.util.*
 
 object AaronExtensions {
@@ -69,8 +66,7 @@ object AaronExtensions {
 	fun <T> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
 
 	fun BlockBehaviour.BlockStateBase.isBlock(block: Block): Boolean = this.`is`(block)
-	fun BlockBehaviour.BlockStateBase.isBlock(blockHolder: Holder<Block>): Boolean = this.`is`(blockHolder)
-	fun BlockBehaviour.BlockStateBase.isBlock(resourceKey: ResourceKey<Block>): Boolean = this.`is`(resourceKey)
+	fun BlockBehaviour.BlockStateBase.isBlock(holderSet: HolderSet<Block>): Boolean = this.`is`(holderSet)
 	fun BlockBehaviour.BlockStateBase.isBlock(tagKey: TagKey<Block>): Boolean = this.`is`(tagKey)
 
 	fun DamageSource.isDamageSource(tagKey: TagKey<DamageType>): Boolean = this.`is`(tagKey)
@@ -95,17 +91,6 @@ object AaronExtensions {
 	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
 
 	fun ItemLike.getDefaultInstance(): ItemStack = this.asItem().defaultInstance
-
-	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
-		val stack = this.asItem().defaultInstance
-		stack.set(componentType, component)
-		return stack
-	}
-
-	fun <T> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
-		this.set(componentType, component)
-		return this
-	}
 
 	fun Player.giveOrDropStack(itemStack: ItemStack): Boolean {
 		if (this.inventory.add(itemStack)) return true
@@ -133,7 +118,7 @@ object AaronExtensions {
 	fun Style.withClickToOpenUrl(url: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, url))
 	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text))
 
-	fun DeferredBlock<*>.defaultBlockState(): BlockState = this.get().defaultBlockState()
+	fun RegistryObject<out Block>.defaultBlockState(): BlockState = this.get().defaultBlockState()
 
 	fun Either<*, *>.isLeft(): Boolean = this.left().isPresent
 	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
@@ -167,10 +152,6 @@ object AaronExtensions {
 				this
 			)
 		)
-	}
-
-	fun Holder<Potion>.getAsStack(): ItemStack {
-		return PotionContents.createItemStack(Items.POTION, this)
 	}
 
 }
