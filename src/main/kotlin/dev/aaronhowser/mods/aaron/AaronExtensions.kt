@@ -36,6 +36,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.registries.RegistryObject
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 object AaronExtensions {
 
@@ -155,5 +156,7 @@ object AaronExtensions {
 			)
 		)
 	}
+
+	fun Holder<*>.locationOrNull(): ResourceLocation? = this.unwrapKey().getOrNull()?.location()
 
 }
