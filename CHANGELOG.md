@@ -23,6 +23,7 @@
 - AaronExtraCodecs.COMPONENT_CODEC
 - ItemLike.withComponent
 - ItemStack.withComponent
+- ItemStack.removeComponent
 
 # 1.4.0
 

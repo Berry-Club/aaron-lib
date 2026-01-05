@@ -45,5 +45,9 @@ abstract class PseudoDataComponent<
 
 			return pair.first
 		}
+
+		fun <C : PseudoDataComponent<T, T>, T : Type<C>> ItemStack.removeComponent(type: T) {
+			this.tag?.remove(type.id.toString())
+		}
 	}
 }
