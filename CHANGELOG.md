@@ -19,6 +19,7 @@
 - AaronMobEffectsRegistry
 - AaronAdvancementSubProvider
 - Holder<*>#getLocationOrNull
+- RegistryObject<out Item>#getDefaultInstance()
 
 # 1.4.0
 

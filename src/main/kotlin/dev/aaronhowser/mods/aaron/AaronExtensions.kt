@@ -94,6 +94,7 @@ object AaronExtensions {
 	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
 
 	fun ItemLike.getDefaultInstance(): ItemStack = this.asItem().defaultInstance
+	fun RegistryObject<out Item>.getDefaultInstance(): ItemStack = this.get().defaultInstance
 
 	fun Player.giveOrDropStack(itemStack: ItemStack): Boolean {
 		if (this.inventory.add(itemStack)) return true
