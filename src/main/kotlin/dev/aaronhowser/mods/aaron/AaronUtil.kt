@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron
 
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
-import net.neoforged.neoforge.common.UsernameCache
+import net.minecraftforge.common.UsernameCache
 import java.util.*
 
 object AaronUtil {
@@ -59,7 +59,7 @@ object AaronUtil {
 		for (stack in inputCopy) {
 			if (stack.isEmpty) continue
 
-			val matchingStack = output.firstOrNull { ItemStack.isSameItemSameComponents(it, stack) }
+			val matchingStack = output.firstOrNull { ItemStack.isSameItemSameTags(it, stack) }
 
 			if (matchingStack != null) {
 				while (!stack.isEmpty && matchingStack.count < matchingStack.maxStackSize) {
