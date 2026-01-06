@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.aaron.data_component.PseudoDataComponent.Companion.s
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderSet
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.ClickEvent
@@ -182,5 +183,7 @@ object AaronExtensions {
 	}
 
 	fun AttributeInstance.hasModifier(id: UUID): Boolean =getModifier(id) != null
+
+	fun Entity.registryAccess(): RegistryAccess = this.level().registryAccess()
 
 }

@@ -25,6 +25,7 @@
 - ItemStack3removeComponent
 - AttributeInstance3hasModifier
 - AaronExtraCodecs.ATTRIBUTE_MODIFIER_CODEC
+- Entity#registryAccess
 
 # 1.4.0
 
