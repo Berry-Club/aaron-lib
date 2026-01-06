@@ -3,11 +3,7 @@ package dev.aaronhowser.mods.aaron
 import com.mojang.datafixers.util.Either
 import dev.aaronhowser.mods.aaron.data_component.PseudoDataComponent
 import dev.aaronhowser.mods.aaron.data_component.PseudoDataComponent.Companion.setComponent
-import net.minecraft.core.Direction
-import net.minecraft.core.Holder
-import net.minecraft.core.HolderSet
-import net.minecraft.core.RegistryAccess
-import net.minecraft.core.Vec3i
+import net.minecraft.core.*
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
@@ -38,6 +34,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.common.crafting.PartialNBTIngredient
+import net.minecraftforge.common.crafting.StrictNBTIngredient
 import net.minecraftforge.registries.RegistryObject
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
@@ -83,8 +81,10 @@ object AaronExtensions {
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
-	fun ItemStack.asIngredient(): Ingredient = Ingredient.of(this)
 	fun RegistryObject<out Item>.asIngredient(): Ingredient = Ingredient.of(this.get())
+	fun ItemStack.asIngredient(): Ingredient = Ingredient.of(this)
+	fun ItemStack.partialNbtIngredient(): PartialNBTIngredient = PartialNBTIngredient.of(this.getOrCreateTag(), this.item)
+	fun ItemStack.strictNbtIngredient(): StrictNBTIngredient = StrictNBTIngredient.of(this)
 
 	fun Entity.isMovingHorizontally(): Boolean {
 		return this.deltaMovement.horizontalDistance() > 0.015
@@ -182,7 +182,7 @@ object AaronExtensions {
 		return this
 	}
 
-	fun AttributeInstance.hasModifier(id: UUID): Boolean =getModifier(id) != null
+	fun AttributeInstance.hasModifier(id: UUID): Boolean = getModifier(id) != null
 
 	fun Entity.registryAccess(): RegistryAccess = this.level().registryAccess()
 

@@ -26,6 +26,8 @@
 - AttributeInstance3hasModifier
 - AaronExtraCodecs.ATTRIBUTE_MODIFIER_CODEC
 - Entity#registryAccess
+- ItemStack#partialNbtIngredient
+- ItemStack#strictNbtIngredient
 
 # 1.4.0
 
