@@ -14,7 +14,6 @@
 - Entity#getPovResult
 - Holder<Potion>#getAsStack()
 - AaronExtraCodecs.UINT_CODEC
-- AaronExtraCodecs.UINT_STREAM_CODEC
 - AaronDataComponentRegistry#uint
 - AaronMobEffectsRegistry
 - AaronAdvancementSubProvider
@@ -25,6 +24,7 @@
 - ItemStack3withComponent
 - ItemStack3removeComponent
 - AttributeInstance3hasModifier
+- AaronExtraCodecs.ATTRIBUTE_MODIFIER_CODEC
 
 # 1.4.0
 
