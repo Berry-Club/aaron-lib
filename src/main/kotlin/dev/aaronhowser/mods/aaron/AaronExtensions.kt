@@ -83,6 +83,7 @@ object AaronExtensions {
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
 	fun ItemStack.asIngredient(): Ingredient = Ingredient.of(this)
+	fun RegistryObject<out Item>.asIngredient(): Ingredient = Ingredient.of(this.get())
 
 	fun Entity.isMovingHorizontally(): Boolean {
 		return this.deltaMovement.horizontalDistance() > 0.015
