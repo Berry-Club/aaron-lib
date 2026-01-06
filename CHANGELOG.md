@@ -21,9 +21,10 @@
 - Holder<*>#getLocationOrNull
 - RegistryObject<out Item>#getDefaultInstance()
 - AaronExtraCodecs.COMPONENT_CODEC
-- ItemLike.withComponent
-- ItemStack.withComponent
-- ItemStack.removeComponent
+- ItemLike3withComponent
+- ItemStack3withComponent
+- ItemStack3removeComponent
+- AttributeInstance3hasModifier
 
 # 1.4.0
 

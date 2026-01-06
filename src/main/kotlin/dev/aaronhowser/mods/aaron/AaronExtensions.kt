@@ -22,6 +22,7 @@ import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.attributes.AttributeInstance
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
@@ -178,5 +179,7 @@ object AaronExtensions {
 		this.setComponent(component)
 		return this
 	}
+
+	fun AttributeInstance.hasModifier(id: UUID): Boolean =getModifier(id) != null
 
 }
