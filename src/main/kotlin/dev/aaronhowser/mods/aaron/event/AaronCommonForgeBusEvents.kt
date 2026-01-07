@@ -2,14 +2,12 @@ package dev.aaronhowser.mods.aaron.event
 
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.command.AaronCommands
-import dev.aaronhowser.mods.aaron.packet.AaronLibPacketRegistrar
 import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.getSchedulerRaw
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.entity.player.PlayerEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 
 @Mod.EventBusSubscriber(
 	modid = AaronLib.MOD_ID,
@@ -35,11 +33,6 @@ object AaronCommonForgeBusEvents {
 	@SubscribeEvent
 	fun onRegisterCommandsEvent(event: RegisterCommandsEvent) {
 		AaronCommands.register(event.dispatcher)
-	}
-
-	@SubscribeEvent
-	fun registerPackets(event: FMLCommonSetupEvent) {
-		AaronLibPacketRegistrar.registerPackets(event)
 	}
 
 }
