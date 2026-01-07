@@ -47,6 +47,7 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 	}
 
 	override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+		renderBackground(guiGraphics)
 		super.render(guiGraphics, mouseX, mouseY, partialTick)
 		this.renderTooltip(guiGraphics, mouseX, mouseY)
 	}
