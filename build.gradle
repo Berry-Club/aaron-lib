@@ -112,28 +112,6 @@ repositories {
 		url = 'https://thedarkcolour.github.io/KotlinForForge/'
 	}
 
-	// For EMI
-	maven {
-		name = "TerraformersMC"
-		url = "https://maven.terraformersmc.com/"
-	}
-
-	// For Curios
-	repositories {
-		maven {
-			name = "Illusive Soulworks maven"
-			url = "https://maven.theillusivec4.top/"
-		}
-	}
-
-	// For Modonomicon
-	maven {
-		url "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
-		content {
-			includeGroup "com.klikli_dev"
-		}
-	}
-
 	maven {
 		url "https://maven.latvian.dev/releases"
 		content {
