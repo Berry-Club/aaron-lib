@@ -29,6 +29,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.alchemy.PotionContents
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
@@ -172,5 +173,7 @@ object AaronExtensions {
 	fun Holder<Potion>.getAsStack(): ItemStack {
 		return PotionContents.createItemStack(Items.POTION, this)
 	}
+
+	fun ItemStack.hasEnchantment(enchantment: Holder<Enchantment>): Boolean = this.getEnchantmentLevel(enchantment) > 0
 
 }
