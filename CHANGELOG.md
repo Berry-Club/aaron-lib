@@ -20,10 +20,10 @@
 - Holder<*>#getLocationOrNull
 - RegistryObject<out Item>#getDefaultInstance()
 - AaronExtraCodecs.COMPONENT_CODEC
-- ItemLike3withComponent
-- ItemStack3withComponent
-- ItemStack3removeComponent
-- AttributeInstance3hasModifier
+- ItemLike#withComponent
+- ItemStack#withComponent
+- ItemStack#removeComponent
+- AttributeInstance#hasModifier
 - AaronExtraCodecs.ATTRIBUTE_MODIFIER_CODEC
 - Entity#registryAccess
 - ItemStack#partialNbtIngredient
