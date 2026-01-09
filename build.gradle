@@ -218,7 +218,7 @@ unifiedPublishing {
 		gameVersions = [project.minecraft_version]
 		gameLoaders = ["forge"]
 
-		changelog = "https://github.com/Berry-Club/aaron-lib/blob/master/CHANGELOG.md#" + project.mod_version.toString().replace(".", "")
+		changelog = "https://github.com/Berry-Club/aaron-lib/blob/1.20.1-Forge/CHANGELOG.md#" + project.mod_version.toString().replace(".", "")
 
 		mainPublication jar
 
