@@ -1,3 +1,9 @@
+# 1.5.1
+
+### Fixed
+
+- Fixed the mixins not loading outside of dev
+
 # 1.5.0
 
 - weakMutableSet()
