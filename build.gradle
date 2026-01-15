@@ -226,6 +226,3 @@ unifiedPublishing {
 
 	}
 }
-kotlin {
-	jvmToolchain(8)
-}
