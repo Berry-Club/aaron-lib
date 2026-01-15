@@ -127,10 +127,6 @@ repositories {
 
 }
 
-obfuscation {
-	createRemappingConfiguration(configurations.localRuntime)
-}
-
 dependencies {
 	implementation "thedarkcolour:kotlinforforge:${kff_version}"
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
