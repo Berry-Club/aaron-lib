@@ -25,6 +25,7 @@ println("Java: ${System.getProperty('java.version')}, JVM: ${System.getProperty(
 
 legacyForge {
 
+	version = forge_version
 	validateAccessTransformers = ENV.CI != "true"
 //	disableRecompilation = ENV.CI == "true"
 
@@ -48,7 +49,7 @@ legacyForge {
 		"Client-One" {
 			client()
 			ideName = "Client One"
-			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 
 			if (ENV.MC_CLIENT_ARGS) {
 				programArguments.addAll(ENV.MC_CLIENT_ARGS.split(' '))
@@ -60,7 +61,7 @@ legacyForge {
 		"Client-Two" {
 			client()
 			ideName = "Client Two"
-			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 
 			gameDirectory = file 'runs/client'
 
@@ -73,7 +74,7 @@ legacyForge {
 			server()
 			ideName = "Server"
 			programArgument '--nogui'
-			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 
 			gameDirectory = file 'runs/server'
 		}
@@ -86,11 +87,10 @@ legacyForge {
 			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
 		}
 
-	}
-
-	mods {
-		"${mod_id}" {
-			sourceSet(sourceSets.main)
+		mods {
+			"${mod_id}" {
+				sourceSet(sourceSets.main)
+			}
 		}
 	}
 
@@ -100,6 +100,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
 	add sourceSets.main, "mixins.aaron.refmap.json"
+
 	config "aaron.mixins.json"
 }
 
@@ -123,14 +124,13 @@ repositories {
 	}
 
 	maven { url 'https://maven.blamejared.com' }
-	mavenCentral()
 
 }
 
 dependencies {
+	minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
+
 	implementation "thedarkcolour:kotlinforforge:${kff_version}"
-	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
@@ -225,7 +225,4 @@ unifiedPublishing {
 		}
 
 	}
-}
-kotlin {
-	jvmToolchain(8)
 }
