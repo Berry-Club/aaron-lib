@@ -159,7 +159,8 @@ processResources {
 
 publishing {
 	publications {
-		register('mavenJava', MavenPublication) {
+		mavenNeoForge(MavenPublication) {
+			artifactId = archiveName
 			from components.java
 		}
 	}
