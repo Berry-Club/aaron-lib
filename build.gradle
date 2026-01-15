@@ -25,17 +25,19 @@ println("Java: ${System.getProperty('java.version')}, JVM: ${System.getProperty(
 
 legacyForge {
 
-	version = forge_version
-	validateAccessTransformers = ENV.CI != "true"
-//	disableRecompilation = ENV.CI == "true"
+	enable {
+		version = forge_version
+		validateAccessTransformers = ENV.CI != "true"
+//		disableRecompilation = ENV.CI == "true"
 
-	accessTransformers {
-		publish(project.file('src/main/resources/META-INF/accesstransformer.cfg'))
+		accessTransformers {
+			publish(project.file('src/main/resources/META-INF/accesstransformer.cfg'))
+		}
 	}
 
 	parchment {
-		mappingsVersion = project.mapping_version
-		minecraftVersion = project.minecraft_version
+		mappingsVersion = project.parchment_mappings_version
+		minecraftVersion = project.parchment_minecraft_version
 	}
 
 	runs {
