@@ -2,7 +2,7 @@
 	"required": true,
 	"package": "dev.aaronhowser.mods.aaron.mixin",
 	"compatibilityLevel": "JAVA_17",
-	"refmap": "aaron.refmap.json",
+	"refmap": "mixins.aaron.refmap.json",
 	"mixins": [
 		"LevelMixin"
 	],
