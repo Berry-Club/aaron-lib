@@ -1,3 +1,9 @@
+# 1.5.2
+
+### Fixed
+
+- ACTUALLY fix it this time
+
 # 1.5.1
 
 ### Fixed
