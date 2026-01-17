@@ -1,3 +1,9 @@
+# 1.5.3
+
+### Fixed
+
+- Found a required fix in Genetics, also applied it here just in case :)
+
 # 1.5.2
 
 ### Fixed
