@@ -1,6 +1,7 @@
 # 1.6.0
 
 - ItemStack#hasEnchantment
+- ImprovedEntityPredicate
 
 # 1.5.0
 
