@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.aaron.datagen
 
-import dev.aaronhowser.mods.aaron.AaronExtensions.asIngredient
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import net.minecraft.advancements.Criterion
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.PackOutput

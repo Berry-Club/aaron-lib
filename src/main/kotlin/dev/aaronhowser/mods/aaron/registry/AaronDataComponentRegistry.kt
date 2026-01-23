@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.registry
 
 import com.mojang.serialization.Codec
-import dev.aaronhowser.mods.aaron.AaronExtraCodecs
+import dev.aaronhowser.mods.aaron.misc.AaronExtraCodecs
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs

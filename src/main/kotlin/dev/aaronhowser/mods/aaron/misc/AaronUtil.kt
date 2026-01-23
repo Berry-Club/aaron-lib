@@ -1,9 +1,10 @@
-package dev.aaronhowser.mods.aaron
+package dev.aaronhowser.mods.aaron.misc
 
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.common.UsernameCache
 import java.util.*
+import kotlin.collections.iterator
 
 object AaronUtil {
 

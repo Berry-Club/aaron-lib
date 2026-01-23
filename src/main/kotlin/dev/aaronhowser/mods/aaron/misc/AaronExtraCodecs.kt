@@ -1,9 +1,6 @@
-package dev.aaronhowser.mods.aaron
+package dev.aaronhowser.mods.aaron.misc
 
-import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
-import com.mojang.serialization.DataResult
-import com.mojang.serialization.DynamicOps
 import io.netty.buffer.ByteBuf
 import net.minecraft.Util
 import net.minecraft.core.NonNullList

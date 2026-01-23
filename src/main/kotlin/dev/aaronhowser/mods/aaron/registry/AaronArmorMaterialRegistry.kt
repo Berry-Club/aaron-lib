@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.aaron.registry
 
-import dev.aaronhowser.mods.aaron.AaronExtensions.asIngredient
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent

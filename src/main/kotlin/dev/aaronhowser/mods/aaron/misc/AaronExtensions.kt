@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron
+package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.Direction

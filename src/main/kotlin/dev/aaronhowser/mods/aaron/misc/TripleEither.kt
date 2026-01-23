@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron
+package dev.aaronhowser.mods.aaron.misc
 
 sealed class TripleEither<A, B, C> {
 	data class First<A, B, C>(val value: A) : TripleEither<A, B, C>()
