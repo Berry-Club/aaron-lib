@@ -1,14 +1,19 @@
 package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
+import net.minecraft.core.Holder
+import net.minecraft.world.effect.MobEffect
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
 
 data class EntitySnapshot(
 	val entityType: EntityType<*>,
 	val tickCount: Int,
 	val nbtSnapshot: NbtSnapshot,
 	val flagsSnapshot: FlagsSnapshot,
-	val movementSnapshot: MovementSnapshot
+	val movementSnapshot: MovementSnapshot,
+	val activeEffects: Map<Holder<MobEffect>, MobEffectInstance>
 ) {
 
 	companion object {
@@ -33,7 +38,8 @@ data class EntitySnapshot(
 				entity.tickCount,
 				nbtSnapshot,
 				flagsSnapshot,
-				movementSnapshot
+				movementSnapshot,
+				if (entity is LivingEntity) entity.activeEffectsMap else emptyMap()
 			)
 		}
 	}

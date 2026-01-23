@@ -43,7 +43,7 @@ class DetailedEntityPredicate(
 		if (entityType.isPresent && !entityType.get().matches(entitySnapshot.entityType)) return false
 		if (movement.isPresent && !entitySnapshot.movementSnapshot.test(movement.get())) return false
 
-		if (effects.isPresent && !effects.get().matches(entitySnapshot)) return false
+		if (effects.isPresent && !effects.get().matches(entitySnapshot.activeEffects)) return false
 		if (nbt.isPresent && !entitySnapshot.nbtSnapshot.test(nbt.get())) return false
 		if (flags.isPresent && !entitySnapshot.flagsSnapshot.test(flags.get())) return false
 
