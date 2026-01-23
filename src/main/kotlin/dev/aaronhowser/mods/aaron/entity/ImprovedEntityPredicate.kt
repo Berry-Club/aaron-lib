@@ -36,6 +36,7 @@ sealed interface ImprovedEntityPredicate {
 		val codec: MapCodec<out ImprovedEntityPredicate>,
 		val streamCodec: StreamCodec<ByteBuf, out ImprovedEntityPredicate>
 	) : StringRepresentable {
+		ALWAYS("always", Always.CODEC, Always.STREAM_CODEC),
 		ALL("all", All.CODEC, All.STREAM_CODEC),
 		NOT("none", Not.CODEC, Not.STREAM_CODEC),
 		DETAILED("detailed", Detailed.CODEC, Detailed.STREAM_CODEC)
@@ -49,17 +50,17 @@ sealed interface ImprovedEntityPredicate {
 		}
 	}
 
-	class All : ImprovedEntityPredicate {
+	class Always : ImprovedEntityPredicate {
 		override fun matches(entity: Entity?) = true
-		override fun getType(): Type = Type.ALL
+		override fun getType(): Type = Type.ALWAYS
 
 		private constructor()
 
 		companion object {
-			val INSTANCE = All()
+			val INSTANCE = Always()
 
-			val CODEC: MapCodec<All> = MapCodec.unit { INSTANCE }
-			val STREAM_CODEC: StreamCodec<ByteBuf, All> = StreamCodec.unit(INSTANCE)
+			val CODEC: MapCodec<Always> = MapCodec.unit { INSTANCE }
+			val STREAM_CODEC: StreamCodec<ByteBuf, Always> = StreamCodec.unit(INSTANCE)
 		}
 	}
 
@@ -83,7 +84,7 @@ sealed interface ImprovedEntityPredicate {
 		}
 	}
 
-	class And(val allOf: List<ImprovedEntityPredicate>) : ImprovedEntityPredicate {
+	class All(val allOf: List<ImprovedEntityPredicate>) : ImprovedEntityPredicate {
 
 		constructor(vararg predicates: ImprovedEntityPredicate) : this(predicates.toList())
 
@@ -91,19 +92,19 @@ sealed interface ImprovedEntityPredicate {
 			return allOf.all { it.matches(entity) }
 		}
 
-		override fun getType(): Type = Type.ALL
+		override fun getType(): Type = Type.ALWAYS
 
 		companion object {
-			val CODEC: MapCodec<And> =
+			val CODEC: MapCodec<All> =
 				ImprovedEntityPredicate.CODEC
 					.listOf()
-					.fieldOf("and")
-					.xmap(::And, And::allOf)
+					.fieldOf("all")
+					.xmap(::All, All::allOf)
 
-			val STREAM_CODEC: StreamCodec<ByteBuf, And> =
+			val STREAM_CODEC: StreamCodec<ByteBuf, All> =
 				StreamCodec.composite(
-					ImprovedEntityPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), And::allOf,
-					::And
+					ImprovedEntityPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), All::allOf,
+					::All
 				)
 		}
 	}
