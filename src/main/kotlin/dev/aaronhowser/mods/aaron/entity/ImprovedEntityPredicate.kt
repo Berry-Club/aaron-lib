@@ -24,8 +24,17 @@ open class ImprovedEntityPredicate(
 	val slots: Optional<SlotsPredicate> = Optional.empty()
 ) {
 
-	object All : ImprovedEntityPredicate() {
+	class All : ImprovedEntityPredicate {
 		override fun matches(entity: Entity?) = true
+
+		private constructor() : super()
+
+		companion object {
+			val INSTANCE = All()
+
+			val CODEC: Codec<All> = Codec.unit { INSTANCE }
+			val STREAM_CODEC: StreamCodec<ByteBuf, All> = StreamCodec.unit(INSTANCE)
+		}
 	}
 
 	open fun matches(entity: Entity?): Boolean {
