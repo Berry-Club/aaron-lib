@@ -39,18 +39,17 @@ class DetailedEntityPredicate(
 		Optional.ofNullable(slots)
 	)
 
-	override fun test(snapshot: EntitySnapshot): Boolean {
+	override fun test(entitySnapshot: EntitySnapshot): Boolean {
+		if (entityType.isPresent && !entityType.get().matches(entitySnapshot.entityType)) return false
+		if (movement.isPresent && !entitySnapshot.movementSnapshot.test(movement.get())) return false
 
-		if (entityType.isPresent && !entityType.get().matches(snapshot.entityType)) return false
-		if (movement.isPresent && !snapshot.movementSnapshot.test(movement.get())) return false
+		if (effects.isPresent && !effects.get().matches(entitySnapshot)) return false
+		if (nbt.isPresent && !entitySnapshot.nbtSnapshot.test(nbt.get())) return false
+		if (flags.isPresent && !entitySnapshot.flagsSnapshot.test(flags.get())) return false
 
-		if (effects.isPresent && !effects.get().matches(snapshot)) return false
-		if (nbt.isPresent && !snapshot.nbtSnapshot.test(nbt.get())) return false
-		if (flags.isPresent && !snapshot.flagsSnapshot.test(flags.get())) return false
+		if (periodicTick.isPresent && entitySnapshot.tickCount % periodicTick.get() != 0) return false
 
-		if (periodicTick.isPresent && snapshot.tickCount % periodicTick.get() != 0) return false
-
-		if (slots.isPresent && !slots.get().matches(snapshot)) return false
+		if (slots.isPresent && !slots.get().matches(entitySnapshot)) return false
 
 		return true
 	}

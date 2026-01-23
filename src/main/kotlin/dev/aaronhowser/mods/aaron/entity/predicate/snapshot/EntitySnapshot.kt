@@ -5,6 +5,7 @@ import net.minecraft.world.entity.EntityType
 
 data class EntitySnapshot(
 	val entityType: EntityType<*>,
+	val tickCount: Int,
 	val nbtSnapshot: NbtSnapshot,
 	val flagsSnapshot: FlagsSnapshot,
 	val movementSnapshot: MovementSnapshot
@@ -27,7 +28,13 @@ data class EntitySnapshot(
 				fallDistance = entity.fallDistance.toDouble()
 			)
 
-			return EntitySnapshot(entity.type, nbtSnapshot, flagsSnapshot, movementSnapshot)
+			return EntitySnapshot(
+				entity.type,
+				entity.tickCount,
+				nbtSnapshot,
+				flagsSnapshot,
+				movementSnapshot
+			)
 		}
 	}
 

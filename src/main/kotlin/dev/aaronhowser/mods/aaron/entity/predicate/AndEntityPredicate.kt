@@ -5,14 +5,13 @@ import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.world.entity.Entity
 
 class AndEntityPredicate(val allOf: List<EntityPredicate>) : EntityPredicate {
 
 	constructor(vararg predicates: EntityPredicate) : this(predicates.toList())
 
-	override fun test(entity: EntitySnapshot): Boolean {
-		return allOf.all { it.test(entity) }
+	override fun test(entitySnapshot: EntitySnapshot): Boolean {
+		return allOf.all { it.test(entitySnapshot) }
 	}
 
 	override fun getType(): EntityPredicate.Type = EntityPredicate.Type.AND

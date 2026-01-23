@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity
 
 object AlwaysEntityPredicate : EntityPredicate {
 
-	override fun test(entity: EntitySnapshot): Boolean  = true
+	override fun test(entitySnapshot: EntitySnapshot): Boolean  = true
 	override fun getType(): Type = Type.ALWAYS
 
 	val CODEC: MapCodec<AlwaysEntityPredicate> = MapCodec.unit { AlwaysEntityPredicate }

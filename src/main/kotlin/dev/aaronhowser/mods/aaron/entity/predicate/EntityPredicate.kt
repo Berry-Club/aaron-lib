@@ -12,7 +12,7 @@ import java.util.function.Supplier
 
 sealed interface EntityPredicate {
 
-	fun test(entity: EntitySnapshot): Boolean
+	fun test(entitySnapshot: EntitySnapshot): Boolean
 	fun test(entity: Entity): Boolean = test(EntitySnapshot.fromEntity(entity, emptyList()))
 	fun getType(): Type
 
