@@ -63,17 +63,32 @@ sealed interface ImprovedEntityPredicate {
 		}
 	}
 
-	class None : ImprovedEntityPredicate {
-		override fun matches(entity: Entity?) = false
-		override fun getType(): Type = Type.ALL
+	class None(val noneOf: List<ImprovedEntityPredicate>) : ImprovedEntityPredicate {
 
-		private constructor()
+		constructor(vararg noneOf: ImprovedEntityPredicate) : this(noneOf.toList())
+
+		override fun matches(entity: Entity?): Boolean {
+			return noneOf.none { it.matches(entity) }
+		}
+
+		override fun getType(): Type = Type.NONE
 
 		companion object {
-			val INSTANCE = None()
+			val CODEC: MapCodec<None> =
+				RecordCodecBuilder.mapCodec { instance ->
+					instance.group(
+						ImprovedEntityPredicate.CODEC
+							.listOf()
+							.fieldOf("none_of")
+							.forGetter(None::noneOf)
+					).apply(instance, ::None)
+				}
 
-			val CODEC: MapCodec<None> = MapCodec.unit { INSTANCE }
-			val STREAM_CODEC: StreamCodec<ByteBuf, None> = StreamCodec.unit(INSTANCE)
+			val STREAM_CODEC: StreamCodec<ByteBuf, None> =
+				StreamCodec.composite(
+					ImprovedEntityPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), None::noneOf,
+					::None
+				)
 		}
 	}
 
