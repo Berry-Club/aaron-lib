@@ -3,11 +3,14 @@ package dev.aaronhowser.mods.aaron.entity.predicate
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
+import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.MovementSnapshot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.entity.EntityType
 import java.util.*
 
 class DetailedEntityPredicate(
@@ -34,6 +37,19 @@ class DetailedEntityPredicate(
 		Optional.ofNullable(flags),
 //		Optional.ofNullable(slots)
 	)
+
+	fun getPassingSnapshot(): EntitySnapshot {
+		var et: EntityType<*>? = null
+		if (entityType.isPresent) {
+			et = BuiltInRegistries.ENTITY_TYPE.first { entityType.get().matches(it) }
+		}
+
+		var movement: MovementSnapshot? = null
+		if (this.movement.isPresent) {
+			movement = MovementSnapshot.createFromPredicate(this.movement.get())
+		}
+
+	}
 
 	override fun test(entitySnapshot: EntitySnapshot): Boolean {
 		if (entityType.isPresent && !entityType.get().matches(entitySnapshot.entityType)) return false
