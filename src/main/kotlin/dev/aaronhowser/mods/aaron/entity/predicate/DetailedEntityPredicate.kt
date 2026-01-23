@@ -8,7 +8,6 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs
 import java.util.*
 
 class DetailedEntityPredicate(
@@ -18,7 +17,7 @@ class DetailedEntityPredicate(
 	val nbt: Optional<NbtPredicate> = Optional.empty(),
 	val flags: Optional<EntityFlagsPredicate> = Optional.empty(),
 	val periodicTick: Optional<Int> = Optional.empty(),
-	val slots: Optional<SlotsPredicate> = Optional.empty()
+//	val slots: Optional<SlotsPredicate> = Optional.empty()
 ) : EntityPredicate {
 
 	constructor(
@@ -28,7 +27,7 @@ class DetailedEntityPredicate(
 		nbt: NbtPredicate? = null,
 		flags: EntityFlagsPredicate? = null,
 		periodicTick: Int? = null,
-		slots: SlotsPredicate? = null
+//		slots: SlotsPredicate? = null
 	) : this(
 		Optional.ofNullable(entityType),
 		Optional.ofNullable(movement),
@@ -36,7 +35,7 @@ class DetailedEntityPredicate(
 		Optional.ofNullable(nbt),
 		Optional.ofNullable(flags),
 		Optional.ofNullable(periodicTick),
-		Optional.ofNullable(slots)
+//		Optional.ofNullable(slots)
 	)
 
 	override fun test(entitySnapshot: EntitySnapshot): Boolean {
@@ -49,7 +48,7 @@ class DetailedEntityPredicate(
 
 		if (periodicTick.isPresent && entitySnapshot.tickCount % periodicTick.get() != 0) return false
 
-		if (slots.isPresent && !slots.get().matches(entitySnapshot)) return false
+//		if (slots.isPresent && !slots.get().matches(entitySnapshot)) return false
 
 		return true
 	}
@@ -78,21 +77,21 @@ class DetailedEntityPredicate(
 					Codec.INT
 						.optionalFieldOf("periodic_tick")
 						.forGetter(DetailedEntityPredicate::periodicTick),
-					SlotsPredicate.CODEC
-						.optionalFieldOf("slots")
-						.forGetter(DetailedEntityPredicate::slots)
+//					SlotsPredicate.CODEC
+//						.optionalFieldOf("slots")
+//						.forGetter(DetailedEntityPredicate::slots)
 				).apply(instance, ::DetailedEntityPredicate)
 			}
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, DetailedEntityPredicate> =
-			NeoForgeStreamCodecs.composite(
+			StreamCodec.composite(
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(EntityTypePredicate.CODEC)), DetailedEntityPredicate::entityType,
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(MovementPredicate.CODEC)), DetailedEntityPredicate::movement,
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(MobEffectsPredicate.CODEC)), DetailedEntityPredicate::effects,
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(NbtPredicate.CODEC)), DetailedEntityPredicate::nbt,
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(EntityFlagsPredicate.CODEC)), DetailedEntityPredicate::flags,
 				ByteBufCodecs.optional(ByteBufCodecs.VAR_INT), DetailedEntityPredicate::periodicTick,
-				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(SlotsPredicate.CODEC)), DetailedEntityPredicate::slots,
+//				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(SlotsPredicate.CODEC)), DetailedEntityPredicate::slots,
 				::DetailedEntityPredicate
 			)
 	}
