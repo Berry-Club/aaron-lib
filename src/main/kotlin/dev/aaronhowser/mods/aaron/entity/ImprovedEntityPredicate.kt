@@ -38,7 +38,7 @@ sealed interface ImprovedEntityPredicate {
 	) : StringRepresentable {
 		ALWAYS("always", Always.CODEC, Always.STREAM_CODEC),
 		ALL("all", All.CODEC, All.STREAM_CODEC),
-		NONE("none", Not.CODEC, Not.STREAM_CODEC),
+		NOT("not", Not.CODEC, Not.STREAM_CODEC),
 		OR("or", Or.CODEC, Or.STREAM_CODEC),
 		DETAILED("detailed", Detailed.CODEC, Detailed.STREAM_CODEC)
 		;
@@ -51,25 +51,19 @@ sealed interface ImprovedEntityPredicate {
 		}
 	}
 
-	class Always : ImprovedEntityPredicate {
+	object Always : ImprovedEntityPredicate {
 		override fun matches(entity: Entity?) = true
 		override fun getType(): Type = Type.ALWAYS
 
-		private constructor()
-
-		companion object {
-			val INSTANCE = Always()
-
-			val CODEC: MapCodec<Always> = MapCodec.unit { INSTANCE }
-			val STREAM_CODEC: StreamCodec<ByteBuf, Always> = StreamCodec.unit(INSTANCE)
-		}
+		val CODEC: MapCodec<Always> = MapCodec.unit { Always }
+		val STREAM_CODEC: StreamCodec<ByteBuf, Always> = StreamCodec.unit(Always)
 	}
 
 	class Not(val other: ImprovedEntityPredicate) : ImprovedEntityPredicate {
 
 		override fun matches(entity: Entity?): Boolean = !other.matches(entity)
 
-		override fun getType(): Type = Type.NONE
+		override fun getType(): Type = Type.NOT
 
 		companion object {
 			val CODEC: MapCodec<Not> =
@@ -93,7 +87,7 @@ sealed interface ImprovedEntityPredicate {
 			return allOf.all { it.matches(entity) }
 		}
 
-		override fun getType(): Type = Type.ALWAYS
+		override fun getType(): Type = Type.ALL
 
 		companion object {
 			val CODEC: MapCodec<All> =
@@ -118,7 +112,7 @@ sealed interface ImprovedEntityPredicate {
 			return anyOf.any { it.matches(entity) }
 		}
 
-		override fun getType(): Type = Type.ALWAYS
+		override fun getType(): Type = Type.OR
 
 		companion object {
 			val CODEC: MapCodec<Or> =
