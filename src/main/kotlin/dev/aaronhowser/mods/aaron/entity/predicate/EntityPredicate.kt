@@ -7,7 +7,6 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.Entity
-import java.util.function.Supplier
 
 sealed interface EntityPredicate {
 
@@ -17,25 +16,27 @@ sealed interface EntityPredicate {
 	companion object {
 		val CODEC: Codec<EntityPredicate> =
 			Type.CODEC.dispatch(
-				EntityPredicate::getType
-			) { type -> type.codecSupplier.get() }
+				EntityPredicate::getType,
+				Type::codec
+			)
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, EntityPredicate> =
 			Type.STREAM_CODEC.dispatch(
 				EntityPredicate::getType,
-			) { type -> type.streamCodec.get() }
+				Type::streamCodec
+			)
 	}
 
 	enum class Type(
 		val id: String,
-		val codecSupplier: Supplier<MapCodec<out EntityPredicate>>,
-		val streamCodec: Supplier<StreamCodec<ByteBuf, out EntityPredicate>>
+		val codec: MapCodec<out EntityPredicate>,
+		val streamCodec: StreamCodec<ByteBuf, out EntityPredicate>
 	) : StringRepresentable {
-		ALWAYS("always", AlwaysEntityPredicate::CODEC, AlwaysEntityPredicate::STREAM_CODEC),
-		AND("and", AndEntityPredicate::CODEC, AndEntityPredicate::STREAM_CODEC),
-		NOT("not", NotEntityPredicate::CODEC, NotEntityPredicate::STREAM_CODEC),
-		OR("or", OrEntityPredicate::CODEC, OrEntityPredicate::STREAM_CODEC),
-		DETAILED("detailed", DetailedEntityPredicate::CODEC, DetailedEntityPredicate::STREAM_CODEC)
+		ALWAYS("always", AlwaysEntityPredicate.CODEC, AlwaysEntityPredicate.STREAM_CODEC),
+		AND("and", AndEntityPredicate.CODEC, AndEntityPredicate.STREAM_CODEC),
+		NOT("not", NotEntityPredicate.CODEC, NotEntityPredicate.STREAM_CODEC),
+		OR("or", OrEntityPredicate.CODEC, OrEntityPredicate.STREAM_CODEC),
+		DETAILED("detailed", DetailedEntityPredicate.CODEC, DetailedEntityPredicate.STREAM_CODEC)
 		;
 
 		override fun getSerializedName(): String = this.id
