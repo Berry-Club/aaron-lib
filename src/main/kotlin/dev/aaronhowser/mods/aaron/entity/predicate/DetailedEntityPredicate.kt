@@ -49,10 +49,14 @@ class DetailedEntityPredicate(
 			movement = MovementSnapshot.createFromPredicate(this.movement.get())
 		}
 
+		return EntitySnapshot(
+			entityType = et,
+			movementSnapshot = movement
+		)
 	}
 
 	override fun test(entitySnapshot: EntitySnapshot): Boolean {
-		if (entityType.isPresent && !entityType.get().matches(entitySnapshot.entityType)) return false
+		if (entityType.isPresent && entitySnapshot.entityType != null && !entityType.get().matches(entitySnapshot.entityType)) return false
 		if (movement.isPresent && !entitySnapshot.movementSnapshot?.test(movement.get()).isTrue()) return false
 
 		if (effects.isPresent && !effects.get().matches(entitySnapshot.activeEffects)) return false

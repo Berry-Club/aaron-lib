@@ -16,7 +16,7 @@ import net.minecraft.world.entity.LivingEntity
 import java.util.*
 
 data class EntitySnapshot(
-	val entityType: EntityType<*>,
+	val entityType: EntityType<*>?,
 	val nbtSnapshot: NbtSnapshot?,
 	val flagsSnapshot: FlagsSnapshot?,
 	val movementSnapshot: MovementSnapshot?,
@@ -29,7 +29,7 @@ data class EntitySnapshot(
 			RecordCodecBuilder.create { instance ->
 				instance.group(
 					BuiltInRegistries.ENTITY_TYPE.byNameCodec()
-						.fieldOf("entity_type")
+						.optionalFieldOf("entity_type", null)
 						.forGetter(EntitySnapshot::entityType),
 					NbtSnapshot.CODEC
 						.optionalFieldOf("nbt", null)
@@ -51,7 +51,7 @@ data class EntitySnapshot(
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, EntitySnapshot> =
 			StreamCodec.composite(
-				ByteBufCodecs.registry(Registries.ENTITY_TYPE), EntitySnapshot::entityType,
+				ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.ENTITY_TYPE)), { Optional.ofNullable(it.entityType) },
 				ByteBufCodecs.optional(NbtSnapshot.STREAM_CODEC), { Optional.ofNullable(it.nbtSnapshot) },
 				ByteBufCodecs.optional(FlagsSnapshot.STREAM_CODEC), { Optional.ofNullable(it.flagsSnapshot) },
 				ByteBufCodecs.optional(MovementSnapshot.STREAM_CODEC), { Optional.ofNullable(it.movementSnapshot) },
@@ -67,7 +67,7 @@ data class EntitySnapshot(
 				movement,
 				effects ->
 				EntitySnapshot(
-					entityType,
+					entityType.orElse(null),
 					nbt.orElse(null),
 					flags.orElse(null),
 					movement.orElse(null),
