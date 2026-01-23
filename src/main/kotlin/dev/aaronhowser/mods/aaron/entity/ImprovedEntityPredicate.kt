@@ -3,13 +3,9 @@ package dev.aaronhowser.mods.aaron.entity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
-import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.Mob
 import java.util.*
 
 sealed interface ImprovedEntityPredicate {
@@ -49,7 +45,6 @@ sealed interface ImprovedEntityPredicate {
 			val INSTANCE = All()
 
 			val CODEC: MapCodec<All> = MapCodec.unit { INSTANCE }
-			val STREAM_CODEC: StreamCodec<ByteBuf, All> = StreamCodec.unit(INSTANCE)
 		}
 	}
 
@@ -60,9 +55,6 @@ sealed interface ImprovedEntityPredicate {
 		val nbt: Optional<NbtPredicate> = Optional.empty(),
 		val flags: Optional<EntityFlagsPredicate> = Optional.empty(),
 		val periodicTick: Optional<Int> = Optional.empty(),
-		val vehicle: Optional<Detailed> = Optional.empty(),
-		val passenger: Optional<Detailed> = Optional.empty(),
-		val targetedEntity: Optional<Detailed> = Optional.empty(),
 		val team: Optional<String> = Optional.empty(),
 		val slots: Optional<SlotsPredicate> = Optional.empty()
 	) : ImprovedEntityPredicate {
@@ -82,10 +74,6 @@ sealed interface ImprovedEntityPredicate {
 
 			if (periodicTick.isPresent && entity.tickCount % periodicTick.get() != 0) return false
 
-			if (vehicle.isPresent && !vehicle.get().matches(entity.vehicle)) return false
-			if (passenger.isPresent && entity.passengers.none { passenger.get().matches(it) }) return false
-			if (targetedEntity.isPresent && !targetedEntity.get().matches((entity as? Mob)?.target)) return false
-
 			if (team.isPresent && !team.get().equals(entity.team?.name, ignoreCase = false)) return false
 			if (slots.isPresent && !slots.get().matches(entity)) return false
 
@@ -95,50 +83,35 @@ sealed interface ImprovedEntityPredicate {
 		override fun getType(): Type = Type.DETAILED
 
 		companion object {
-			val CODEC: Codec<Detailed> =
-				Codec.recursive("ImprovedEntityPredicate") { codec ->
-					RecordCodecBuilder.create { instance ->
-						instance.group(
-							EntityTypePredicate.CODEC
-								.optionalFieldOf("entity_type")
-								.forGetter(Detailed::entityType),
-							MovementPredicate.CODEC
-								.optionalFieldOf("movement")
-								.forGetter(Detailed::movement),
-							MobEffectsPredicate.CODEC
-								.optionalFieldOf("effects")
-								.forGetter(Detailed::effects),
-							NbtPredicate.CODEC
-								.optionalFieldOf("nbt")
-								.forGetter(Detailed::nbt),
-							EntityFlagsPredicate.CODEC
-								.optionalFieldOf("flags")
-								.forGetter(Detailed::flags),
-							Codec.INT
-								.optionalFieldOf("periodic_tick")
-								.forGetter(Detailed::periodicTick),
-							codec
-								.optionalFieldOf("vehicle")
-								.forGetter(Detailed::vehicle),
-							codec
-								.optionalFieldOf("passenger")
-								.forGetter(Detailed::passenger),
-							codec
-								.optionalFieldOf("targeted_entity")
-								.forGetter(Detailed::targetedEntity),
-							Codec.STRING
-								.optionalFieldOf("team")
-								.forGetter(Detailed::team),
-							SlotsPredicate.CODEC
-								.optionalFieldOf("slots")
-								.forGetter(Detailed::slots)
-						).apply(instance, ::Detailed)
-					}
+			val CODEC: MapCodec<Detailed> =
+				RecordCodecBuilder.mapCodec { instance ->
+					instance.group(
+						EntityTypePredicate.CODEC
+							.optionalFieldOf("entity_type")
+							.forGetter(Detailed::entityType),
+						MovementPredicate.CODEC
+							.optionalFieldOf("movement")
+							.forGetter(Detailed::movement),
+						MobEffectsPredicate.CODEC
+							.optionalFieldOf("effects")
+							.forGetter(Detailed::effects),
+						NbtPredicate.CODEC
+							.optionalFieldOf("nbt")
+							.forGetter(Detailed::nbt),
+						EntityFlagsPredicate.CODEC
+							.optionalFieldOf("flags")
+							.forGetter(Detailed::flags),
+						Codec.INT
+							.optionalFieldOf("periodic_tick")
+							.forGetter(Detailed::periodicTick),
+						Codec.STRING
+							.optionalFieldOf("team")
+							.forGetter(Detailed::team),
+						SlotsPredicate.CODEC
+							.optionalFieldOf("slots")
+							.forGetter(Detailed::slots)
+					).apply(instance, ::Detailed)
 				}
-
-			// FIXME
-			val STREAM_CODEC: StreamCodec<ByteBuf, Detailed> =
-				ByteBufCodecs.fromCodec(CODEC)
 		}
 	}
 
