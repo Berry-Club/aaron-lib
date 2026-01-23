@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.entity.predicate
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
 import net.minecraft.network.codec.ByteBufCodecs
@@ -36,11 +37,11 @@ class DetailedEntityPredicate(
 
 	override fun test(entitySnapshot: EntitySnapshot): Boolean {
 		if (entityType.isPresent && !entityType.get().matches(entitySnapshot.entityType)) return false
-		if (movement.isPresent && !entitySnapshot.movementSnapshot.test(movement.get())) return false
+		if (movement.isPresent && !entitySnapshot.movementSnapshot?.test(movement.get()).isTrue()) return false
 
 		if (effects.isPresent && !effects.get().matches(entitySnapshot.activeEffects)) return false
-		if (nbt.isPresent && !entitySnapshot.nbtSnapshot.test(nbt.get())) return false
-		if (flags.isPresent && !entitySnapshot.flagsSnapshot.test(flags.get())) return false
+		if (nbt.isPresent && !entitySnapshot.nbtSnapshot?.test(nbt.get()).isTrue()) return false
+		if (flags.isPresent && !entitySnapshot.flagsSnapshot?.test(flags.get()).isTrue()) return false
 
 //		if (slots.isPresent && !slots.get().matches(entitySnapshot)) return false
 
