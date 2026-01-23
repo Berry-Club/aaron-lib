@@ -9,6 +9,7 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.Entity
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs
 import java.util.*
 
 sealed interface ImprovedEntityPredicate {
@@ -59,7 +60,6 @@ sealed interface ImprovedEntityPredicate {
 		val nbt: Optional<NbtPredicate> = Optional.empty(),
 		val flags: Optional<EntityFlagsPredicate> = Optional.empty(),
 		val periodicTick: Optional<Int> = Optional.empty(),
-		val team: Optional<String> = Optional.empty(),
 		val slots: Optional<SlotsPredicate> = Optional.empty()
 	) : ImprovedEntityPredicate {
 
@@ -78,7 +78,6 @@ sealed interface ImprovedEntityPredicate {
 
 			if (periodicTick.isPresent && entity.tickCount % periodicTick.get() != 0) return false
 
-			if (team.isPresent && !team.get().equals(entity.team?.name, ignoreCase = false)) return false
 			if (slots.isPresent && !slots.get().matches(entity)) return false
 
 			return true
@@ -108,24 +107,20 @@ sealed interface ImprovedEntityPredicate {
 						Codec.INT
 							.optionalFieldOf("periodic_tick")
 							.forGetter(Detailed::periodicTick),
-						Codec.STRING
-							.optionalFieldOf("team")
-							.forGetter(Detailed::team),
 						SlotsPredicate.CODEC
 							.optionalFieldOf("slots")
 							.forGetter(Detailed::slots)
 					).apply(instance, ::Detailed)
 				}
 
-			val STREAM_CODEC =
-				StreamCodec.composite(
+			val STREAM_CODEC: StreamCodec<ByteBuf, Detailed> =
+				NeoForgeStreamCodecs.composite(
 					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(EntityTypePredicate.CODEC)), Detailed::entityType,
 					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(MovementPredicate.CODEC)), Detailed::movement,
 					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(MobEffectsPredicate.CODEC)), Detailed::effects,
 					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(NbtPredicate.CODEC)), Detailed::nbt,
 					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(EntityFlagsPredicate.CODEC)), Detailed::flags,
 					ByteBufCodecs.optional(ByteBufCodecs.VAR_INT), Detailed::periodicTick,
-					ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), Detailed::team,
 					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(SlotsPredicate.CODEC)), Detailed::slots,
 					::Detailed
 				)
