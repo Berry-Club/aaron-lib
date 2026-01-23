@@ -3,7 +3,10 @@ package dev.aaronhowser.mods.aaron.entity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.Entity
 import java.util.*
@@ -45,6 +48,7 @@ sealed interface ImprovedEntityPredicate {
 			val INSTANCE = All()
 
 			val CODEC: MapCodec<All> = MapCodec.unit { INSTANCE }
+			val STREAM_CODEC: StreamCodec<ByteBuf, All> = StreamCodec.unit(INSTANCE)
 		}
 	}
 
@@ -112,6 +116,19 @@ sealed interface ImprovedEntityPredicate {
 							.forGetter(Detailed::slots)
 					).apply(instance, ::Detailed)
 				}
+
+			val STREAM_CODEC =
+				StreamCodec.composite(
+					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(EntityTypePredicate.CODEC)), Detailed::entityType,
+					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(MovementPredicate.CODEC)), Detailed::movement,
+					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(MobEffectsPredicate.CODEC)), Detailed::effects,
+					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(NbtPredicate.CODEC)), Detailed::nbt,
+					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(EntityFlagsPredicate.CODEC)), Detailed::flags,
+					ByteBufCodecs.optional(ByteBufCodecs.VAR_INT), Detailed::periodicTick,
+					ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), Detailed::team,
+					ByteBufCodecs.optional(ByteBufCodecs.fromCodec(SlotsPredicate.CODEC)), Detailed::slots,
+					::Detailed
+				)
 		}
 	}
 
