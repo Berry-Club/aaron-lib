@@ -55,6 +55,16 @@ data class FlagsSnapshot(
 				ByteBufCodecs.BOOL, FlagsSnapshot::isSwimming,
 				::FlagsSnapshot
 			)
+
+		fun fromPredicate(predicate: EntityFlagsPredicate): FlagsSnapshot {
+			return FlagsSnapshot(
+				isOnGround = predicate.isOnGround.orElse(true),
+				isOnFire = predicate.isOnFire.orElse(false),
+				isCrouching = predicate.isCrouching.orElse(false),
+				isSprinting = predicate.isSprinting.orElse(false),
+				isSwimming = predicate.isSwimming.orElse(false)
+			)
+		}
 	}
 
 }

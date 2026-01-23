@@ -36,6 +36,10 @@ class NbtSnapshot(
 			return NbtSnapshot(filteredNbt)
 		}
 
+		fun fromPredicate(predicate: NbtPredicate): NbtSnapshot {
+			return NbtSnapshot(predicate.tag)
+		}
+
 	}
 
 }
