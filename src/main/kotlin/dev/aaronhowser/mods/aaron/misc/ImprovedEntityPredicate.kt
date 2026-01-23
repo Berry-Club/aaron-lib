@@ -6,7 +6,11 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.Mob
 import java.util.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 data class ImprovedEntityPredicate(
 	val entityType: Optional<EntityTypePredicate> = Optional.empty(),
@@ -21,6 +25,34 @@ data class ImprovedEntityPredicate(
 	val team: Optional<String> = Optional.empty(),
 	val slots: Optional<SlotsPredicate> = Optional.empty()
 ) {
+
+
+	@OptIn(ExperimentalContracts::class)
+	fun matches(entity: Entity?): Boolean {
+		contract { returns(true) implies (entity != null) }
+		if (entity == null) return false
+
+		if (entityType.isPresent && !entityType.get().matches(entity.type)) return false
+		if (movement.isPresent) {
+			val motion = entity.knownMovement.scale(20.0) // Why scale?
+			if (!movement.get().matches(motion.x, motion.y, motion.z, entity.fallDistance.toDouble())) return false
+		}
+
+		if (effects.isPresent && !effects.get().matches(entity)) return false
+		if (nbt.isPresent && !nbt.get().matches(entity)) return false
+		if (flags.isPresent && !flags.get().matches(entity)) return false
+
+		if (periodicTick.isPresent && entity.tickCount % periodicTick.get() != 0) return false
+
+		if (vehicle.isPresent && !vehicle.get().matches(entity.vehicle)) return false
+		if (passenger.isPresent && entity.passengers.none { passenger.get().matches(it) }) return false
+		if (targetedEntity.isPresent && !targetedEntity.get().matches((entity as? Mob)?.target)) return false
+
+		if (team.isPresent && !team.get().equals(entity.team?.name, ignoreCase = false)) return false
+		if (slots.isPresent && !slots.get().matches(entity)) return false
+
+		return true
+	}
 
 	companion object {
 		val CODEC: Codec<ImprovedEntityPredicate> =
