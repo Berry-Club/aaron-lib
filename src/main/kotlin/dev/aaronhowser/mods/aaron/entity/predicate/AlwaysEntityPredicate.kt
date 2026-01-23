@@ -7,7 +7,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.Entity
 
 object AlwaysEntityPredicate : EntityPredicate {
-	override fun matches(entity: Entity?) = true
+	override fun test(entity: Entity?) = true
 	override fun getType(): Type = Type.ALWAYS
 
 	val CODEC: MapCodec<AlwaysEntityPredicate> = MapCodec.unit { AlwaysEntityPredicate }

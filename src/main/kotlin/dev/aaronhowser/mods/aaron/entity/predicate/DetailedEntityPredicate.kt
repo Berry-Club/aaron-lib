@@ -39,7 +39,7 @@ class DetailedEntityPredicate(
 		Optional.ofNullable(slots)
 	)
 
-	override fun matches(entity: Entity?): Boolean {
+	override fun test(entity: Entity?): Boolean {
 		if (entity == null) return false
 
 		if (entityType.isPresent && !entityType.get().matches(entity.type)) return false

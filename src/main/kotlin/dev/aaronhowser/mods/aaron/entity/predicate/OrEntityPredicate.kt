@@ -10,8 +10,8 @@ class OrEntityPredicate(val anyOf: List<EntityPredicate>) : EntityPredicate {
 
 	constructor(vararg predicates: EntityPredicate) : this(predicates.toList())
 
-	override fun matches(entity: Entity?): Boolean {
-		return anyOf.any { it.matches(entity) }
+	override fun test(entity: Entity?): Boolean {
+		return anyOf.any { it.test(entity) }
 	}
 
 	override fun getType(): EntityPredicate.Type = EntityPredicate.Type.OR

@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Entity
 
 class NotEntityPredicate(val other: EntityPredicate) : EntityPredicate {
 
-	override fun matches(entity: Entity?): Boolean = !other.matches(entity)
+	override fun test(entity: Entity?): Boolean = !other.test(entity)
 
 	override fun getType(): EntityPredicate.Type = EntityPredicate.Type.NOT
 

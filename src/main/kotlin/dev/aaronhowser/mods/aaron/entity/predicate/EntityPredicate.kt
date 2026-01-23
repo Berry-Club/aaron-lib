@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.entity.predicate
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
+import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -11,7 +12,8 @@ import java.util.function.Supplier
 
 sealed interface EntityPredicate {
 
-	fun matches(entity: Entity?): Boolean
+	fun test(entity: EntitySnapshot): Boolean
+	fun test(entity: Entity): Boolean = test(EntitySnapshot.fromEntity(entity, emptyList()))
 	fun getType(): Type
 
 	companion object {
