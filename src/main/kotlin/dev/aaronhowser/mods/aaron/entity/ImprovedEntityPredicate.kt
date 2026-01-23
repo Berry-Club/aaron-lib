@@ -71,18 +71,39 @@ sealed interface ImprovedEntityPredicate {
 
 		companion object {
 			val CODEC: MapCodec<Not> =
-				RecordCodecBuilder.mapCodec { instance ->
-					instance.group(
-						ImprovedEntityPredicate.CODEC
-							.fieldOf("other")
-							.forGetter(Not::other)
-					).apply(instance, ::Not)
-				}
+				ImprovedEntityPredicate.CODEC
+					.fieldOf("not")
+					.xmap(::Not, Not::other)
 
 			val STREAM_CODEC: StreamCodec<ByteBuf, Not> =
 				StreamCodec.composite(
 					ImprovedEntityPredicate.STREAM_CODEC, Not::other,
 					::Not
+				)
+		}
+	}
+
+	class And(val allOf: List<ImprovedEntityPredicate>) : ImprovedEntityPredicate {
+
+		constructor(vararg predicates: ImprovedEntityPredicate) : this(predicates.toList())
+
+		override fun matches(entity: Entity?): Boolean {
+			return allOf.all { it.matches(entity) }
+		}
+
+		override fun getType(): Type = Type.ALL
+
+		companion object {
+			val CODEC: MapCodec<And> =
+				ImprovedEntityPredicate.CODEC
+					.listOf()
+					.fieldOf("and")
+					.xmap(::And, And::allOf)
+
+			val STREAM_CODEC: StreamCodec<ByteBuf, And> =
+				StreamCodec.composite(
+					ImprovedEntityPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), And::allOf,
+					::And
 				)
 		}
 	}
