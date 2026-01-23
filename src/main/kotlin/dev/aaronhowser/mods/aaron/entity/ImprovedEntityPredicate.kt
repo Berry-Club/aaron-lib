@@ -37,7 +37,7 @@ sealed interface ImprovedEntityPredicate {
 		val streamCodec: StreamCodec<ByteBuf, out ImprovedEntityPredicate>
 	) : StringRepresentable {
 		ALL("all", All.CODEC, All.STREAM_CODEC),
-		NONE("none", None.CODEC, None.STREAM_CODEC),
+		NOT("none", Not.CODEC, Not.STREAM_CODEC),
 		DETAILED("detailed", Detailed.CODEC, Detailed.STREAM_CODEC)
 		;
 
@@ -63,31 +63,26 @@ sealed interface ImprovedEntityPredicate {
 		}
 	}
 
-	class None(val noneOf: List<ImprovedEntityPredicate>) : ImprovedEntityPredicate {
+	class Not(val other: ImprovedEntityPredicate) : ImprovedEntityPredicate {
 
-		constructor(vararg noneOf: ImprovedEntityPredicate) : this(noneOf.toList())
+		override fun matches(entity: Entity?): Boolean = !other.matches(entity)
 
-		override fun matches(entity: Entity?): Boolean {
-			return noneOf.none { it.matches(entity) }
-		}
-
-		override fun getType(): Type = Type.NONE
+		override fun getType(): Type = Type.NOT
 
 		companion object {
-			val CODEC: MapCodec<None> =
+			val CODEC: MapCodec<Not> =
 				RecordCodecBuilder.mapCodec { instance ->
 					instance.group(
 						ImprovedEntityPredicate.CODEC
-							.listOf()
-							.fieldOf("none_of")
-							.forGetter(None::noneOf)
-					).apply(instance, ::None)
+							.fieldOf("other")
+							.forGetter(Not::other)
+					).apply(instance, ::Not)
 				}
 
-			val STREAM_CODEC: StreamCodec<ByteBuf, None> =
+			val STREAM_CODEC: StreamCodec<ByteBuf, Not> =
 				StreamCodec.composite(
-					ImprovedEntityPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), None::noneOf,
-					::None
+					ImprovedEntityPredicate.STREAM_CODEC, Not::other,
+					::Not
 				)
 		}
 	}
