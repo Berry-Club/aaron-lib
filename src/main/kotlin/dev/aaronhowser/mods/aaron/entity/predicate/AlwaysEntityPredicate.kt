@@ -5,12 +5,13 @@ import dev.aaronhowser.mods.aaron.entity.predicate.EntityPredicate.Type
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.world.entity.Entity
 
 object AlwaysEntityPredicate : EntityPredicate {
 
-	override fun test(entitySnapshot: EntitySnapshot): Boolean  = true
+	override fun test(entitySnapshot: EntitySnapshot): Boolean = true
 	override fun getType(): Type = Type.ALWAYS
+
+	override fun getPassingSnapshot(): EntitySnapshot = EntitySnapshot(null, null, null, null, emptyMap())
 
 	val CODEC: MapCodec<AlwaysEntityPredicate> = MapCodec.unit { AlwaysEntityPredicate }
 	val STREAM_CODEC: StreamCodec<ByteBuf, AlwaysEntityPredicate> = StreamCodec.unit(AlwaysEntityPredicate)

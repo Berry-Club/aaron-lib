@@ -16,6 +16,16 @@ class AndEntityPredicate(val allOf: List<EntityPredicate>) : EntityPredicate {
 
 	override fun getType(): EntityPredicate.Type = EntityPredicate.Type.AND
 
+	override fun getPassingSnapshot(): EntitySnapshot? {
+		val snapshots = allOf.mapNotNull(EntityPredicate::getPassingSnapshot)
+		if (snapshots.isEmpty()) return null
+
+		val entityTypes = snapshots.mapNotNull { it.entityType }.toSet()
+		val movement = snapshots.firstNotNullOfOrNull { it.movementSnapshot }
+		val nbt = snapshots.firstNotNullOfOrNull { it.nbtSnapshot }
+
+	}
+
 	companion object {
 		val CODEC: MapCodec<AndEntityPredicate> =
 			EntityPredicate.CODEC
