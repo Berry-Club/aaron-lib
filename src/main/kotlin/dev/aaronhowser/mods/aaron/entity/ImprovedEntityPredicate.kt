@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.misc
+package dev.aaronhowser.mods.aaron.entity
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
