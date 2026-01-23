@@ -23,7 +23,7 @@ data class EntitySnapshot(
 			)
 
 			val movementSnapshot = MovementSnapshot(
-				deltaMovement = entity.deltaMovement,
+				deltaMovement = entity.deltaMovement.scale(20.0),
 				fallDistance = entity.fallDistance.toDouble()
 			)
 

@@ -42,15 +42,11 @@ class DetailedEntityPredicate(
 	override fun test(snapshot: EntitySnapshot): Boolean {
 
 		if (entityType.isPresent && !entityType.get().matches(snapshot.entityType)) return false
-
-		if (movement.isPresent) {
-			val motion = snapshot.knownMovement.scale(20.0) // Why scale?
-			if (!movement.get().matches(motion.x, motion.y, motion.z, snapshot.fallDistance.toDouble())) return false
-		}
+		if (movement.isPresent && !snapshot.movementSnapshot.test(movement.get())) return false
 
 		if (effects.isPresent && !effects.get().matches(snapshot)) return false
-		if (nbt.isPresent && !nbt.get().matches(snapshot)) return false
-		if (flags.isPresent && !flags.get().matches(snapshot)) return false
+		if (nbt.isPresent && !snapshot.nbtSnapshot.test(nbt.get())) return false
+		if (flags.isPresent && !snapshot.flagsSnapshot.test(flags.get())) return false
 
 		if (periodicTick.isPresent && snapshot.tickCount % periodicTick.get() != 0) return false
 
