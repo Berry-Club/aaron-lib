@@ -2,7 +2,11 @@ package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs
+import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.MovementPredicate
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.phys.Vec3
 
 class MovementSnapshot(
@@ -31,6 +35,13 @@ class MovementSnapshot(
 						.forGetter(MovementSnapshot::fallDistance)
 				).apply(instance, ::MovementSnapshot)
 			}
+
+		val STREAM_CODEC: StreamCodec<ByteBuf, MovementSnapshot> =
+			StreamCodec.composite(
+				AaronExtraCodecs.VEC3_STREAM_CODEC, MovementSnapshot::deltaMovement,
+				ByteBufCodecs.DOUBLE, MovementSnapshot::fallDistance,
+				::MovementSnapshot
+			)
 	}
 
 }

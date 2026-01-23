@@ -2,7 +2,10 @@ package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.EntityFlagsPredicate
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 
 data class FlagsSnapshot(
 	val isOnGround: Boolean,
@@ -42,6 +45,16 @@ data class FlagsSnapshot(
 						.forGetter(FlagsSnapshot::isSwimming)
 				).apply(instance, ::FlagsSnapshot)
 			}
+
+		val STREAM_CODEC: StreamCodec<ByteBuf, FlagsSnapshot> =
+			StreamCodec.composite(
+				ByteBufCodecs.BOOL, FlagsSnapshot::isOnGround,
+				ByteBufCodecs.BOOL, FlagsSnapshot::isOnFire,
+				ByteBufCodecs.BOOL, FlagsSnapshot::isCrouching,
+				ByteBufCodecs.BOOL, FlagsSnapshot::isSprinting,
+				ByteBufCodecs.BOOL, FlagsSnapshot::isSwimming,
+				::FlagsSnapshot
+			)
 	}
 
 }
