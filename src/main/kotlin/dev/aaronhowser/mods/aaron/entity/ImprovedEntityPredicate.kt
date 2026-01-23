@@ -38,7 +38,8 @@ sealed interface ImprovedEntityPredicate {
 	) : StringRepresentable {
 		ALWAYS("always", Always.CODEC, Always.STREAM_CODEC),
 		ALL("all", All.CODEC, All.STREAM_CODEC),
-		NOT("none", Not.CODEC, Not.STREAM_CODEC),
+		NONE("none", Not.CODEC, Not.STREAM_CODEC),
+		OR("or", Or.CODEC, Or.STREAM_CODEC),
 		DETAILED("detailed", Detailed.CODEC, Detailed.STREAM_CODEC)
 		;
 
@@ -68,7 +69,7 @@ sealed interface ImprovedEntityPredicate {
 
 		override fun matches(entity: Entity?): Boolean = !other.matches(entity)
 
-		override fun getType(): Type = Type.NOT
+		override fun getType(): Type = Type.NONE
 
 		companion object {
 			val CODEC: MapCodec<Not> =
@@ -105,6 +106,31 @@ sealed interface ImprovedEntityPredicate {
 				StreamCodec.composite(
 					ImprovedEntityPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), All::allOf,
 					::All
+				)
+		}
+	}
+
+	class Or(val anyOf: List<ImprovedEntityPredicate>) : ImprovedEntityPredicate {
+
+		constructor(vararg predicates: ImprovedEntityPredicate) : this(predicates.toList())
+
+		override fun matches(entity: Entity?): Boolean {
+			return anyOf.any { it.matches(entity) }
+		}
+
+		override fun getType(): Type = Type.ALWAYS
+
+		companion object {
+			val CODEC: MapCodec<Or> =
+				ImprovedEntityPredicate.CODEC
+					.listOf()
+					.fieldOf("or")
+					.xmap(::Or, Or::anyOf)
+
+			val STREAM_CODEC: StreamCodec<ByteBuf, Or> =
+				StreamCodec.composite(
+					ImprovedEntityPredicate.STREAM_CODEC.apply(ByteBufCodecs.list()), Or::anyOf,
+					::Or
 				)
 		}
 	}
