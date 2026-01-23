@@ -87,6 +87,24 @@ sealed interface ImprovedEntityPredicate {
 		val slots: Optional<SlotsPredicate> = Optional.empty()
 	) : ImprovedEntityPredicate {
 
+		constructor(
+			entityType: EntityTypePredicate? = null,
+			movement: MovementPredicate? = null,
+			effects: MobEffectsPredicate? = null,
+			nbt: NbtPredicate? = null,
+			flags: EntityFlagsPredicate? = null,
+			periodicTick: Int? = null,
+			slots: SlotsPredicate? = null
+		) : this(
+			Optional.ofNullable(entityType),
+			Optional.ofNullable(movement),
+			Optional.ofNullable(effects),
+			Optional.ofNullable(nbt),
+			Optional.ofNullable(flags),
+			Optional.ofNullable(periodicTick),
+			Optional.ofNullable(slots)
+		)
+
 		override fun matches(entity: Entity?): Boolean {
 			if (entity == null) return false
 
