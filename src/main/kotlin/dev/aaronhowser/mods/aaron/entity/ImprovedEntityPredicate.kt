@@ -9,10 +9,8 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Mob
 import java.util.*
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 
-data class ImprovedEntityPredicate(
+open class ImprovedEntityPredicate(
 	val entityType: Optional<EntityTypePredicate> = Optional.empty(),
 	val movement: Optional<MovementPredicate> = Optional.empty(),
 	val effects: Optional<MobEffectsPredicate> = Optional.empty(),
@@ -26,10 +24,11 @@ data class ImprovedEntityPredicate(
 	val slots: Optional<SlotsPredicate> = Optional.empty()
 ) {
 
+	object All : ImprovedEntityPredicate() {
+		override fun matches(entity: Entity?) = true
+	}
 
-	@OptIn(ExperimentalContracts::class)
-	fun matches(entity: Entity?): Boolean {
-		contract { returns(true) implies (entity != null) }
+	open fun matches(entity: Entity?): Boolean {
 		if (entity == null) return false
 
 		if (entityType.isPresent && !entityType.get().matches(entity.type)) return false
