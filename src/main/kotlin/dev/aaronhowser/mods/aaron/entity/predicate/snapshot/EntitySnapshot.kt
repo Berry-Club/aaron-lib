@@ -1,8 +1,10 @@
 package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityType
 
 data class EntitySnapshot(
+	val entityType: EntityType<*>,
 	val nbtSnapshot: NbtSnapshot,
 	val flagsSnapshot: FlagsSnapshot
 ) {
@@ -19,7 +21,7 @@ data class EntitySnapshot(
 				isSwimming = entity.isSwimming
 			)
 
-			return EntitySnapshot(nbtSnapshot, flagsSnapshot)
+			return EntitySnapshot(entity.type, nbtSnapshot, flagsSnapshot)
 		}
 	}
 

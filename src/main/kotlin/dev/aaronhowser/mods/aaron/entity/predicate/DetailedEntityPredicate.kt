@@ -3,11 +3,11 @@ package dev.aaronhowser.mods.aaron.entity.predicate
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
 import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.world.entity.Entity
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs
 import java.util.*
 
@@ -39,22 +39,22 @@ class DetailedEntityPredicate(
 		Optional.ofNullable(slots)
 	)
 
-	override fun test(entity: Entity?): Boolean {
-		if (entity == null) return false
+	override fun test(snapshot: EntitySnapshot): Boolean {
 
-		if (entityType.isPresent && !entityType.get().matches(entity.type)) return false
+		if (entityType.isPresent && !entityType.get().matches(snapshot.entityType)) return false
+
 		if (movement.isPresent) {
-			val motion = entity.knownMovement.scale(20.0) // Why scale?
-			if (!movement.get().matches(motion.x, motion.y, motion.z, entity.fallDistance.toDouble())) return false
+			val motion = snapshot.knownMovement.scale(20.0) // Why scale?
+			if (!movement.get().matches(motion.x, motion.y, motion.z, snapshot.fallDistance.toDouble())) return false
 		}
 
-		if (effects.isPresent && !effects.get().matches(entity)) return false
-		if (nbt.isPresent && !nbt.get().matches(entity)) return false
-		if (flags.isPresent && !flags.get().matches(entity)) return false
+		if (effects.isPresent && !effects.get().matches(snapshot)) return false
+		if (nbt.isPresent && !nbt.get().matches(snapshot)) return false
+		if (flags.isPresent && !flags.get().matches(snapshot)) return false
 
-		if (periodicTick.isPresent && entity.tickCount % periodicTick.get() != 0) return false
+		if (periodicTick.isPresent && snapshot.tickCount % periodicTick.get() != 0) return false
 
-		if (slots.isPresent && !slots.get().matches(entity)) return false
+		if (slots.isPresent && !slots.get().matches(snapshot)) return false
 
 		return true
 	}
