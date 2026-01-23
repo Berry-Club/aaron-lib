@@ -18,24 +18,33 @@ sealed interface ImprovedEntityPredicate {
 	fun getType(): Type
 
 	companion object {
-		val CODEC: Codec<ImprovedEntityPredicate> = Type.CODEC.dispatch(
-			ImprovedEntityPredicate::getType,
-			Type::codec
-		)
+		val CODEC: Codec<ImprovedEntityPredicate> =
+			Type.CODEC.dispatch(
+				ImprovedEntityPredicate::getType,
+				Type::codec
+			)
+
+		val STREAM_CODEC: StreamCodec<ByteBuf, ImprovedEntityPredicate> =
+			Type.STREAM_CODEC.dispatch(
+				ImprovedEntityPredicate::getType,
+				Type::streamCodec
+			)
 	}
 
 	enum class Type(
 		val id: String,
-		val codec: MapCodec<out ImprovedEntityPredicate>
+		val codec: MapCodec<out ImprovedEntityPredicate>,
+		val streamCodec: StreamCodec<ByteBuf, out ImprovedEntityPredicate>
 	) : StringRepresentable {
-		ALL("all", All.CODEC),
-		DETAILED("detailed", Detailed.CODEC)
+		ALL("all", All.CODEC, All.STREAM_CODEC),
+		DETAILED("detailed", Detailed.CODEC, Detailed.STREAM_CODEC)
 		;
 
 		override fun getSerializedName(): String = this.id
 
 		companion object {
 			val CODEC: StringRepresentable.EnumCodec<Type> = StringRepresentable.fromEnum(Type::values)
+			val STREAM_CODEC: StreamCodec<ByteBuf, Type> = ByteBufCodecs.fromCodec(CODEC)
 		}
 	}
 
