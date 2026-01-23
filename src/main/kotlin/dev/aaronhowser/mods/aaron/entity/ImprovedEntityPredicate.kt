@@ -37,6 +37,7 @@ sealed interface ImprovedEntityPredicate {
 		val streamCodec: StreamCodec<ByteBuf, out ImprovedEntityPredicate>
 	) : StringRepresentable {
 		ALL("all", All.CODEC, All.STREAM_CODEC),
+		NONE("none", None.CODEC, None.STREAM_CODEC),
 		DETAILED("detailed", Detailed.CODEC, Detailed.STREAM_CODEC)
 		;
 
@@ -59,6 +60,20 @@ sealed interface ImprovedEntityPredicate {
 
 			val CODEC: MapCodec<All> = MapCodec.unit { INSTANCE }
 			val STREAM_CODEC: StreamCodec<ByteBuf, All> = StreamCodec.unit(INSTANCE)
+		}
+	}
+
+	class None : ImprovedEntityPredicate {
+		override fun matches(entity: Entity?) = false
+		override fun getType(): Type = Type.ALL
+
+		private constructor()
+
+		companion object {
+			val INSTANCE = None()
+
+			val CODEC: MapCodec<None> = MapCodec.unit { INSTANCE }
+			val STREAM_CODEC: StreamCodec<ByteBuf, None> = StreamCodec.unit(INSTANCE)
 		}
 	}
 
