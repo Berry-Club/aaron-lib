@@ -1,111 +1,145 @@
 package dev.aaronhowser.mods.aaron.entity
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Mob
 import java.util.*
 
-open class ImprovedEntityPredicate(
-	val entityType: Optional<EntityTypePredicate> = Optional.empty(),
-	val movement: Optional<MovementPredicate> = Optional.empty(),
-	val effects: Optional<MobEffectsPredicate> = Optional.empty(),
-	val nbt: Optional<NbtPredicate> = Optional.empty(),
-	val flags: Optional<EntityFlagsPredicate> = Optional.empty(),
-	val periodicTick: Optional<Int> = Optional.empty(),
-	val vehicle: Optional<ImprovedEntityPredicate> = Optional.empty(),
-	val passenger: Optional<ImprovedEntityPredicate> = Optional.empty(),
-	val targetedEntity: Optional<ImprovedEntityPredicate> = Optional.empty(),
-	val team: Optional<String> = Optional.empty(),
-	val slots: Optional<SlotsPredicate> = Optional.empty()
-) {
+sealed interface ImprovedEntityPredicate {
+
+	fun matches(entity: Entity?): Boolean
+	fun getType(): Type
+
+	companion object {
+		val CODEC: Codec<ImprovedEntityPredicate> = Type.CODEC.dispatch(
+			ImprovedEntityPredicate::getType,
+			Type::codec
+		)
+	}
+
+	enum class Type(
+		val id: String,
+		val codec: MapCodec<out ImprovedEntityPredicate>
+	) : StringRepresentable {
+		ALL("all", All.CODEC),
+		DETAILED("detailed", Detailed.CODEC)
+		;
+
+		override fun getSerializedName(): String = this.id
+
+		companion object {
+			val CODEC: StringRepresentable.EnumCodec<Type> = StringRepresentable.fromEnum(Type::values)
+		}
+	}
 
 	class All : ImprovedEntityPredicate {
 		override fun matches(entity: Entity?) = true
+		override fun getType(): Type = Type.ALL
 
-		private constructor() : super()
+		private constructor()
 
 		companion object {
 			val INSTANCE = All()
 
-			val CODEC: Codec<All> = Codec.unit { INSTANCE }
+			val CODEC: MapCodec<All> = MapCodec.unit { INSTANCE }
 			val STREAM_CODEC: StreamCodec<ByteBuf, All> = StreamCodec.unit(INSTANCE)
 		}
 	}
 
-	open fun matches(entity: Entity?): Boolean {
-		if (entity == null) return false
+	class Detailed(
+		val entityType: Optional<EntityTypePredicate> = Optional.empty(),
+		val movement: Optional<MovementPredicate> = Optional.empty(),
+		val effects: Optional<MobEffectsPredicate> = Optional.empty(),
+		val nbt: Optional<NbtPredicate> = Optional.empty(),
+		val flags: Optional<EntityFlagsPredicate> = Optional.empty(),
+		val periodicTick: Optional<Int> = Optional.empty(),
+		val vehicle: Optional<Detailed> = Optional.empty(),
+		val passenger: Optional<Detailed> = Optional.empty(),
+		val targetedEntity: Optional<Detailed> = Optional.empty(),
+		val team: Optional<String> = Optional.empty(),
+		val slots: Optional<SlotsPredicate> = Optional.empty()
+	) : ImprovedEntityPredicate {
 
-		if (entityType.isPresent && !entityType.get().matches(entity.type)) return false
-		if (movement.isPresent) {
-			val motion = entity.knownMovement.scale(20.0) // Why scale?
-			if (!movement.get().matches(motion.x, motion.y, motion.z, entity.fallDistance.toDouble())) return false
-		}
+		override fun matches(entity: Entity?): Boolean {
+			if (entity == null) return false
 
-		if (effects.isPresent && !effects.get().matches(entity)) return false
-		if (nbt.isPresent && !nbt.get().matches(entity)) return false
-		if (flags.isPresent && !flags.get().matches(entity)) return false
-
-		if (periodicTick.isPresent && entity.tickCount % periodicTick.get() != 0) return false
-
-		if (vehicle.isPresent && !vehicle.get().matches(entity.vehicle)) return false
-		if (passenger.isPresent && entity.passengers.none { passenger.get().matches(it) }) return false
-		if (targetedEntity.isPresent && !targetedEntity.get().matches((entity as? Mob)?.target)) return false
-
-		if (team.isPresent && !team.get().equals(entity.team?.name, ignoreCase = false)) return false
-		if (slots.isPresent && !slots.get().matches(entity)) return false
-
-		return true
-	}
-
-	companion object {
-		val CODEC: Codec<ImprovedEntityPredicate> =
-			Codec.recursive("ImprovedEntityPredicate") { codec ->
-				RecordCodecBuilder.create { instance ->
-					instance.group(
-						EntityTypePredicate.CODEC
-							.optionalFieldOf("entity_type")
-							.forGetter(ImprovedEntityPredicate::entityType),
-						MovementPredicate.CODEC
-							.optionalFieldOf("movement")
-							.forGetter(ImprovedEntityPredicate::movement),
-						MobEffectsPredicate.CODEC
-							.optionalFieldOf("effects")
-							.forGetter(ImprovedEntityPredicate::effects),
-						NbtPredicate.CODEC
-							.optionalFieldOf("nbt")
-							.forGetter(ImprovedEntityPredicate::nbt),
-						EntityFlagsPredicate.CODEC
-							.optionalFieldOf("flags")
-							.forGetter(ImprovedEntityPredicate::flags),
-						Codec.INT
-							.optionalFieldOf("periodic_tick")
-							.forGetter(ImprovedEntityPredicate::periodicTick),
-						codec
-							.optionalFieldOf("vehicle")
-							.forGetter(ImprovedEntityPredicate::vehicle),
-						codec
-							.optionalFieldOf("passenger")
-							.forGetter(ImprovedEntityPredicate::passenger),
-						codec
-							.optionalFieldOf("targeted_entity")
-							.forGetter(ImprovedEntityPredicate::targetedEntity),
-						Codec.STRING
-							.optionalFieldOf("team")
-							.forGetter(ImprovedEntityPredicate::team),
-						SlotsPredicate.CODEC
-							.optionalFieldOf("slots")
-							.forGetter(ImprovedEntityPredicate::slots)
-					).apply(instance, ::ImprovedEntityPredicate)
-				}
+			if (entityType.isPresent && !entityType.get().matches(entity.type)) return false
+			if (movement.isPresent) {
+				val motion = entity.knownMovement.scale(20.0) // Why scale?
+				if (!movement.get().matches(motion.x, motion.y, motion.z, entity.fallDistance.toDouble())) return false
 			}
 
-		// FIXME
-		val STREAM_CODEC: StreamCodec<ByteBuf, ImprovedEntityPredicate> =
-			ByteBufCodecs.fromCodec(CODEC)
+			if (effects.isPresent && !effects.get().matches(entity)) return false
+			if (nbt.isPresent && !nbt.get().matches(entity)) return false
+			if (flags.isPresent && !flags.get().matches(entity)) return false
+
+			if (periodicTick.isPresent && entity.tickCount % periodicTick.get() != 0) return false
+
+			if (vehicle.isPresent && !vehicle.get().matches(entity.vehicle)) return false
+			if (passenger.isPresent && entity.passengers.none { passenger.get().matches(it) }) return false
+			if (targetedEntity.isPresent && !targetedEntity.get().matches((entity as? Mob)?.target)) return false
+
+			if (team.isPresent && !team.get().equals(entity.team?.name, ignoreCase = false)) return false
+			if (slots.isPresent && !slots.get().matches(entity)) return false
+
+			return true
+		}
+
+		override fun getType(): Type = Type.DETAILED
+
+		companion object {
+			val CODEC: Codec<Detailed> =
+				Codec.recursive("ImprovedEntityPredicate") { codec ->
+					RecordCodecBuilder.create { instance ->
+						instance.group(
+							EntityTypePredicate.CODEC
+								.optionalFieldOf("entity_type")
+								.forGetter(Detailed::entityType),
+							MovementPredicate.CODEC
+								.optionalFieldOf("movement")
+								.forGetter(Detailed::movement),
+							MobEffectsPredicate.CODEC
+								.optionalFieldOf("effects")
+								.forGetter(Detailed::effects),
+							NbtPredicate.CODEC
+								.optionalFieldOf("nbt")
+								.forGetter(Detailed::nbt),
+							EntityFlagsPredicate.CODEC
+								.optionalFieldOf("flags")
+								.forGetter(Detailed::flags),
+							Codec.INT
+								.optionalFieldOf("periodic_tick")
+								.forGetter(Detailed::periodicTick),
+							codec
+								.optionalFieldOf("vehicle")
+								.forGetter(Detailed::vehicle),
+							codec
+								.optionalFieldOf("passenger")
+								.forGetter(Detailed::passenger),
+							codec
+								.optionalFieldOf("targeted_entity")
+								.forGetter(Detailed::targetedEntity),
+							Codec.STRING
+								.optionalFieldOf("team")
+								.forGetter(Detailed::team),
+							SlotsPredicate.CODEC
+								.optionalFieldOf("slots")
+								.forGetter(Detailed::slots)
+						).apply(instance, ::Detailed)
+					}
+				}
+
+			// FIXME
+			val STREAM_CODEC: StreamCodec<ByteBuf, Detailed> =
+				ByteBufCodecs.fromCodec(CODEC)
+		}
 	}
+
 }
