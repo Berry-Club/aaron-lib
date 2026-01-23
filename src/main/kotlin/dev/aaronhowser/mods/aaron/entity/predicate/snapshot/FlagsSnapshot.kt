@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.advancements.critereon.EntityFlagsPredicate
 
 data class FlagsSnapshot(
@@ -17,6 +19,29 @@ data class FlagsSnapshot(
 		if (predicate.isSprinting.isPresent && predicate.isSprinting.get() != isSprinting) return false
 		if (predicate.isSwimming.isPresent && predicate.isSwimming.get() != isSwimming) return false
 		return true
+	}
+
+	companion object {
+		val CODEC: Codec<FlagsSnapshot> =
+			RecordCodecBuilder.create { instance ->
+				instance.group(
+					Codec.BOOL
+						.optionalFieldOf("on_ground", true)
+						.forGetter(FlagsSnapshot::isOnGround),
+					Codec.BOOL
+						.optionalFieldOf("on_fire", false)
+						.forGetter(FlagsSnapshot::isOnFire),
+					Codec.BOOL
+						.optionalFieldOf("crouching", false)
+						.forGetter(FlagsSnapshot::isCrouching),
+					Codec.BOOL
+						.optionalFieldOf("sprinting", false)
+						.forGetter(FlagsSnapshot::isSprinting),
+					Codec.BOOL
+						.optionalFieldOf("swimming", false)
+						.forGetter(FlagsSnapshot::isSwimming)
+				).apply(instance, ::FlagsSnapshot)
+			}
 	}
 
 }

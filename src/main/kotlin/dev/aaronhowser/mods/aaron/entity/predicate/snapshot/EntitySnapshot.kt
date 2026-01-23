@@ -9,14 +9,13 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import java.util.*
 
 data class EntitySnapshot(
 	val entityType: EntityType<*>,
-	val nbtSnapshot: Optional<NbtSnapshot>,
-	val flagsSnapshot: Optional<FlagsSnapshot>,
-	val movementSnapshot: Optional<MovementSnapshot>,
-	val activeEffects: Map<Holder<MobEffect>, MobEffectInstance>
+	val nbtSnapshot: NbtSnapshot?,
+	val flagsSnapshot: FlagsSnapshot?,
+	val movementSnapshot: MovementSnapshot?,
+	val activeEffects: Map<Holder<MobEffect>, MobEffectInstance> = emptyMap()
 ) {
 
 	companion object {
@@ -28,16 +27,19 @@ data class EntitySnapshot(
 						.fieldOf("entity_type")
 						.forGetter(EntitySnapshot::entityType),
 					NbtSnapshot.CODEC
-						.optionalFieldOf("nbt")
+						.optionalFieldOf("nbt", null)
 						.forGetter(EntitySnapshot::nbtSnapshot),
 					FlagsSnapshot.CODEC
-						.optionalFieldOf("flags")
+						.optionalFieldOf("flags", null)
 						.forGetter(EntitySnapshot::flagsSnapshot),
 					MovementSnapshot.CODEC
-						.optionalFieldOf("movement")
+						.optionalFieldOf("movement", null)
 						.forGetter(EntitySnapshot::movementSnapshot),
-					MobEffectInstance.MAP_CODEC
-						.fieldOf("active_effects")
+					Codec.unboundedMap(
+						BuiltInRegistries.MOB_EFFECT.holderByNameCodec(),
+						MobEffectInstance.CODEC
+					)
+						.optionalFieldOf("active_effects", emptyMap())
 						.forGetter(EntitySnapshot::activeEffects)
 				).apply(instance, ::EntitySnapshot)
 			}
