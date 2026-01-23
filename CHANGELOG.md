@@ -2,6 +2,7 @@
 
 - ItemStack#hasEnchantment
 - ImprovedEntityPredicate
+- Moved many classes to a misc package
 
 # 1.5.0
 
