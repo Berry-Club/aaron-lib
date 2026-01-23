@@ -6,7 +6,8 @@ import net.minecraft.world.entity.EntityType
 data class EntitySnapshot(
 	val entityType: EntityType<*>,
 	val nbtSnapshot: NbtSnapshot,
-	val flagsSnapshot: FlagsSnapshot
+	val flagsSnapshot: FlagsSnapshot,
+	val movementSnapshot: MovementSnapshot
 ) {
 
 	companion object {
@@ -21,7 +22,12 @@ data class EntitySnapshot(
 				isSwimming = entity.isSwimming
 			)
 
-			return EntitySnapshot(entity.type, nbtSnapshot, flagsSnapshot)
+			val movementSnapshot = MovementSnapshot(
+				deltaMovement = entity.deltaMovement,
+				fallDistance = entity.fallDistance.toDouble()
+			)
+
+			return EntitySnapshot(entity.type, nbtSnapshot, flagsSnapshot, movementSnapshot)
 		}
 	}
 
