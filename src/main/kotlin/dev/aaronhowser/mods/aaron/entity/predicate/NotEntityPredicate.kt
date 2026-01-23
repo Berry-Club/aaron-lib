@@ -1,13 +1,13 @@
 package dev.aaronhowser.mods.aaron.entity.predicate
 
 import com.mojang.serialization.MapCodec
+import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.world.entity.Entity
 
 class NotEntityPredicate(val other: EntityPredicate) : EntityPredicate {
 
-	override fun test(entity: Entity?): Boolean = !other.test(entity)
+	override fun test(entitySnapshot: EntitySnapshot): Boolean = !other.test(entitySnapshot)
 
 	override fun getType(): EntityPredicate.Type = EntityPredicate.Type.NOT
 
