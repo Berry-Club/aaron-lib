@@ -16,10 +16,10 @@ import net.minecraft.world.entity.LivingEntity
 import java.util.*
 
 data class EntitySnapshot(
-	val entityType: EntityType<*>?,
-	val nbtSnapshot: NbtSnapshot?,
-	val flagsSnapshot: FlagsSnapshot?,
-	val movementSnapshot: MovementSnapshot?,
+	val entityType: EntityType<*>? = null,
+	val nbtSnapshot: NbtSnapshot? = null,
+	val flagsSnapshot: FlagsSnapshot? = null,
+	val movementSnapshot: MovementSnapshot? = null,
 	val activeEffects: Map<Holder<MobEffect>, MobEffectInstance> = emptyMap()
 ) {
 
