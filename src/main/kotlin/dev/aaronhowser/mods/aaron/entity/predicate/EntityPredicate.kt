@@ -17,6 +17,7 @@ sealed interface EntityPredicate {
 	companion object {
 		val CODEC: Codec<EntityPredicate> =
 			Type.CODEC.dispatch(
+				"predicate_type",
 				EntityPredicate::getType
 			) { it.codec.get() }
 
