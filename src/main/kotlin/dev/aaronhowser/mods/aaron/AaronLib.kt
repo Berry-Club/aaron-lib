@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron
 
+import dev.aaronhowser.mods.aaron.entity.predicate.EntityPredicate
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
@@ -16,6 +17,8 @@ class AaronLib(
 		LOGGER.log(Level.INFO, "Aaron.")
 		LOGGER.log(Level.INFO, "Arriving.")
 		LOGGER.log(Level.INFO, "On the scene.")
+
+		EntityPredicate.CODEC
 	}
 
 	companion object {
