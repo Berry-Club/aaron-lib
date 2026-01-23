@@ -16,8 +16,6 @@ sealed interface EntityPredicate {
 	fun test(entity: Entity): Boolean = test(EntitySnapshot.fromEntity(entity, emptyList()))
 	fun getType(): Type
 
-	fun getPassingSnapshot(): EntitySnapshot?
-
 	companion object {
 		val CODEC: Codec<EntityPredicate> =
 			Type.CODEC.dispatch(

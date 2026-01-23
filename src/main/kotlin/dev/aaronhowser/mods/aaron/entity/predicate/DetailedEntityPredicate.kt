@@ -43,7 +43,7 @@ class DetailedEntityPredicate(
 //		Optional.ofNullable(slots)
 	)
 
-	override fun getPassingSnapshot(): EntitySnapshot {
+	fun getPassingSnapshot(): EntitySnapshot {
 		var et: EntityType<*>? = null
 		if (entityType.isPresent) {
 			et = BuiltInRegistries.ENTITY_TYPE.first { entityType.get().matches(it) }

@@ -11,8 +11,6 @@ class NotEntityPredicate(val other: EntityPredicate) : EntityPredicate {
 
 	override fun getType(): EntityPredicate.Type = EntityPredicate.Type.NOT
 
-	override fun getPassingSnapshot(): EntitySnapshot = error("NotEntityPredicate does not have a passing snapshot")
-
 	companion object {
 		val CODEC: MapCodec<NotEntityPredicate> =
 			EntityPredicate.CODEC
