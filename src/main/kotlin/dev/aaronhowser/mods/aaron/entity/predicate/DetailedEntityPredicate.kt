@@ -4,17 +4,12 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
-import net.minecraft.advancements.critereon.EntityFlagsPredicate
-import net.minecraft.advancements.critereon.EntityTypePredicate
-import net.minecraft.advancements.critereon.MobEffectsPredicate
-import net.minecraft.advancements.critereon.MovementPredicate
-import net.minecraft.advancements.critereon.NbtPredicate
-import net.minecraft.advancements.critereon.SlotsPredicate
+import net.minecraft.advancements.critereon.*
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.Entity
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs
-import java.util.Optional
+import java.util.*
 
 class DetailedEntityPredicate(
 	val entityType: Optional<EntityTypePredicate> = Optional.empty(),

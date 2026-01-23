@@ -28,7 +28,7 @@ abstract class AaronBlockRegistry {
 	protected fun basicStoneBlock(name: String) =
 		basicCopiedBlock(name, Blocks.STONE)
 
-	protected  fun <T : Block> registerBlock(
+	protected fun <T : Block> registerBlock(
 		name: String,
 		supplier: () -> T
 	): DeferredBlock<T> {
