@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
-import net.minecraft.advancements.critereon.EntityPredicate
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.Vec3i
@@ -41,8 +40,6 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.registries.DeferredBlock
 import java.util.*
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 
 object AaronExtensions {
 
@@ -178,30 +175,5 @@ object AaronExtensions {
 	}
 
 	fun ItemStack.hasEnchantment(enchantment: Holder<Enchantment>): Boolean = this.getEnchantmentLevel(enchantment) > 0
-
-	@OptIn(ExperimentalContracts::class)
-	fun EntityPredicate.matches(entity: Entity?): Boolean {
-		contract { returns(true) implies (entity != null) }
-		if (entity == null) return false
-
-		if (EntityPredicate.entityType.isPresent && !EntityPredicate.entityType.get().matches(entity.type)) return false
-
-		if (EntityPredicate.movement.isPresent) {
-			val knownMovement = entity.knownMovement.scale(20.0)
-			if (!EntityPredicate.movement.get().matches(
-					knownMovement.x,
-					knownMovement.y,
-					knownMovement.z,
-					entity.fallDistance.toDouble()
-				)
-			) return false
-		}
-
-		if (EntityPredicate.effects.isPresent && !EntityPredicate.effects.get().matches(entity)) return false
-		if (EntityPredicate.flags.isPresent && !EntityPredicate.flags.get().matches(entity)) return false
-		if (EntityPredicate.equipment.isPresent && !EntityPredicate.equipment.get().matches(entity)) return false
-
-		return true
-	}
 
 }
