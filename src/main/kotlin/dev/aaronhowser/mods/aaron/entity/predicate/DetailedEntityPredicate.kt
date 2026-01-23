@@ -9,9 +9,12 @@ import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.NbtSnapshot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
+import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.effect.MobEffect
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.EntityType
 import java.util.*
 
@@ -61,11 +64,53 @@ class DetailedEntityPredicate(
 			flags = FlagsSnapshot.fromPredicate(this.flags.get())
 		}
 
+		val effectsMap = mutableMapOf<Holder<MobEffect>, MobEffectInstance>()
+		if (this.effects.isPresent) {
+			val a = this.effects.get()
+
+			for ((effect, predicate) in a.effectMap) {
+				fun pick(bounds: MinMaxBounds.Ints): Int {
+					if (bounds.isAny) return 0
+
+					val hasMin = bounds.min.isPresent
+					val hasMax = bounds.max.isPresent
+
+					if (hasMin && hasMax) {
+						val min = bounds.min.get()
+						val max = bounds.max.get()
+
+						return ((min + max) / 2.0).toInt()
+					} else if (hasMin) {
+						return bounds.min.get() + 1
+					} else if (hasMax) {
+						return bounds.max.get() - 1
+					} else {
+						return 0
+					}
+				}
+
+				val duration = pick(predicate.duration)
+				val amplifier = pick(predicate.amplifier)
+				val ambient = predicate.ambient.orElse(false)
+				val visible = predicate.visible.orElse(true)
+
+				effectsMap[effect] = MobEffectInstance(
+					effect,
+					duration,
+					amplifier,
+					ambient,
+					visible
+				)
+			}
+
+		}
+
 		return EntitySnapshot(
 			entityType = et,
 			nbtSnapshot = nbt,
 			flagsSnapshot = flags,
-			movementSnapshot = movement
+			movementSnapshot = movement,
+			activeEffects = effectsMap
 		)
 	}
 
