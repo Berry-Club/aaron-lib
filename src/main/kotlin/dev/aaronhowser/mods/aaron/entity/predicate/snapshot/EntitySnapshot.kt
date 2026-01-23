@@ -9,7 +9,6 @@ import net.minecraft.world.entity.LivingEntity
 
 data class EntitySnapshot(
 	val entityType: EntityType<*>,
-	val tickCount: Int,
 	val nbtSnapshot: NbtSnapshot,
 	val flagsSnapshot: FlagsSnapshot,
 	val movementSnapshot: MovementSnapshot,
@@ -35,7 +34,6 @@ data class EntitySnapshot(
 
 			return EntitySnapshot(
 				entity.type,
-				entity.tickCount,
 				nbtSnapshot,
 				flagsSnapshot,
 				movementSnapshot,

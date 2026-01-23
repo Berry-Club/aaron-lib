@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.aaron.entity.predicate
 
-import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
@@ -16,7 +15,6 @@ class DetailedEntityPredicate(
 	val effects: Optional<MobEffectsPredicate> = Optional.empty(),
 	val nbt: Optional<NbtPredicate> = Optional.empty(),
 	val flags: Optional<EntityFlagsPredicate> = Optional.empty(),
-	val periodicTick: Optional<Int> = Optional.empty(),
 //	val slots: Optional<SlotsPredicate> = Optional.empty()
 ) : EntityPredicate {
 
@@ -26,7 +24,6 @@ class DetailedEntityPredicate(
 		effects: MobEffectsPredicate? = null,
 		nbt: NbtPredicate? = null,
 		flags: EntityFlagsPredicate? = null,
-		periodicTick: Int? = null,
 //		slots: SlotsPredicate? = null
 	) : this(
 		Optional.ofNullable(entityType),
@@ -34,7 +31,6 @@ class DetailedEntityPredicate(
 		Optional.ofNullable(effects),
 		Optional.ofNullable(nbt),
 		Optional.ofNullable(flags),
-		Optional.ofNullable(periodicTick),
 //		Optional.ofNullable(slots)
 	)
 
@@ -45,8 +41,6 @@ class DetailedEntityPredicate(
 		if (effects.isPresent && !effects.get().matches(entitySnapshot.activeEffects)) return false
 		if (nbt.isPresent && !entitySnapshot.nbtSnapshot.test(nbt.get())) return false
 		if (flags.isPresent && !entitySnapshot.flagsSnapshot.test(flags.get())) return false
-
-		if (periodicTick.isPresent && entitySnapshot.tickCount % periodicTick.get() != 0) return false
 
 //		if (slots.isPresent && !slots.get().matches(entitySnapshot)) return false
 
@@ -74,9 +68,6 @@ class DetailedEntityPredicate(
 					EntityFlagsPredicate.CODEC
 						.optionalFieldOf("flags")
 						.forGetter(DetailedEntityPredicate::flags),
-					Codec.INT
-						.optionalFieldOf("periodic_tick")
-						.forGetter(DetailedEntityPredicate::periodicTick),
 //					SlotsPredicate.CODEC
 //						.optionalFieldOf("slots")
 //						.forGetter(DetailedEntityPredicate::slots)
@@ -90,7 +81,6 @@ class DetailedEntityPredicate(
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(MobEffectsPredicate.CODEC)), DetailedEntityPredicate::effects,
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(NbtPredicate.CODEC)), DetailedEntityPredicate::nbt,
 				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(EntityFlagsPredicate.CODEC)), DetailedEntityPredicate::flags,
-				ByteBufCodecs.optional(ByteBufCodecs.VAR_INT), DetailedEntityPredicate::periodicTick,
 //				ByteBufCodecs.optional(ByteBufCodecs.fromCodec(SlotsPredicate.CODEC)), DetailedEntityPredicate::slots,
 				::DetailedEntityPredicate
 			)
