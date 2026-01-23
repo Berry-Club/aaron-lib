@@ -2,7 +2,10 @@ package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.*
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import java.util.*
 
 data class ImprovedEntityPredicate(
@@ -60,5 +63,9 @@ data class ImprovedEntityPredicate(
 					).apply(instance, ::ImprovedEntityPredicate)
 				}
 			}
+
+		// FIXME
+		val STREAM_CODEC: StreamCodec<ByteBuf, ImprovedEntityPredicate> =
+			ByteBufCodecs.fromCodec(CODEC)
 	}
 }
