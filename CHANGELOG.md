@@ -2,7 +2,7 @@
 
 ### Fixed
 
-- Found a required fix in Genetics, also applied it here just in case :)
+- Obfuscate the jar so it works outside of dev
 
 # 1.5.2
 
