@@ -21,6 +21,7 @@ import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
@@ -164,6 +165,10 @@ object AaronExtensions {
 
 	fun ItemStack.isNotFull(): Boolean {
 		return this.count < this.maxStackSize
+	}
+
+	fun Player.getPovResult(range: Number = this.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)): BlockHitResult {
+		return getPovResult(range)
 	}
 
 	fun Entity.getPovResult(range: Number): BlockHitResult {
