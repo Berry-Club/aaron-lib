@@ -44,6 +44,7 @@ import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.registries.DeferredBlock
 import java.util.*
 
+@Suppress("unused")
 object AaronExtensions {
 
 	val Level.isServerSide: Boolean get() = !this.isClientSide
