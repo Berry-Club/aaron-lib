@@ -47,7 +47,7 @@ abstract class AaronRecipeProvider(
 
 	protected fun shapelessRecipe(
 		output: ItemLike,
-		count: Int,
+		count: Int = 1,
 		requirements: List<IngredientType>,
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
