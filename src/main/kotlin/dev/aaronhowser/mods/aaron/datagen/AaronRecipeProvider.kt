@@ -47,7 +47,7 @@ abstract class AaronRecipeProvider(
 
 	protected fun shapelessRecipe(
 		output: ItemLike,
-		count: Int = 1,
+		count: Int,
 		requirements: List<IngredientType>,
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
@@ -60,6 +60,13 @@ abstract class AaronRecipeProvider(
 
 		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
 	}
+
+	private fun shapelessRecipe(
+		output: ItemLike,
+		requirements: List<IngredientType>,
+		unlockedByName: String = "has_log",
+		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
+	) = shapelessRecipe(output, 1, requirements, unlockedByName, unlockedByCriterion)
 
 	protected fun <T : IngredientType> shapedRecipe(
 		output: ItemStack,
