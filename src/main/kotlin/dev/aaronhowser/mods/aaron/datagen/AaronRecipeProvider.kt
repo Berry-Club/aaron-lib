@@ -61,7 +61,7 @@ abstract class AaronRecipeProvider(
 		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
 	}
 
-	private fun shapelessRecipe(
+	protected fun shapelessRecipe(
 		output: ItemLike,
 		requirements: List<IngredientType>,
 		unlockedByName: String = "has_log",
