@@ -7,6 +7,7 @@ import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.data.recipes.ShapedRecipeBuilder
+import net.minecraft.data.recipes.ShapelessRecipeBuilder
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
@@ -43,6 +44,22 @@ abstract class AaronRecipeProvider(
 	protected fun ing(tagKey: TagKey<Item>) = IngredientType.TagKeyIng(tagKey)
 	protected fun ing(item: ItemLike) = IngredientType.ItemLikeIng(item)
 	protected fun ing(itemStack: ItemStack) = IngredientType.ItemStackIng(itemStack)
+
+	protected fun shapelessRecipe(
+		output: ItemLike,
+		count: Int,
+		requirements: List<IngredientType>,
+		unlockedByName: String = "has_log",
+		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
+	): ShapelessRecipeBuilder {
+		var temp = ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, count)
+
+		for (requirement in requirements) {
+			temp = temp.requires(requirement.getIngredient())
+		}
+
+		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
+	}
 
 	protected fun <T : IngredientType> shapedRecipe(
 		output: ItemStack,

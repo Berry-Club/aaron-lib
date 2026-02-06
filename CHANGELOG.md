@@ -1,6 +1,7 @@
 # 1.7.0
 
 - FluidState#isFluid
+- AaronRecipeProvider#shapelessRecipe
 
 # 1.6.0
 
