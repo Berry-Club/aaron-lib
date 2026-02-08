@@ -3,6 +3,7 @@
 - FluidState#isFluid
 - AaronRecipeProvider#shapelessRecipe
 - CompoundTag#putUuidIfNotNull
+- ObservableMutableSet
 
 # 1.6.0
 
