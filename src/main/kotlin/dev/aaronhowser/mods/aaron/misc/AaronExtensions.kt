@@ -129,6 +129,11 @@ object AaronExtensions {
 		return if (this.hasUUID(key)) this.getUUID(key) else null
 	}
 
+	fun CompoundTag.putUuidIfNotNull(key: String, uuid: UUID?): CompoundTag {
+		if (uuid != null) this.putUUID(key, uuid)
+		return this
+	}
+
 	fun Vec3i.toVec3(): Vec3 {
 		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
 	}

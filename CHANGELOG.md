@@ -2,6 +2,7 @@
 
 - FluidState#isFluid
 - AaronRecipeProvider#shapelessRecipe
+- CompoundTag#putUuidIfNotNull
 
 # 1.6.0
 
