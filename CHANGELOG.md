@@ -5,6 +5,7 @@
 - CompoundTag#putUuidIfNotNull
 - ObservableMutableSet
 - FluidStack#isFluid
+- AaronUtil#dropStackAt
 
 # 1.6.0
 

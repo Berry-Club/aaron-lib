@@ -1,7 +1,11 @@
 package dev.aaronhowser.mods.aaron.misc
 
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.common.UsernameCache
 import java.util.*
 
@@ -74,6 +78,16 @@ object AaronUtil {
 		}
 
 		return output
+	}
+
+	fun dropStackAt(itemStack: ItemStack, entity: Entity, instantPickup: Boolean = false): Boolean {
+		return dropStackAt(itemStack, entity.level(), entity.position(), instantPickup)
+	}
+
+	fun dropStackAt(itemStack: ItemStack, level: Level, pos: Vec3, instantPickup: Boolean = false): Boolean {
+		val itemEntity = ItemEntity(level, pos.x, pos.y, pos.z, itemStack)
+		if (instantPickup) itemEntity.setNoPickUpDelay()
+		return level.addFreshEntity(itemEntity)
 	}
 
 }
