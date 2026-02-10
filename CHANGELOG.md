@@ -6,6 +6,7 @@
 - ObservableMutableSet
 - FluidStack#isFluid
 - AaronUtil#dropStackAt
+- Vector3f#toVec3
 
 # 1.6.0
 

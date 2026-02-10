@@ -44,6 +44,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
+import org.joml.Vector3f
 import java.util.*
 
 @Suppress("unused")
@@ -141,6 +142,10 @@ object AaronExtensions {
 	}
 
 	fun Vec3i.toVec3(): Vec3 {
+		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
+	}
+
+	fun Vector3f.toVec3(): Vec3 {
 		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
 	}
 
