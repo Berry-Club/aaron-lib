@@ -42,6 +42,7 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
+import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import java.util.*
 
@@ -78,6 +79,10 @@ object AaronExtensions {
 	fun BlockBehaviour.BlockStateBase.isBlock(blockHolder: Holder<Block>): Boolean = this.`is`(blockHolder)
 	fun BlockBehaviour.BlockStateBase.isBlock(resourceKey: ResourceKey<Block>): Boolean = this.`is`(resourceKey)
 	fun BlockBehaviour.BlockStateBase.isBlock(tagKey: TagKey<Block>): Boolean = this.`is`(tagKey)
+
+	fun FluidStack.isFluid(fluid: Fluid): Boolean = this.`is`(fluid)
+	fun FluidStack.isFluid(tagKey: TagKey<Fluid>): Boolean = this.`is`(tagKey)
+	fun FluidStack.isFluid(fluids: HolderSet<Fluid>): Boolean = this.`is`(fluids)
 
 	fun FluidState.isFluid(fluid: Fluid): Boolean = this.`is`(fluid)
 	fun FluidState.isFluid(tagKey: TagKey<Fluid>): Boolean = this.`is`(tagKey)
