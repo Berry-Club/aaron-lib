@@ -74,6 +74,7 @@ object AaronExtensions {
 	fun <T> Holder<T>.isHolder(location: ResourceLocation): Boolean = this.`is`(location)
 	fun <T> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
 	fun <T> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
+	fun <T> Holder<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
 
 	fun BlockBehaviour.BlockStateBase.isBlock(block: Block): Boolean = this.`is`(block)
 	fun BlockBehaviour.BlockStateBase.isBlock(blockHolder: Holder<Block>): Boolean = this.`is`(blockHolder)
