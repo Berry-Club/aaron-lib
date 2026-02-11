@@ -8,6 +8,8 @@
 - AaronUtil#dropStackAt
 - Vector3f#toVec3
 - AaronDataComponentRegistry#uuid
+- Long#toBlockPos
+- Long#toChunkPos
 
 # 1.6.0
 

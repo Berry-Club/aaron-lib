@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderSet
@@ -32,6 +33,7 @@ import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.alchemy.PotionContents
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
@@ -205,5 +207,8 @@ object AaronExtensions {
 	}
 
 	fun ItemStack.hasEnchantment(enchantment: Holder<Enchantment>): Boolean = this.getEnchantmentLevel(enchantment) > 0
+
+	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
+	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)
 
 }
