@@ -10,6 +10,7 @@
 - AaronDataComponentRegistry#uuid
 - Long#toBlockPos
 - Long#toChunkPos
+- ItemStack#asIngredient
 
 # 1.6.0
 

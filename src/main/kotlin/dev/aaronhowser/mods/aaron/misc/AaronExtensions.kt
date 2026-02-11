@@ -1,11 +1,7 @@
 package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
-import net.minecraft.core.Holder
-import net.minecraft.core.HolderSet
-import net.minecraft.core.Vec3i
+import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.ClickEvent
@@ -44,6 +40,7 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
@@ -100,6 +97,13 @@ object AaronExtensions {
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
+	fun ItemStack.asIngredient(strict: Boolean = false): Ingredient {
+		return if (isComponentsPatchEmpty) {
+			Ingredient.of(this)
+		} else {
+			DataComponentIngredient.of(strict, this)
+		}
+	}
 
 	fun Entity.isMovingHorizontally(): Boolean {
 		return this.deltaMovement.horizontalDistance() > 0.015
