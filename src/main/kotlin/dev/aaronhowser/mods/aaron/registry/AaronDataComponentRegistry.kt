@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.registry
 
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs
+import net.minecraft.core.UUIDUtil
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -9,6 +10,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.Unit
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
+import java.util.*
 
 abstract class AaronDataComponentRegistry {
 
@@ -44,6 +46,10 @@ abstract class AaronDataComponentRegistry {
 
 	protected fun uint(name: String): DeferredHolder<DataComponentType<*>, DataComponentType<UInt>> {
 		return register(name, AaronExtraCodecs.UINT_CODEC, AaronExtraCodecs.UINT_STREAM_CODEC)
+	}
+
+	protected fun uuid(name: String): DeferredHolder<DataComponentType<*>, DataComponentType<UUID>> {
+		return register(name, UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC)
 	}
 
 	protected fun <T> register(

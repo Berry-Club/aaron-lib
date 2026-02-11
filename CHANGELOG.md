@@ -7,6 +7,7 @@
 - FluidStack#isFluid
 - AaronUtil#dropStackAt
 - Vector3f#toVec3
+- AaronDataComponentRegistry#uuid
 
 # 1.6.0
 
