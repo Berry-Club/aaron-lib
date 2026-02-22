@@ -110,7 +110,7 @@ configurations {
 }
 
 repositories {
-	mavenLocal() // Comment
+	mavenLocal()
 
 	maven {
 		name = 'Kotlin for Forge'
