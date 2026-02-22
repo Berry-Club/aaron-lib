@@ -101,7 +101,7 @@ legacyForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
-	add sourceSets.main, "mixins.aaron.refmap.json"
+	add sourceSets.main, "aaron.refmap.json"
 	config "aaron.mixins.json"
 }
 
