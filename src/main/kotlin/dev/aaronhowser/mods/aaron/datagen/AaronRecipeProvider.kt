@@ -1,15 +1,12 @@
 package dev.aaronhowser.mods.aaron.datagen
 
-import dev.aaronhowser.mods.aaron.AaronExtensions.asIngredient
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance
-import net.minecraft.advancements.critereon.InventoryChangeTrigger
+import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.data.recipes.ShapedRecipeBuilder
+import net.minecraft.data.recipes.ShapelessRecipeBuilder
 import net.minecraft.tags.ItemTags
-import net.minecraft.tags.TagKey
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ItemLike
@@ -18,30 +15,37 @@ abstract class AaronRecipeProvider(
 	output: PackOutput
 ) : RecipeProvider(output) {
 
-	protected sealed class IngredientType {
-		data class TagKeyIng(val tagKey: TagKey<Item>) : IngredientType()
-		data class ItemLikeIng(val item: ItemLike) : IngredientType()
-		data class ItemStackIng(val itemStack: ItemStack) : IngredientType()
+	protected fun shapelessRecipe(
+		output: ItemLike,
+		count: Int,
+		requirements: List<Ingredient>,
+		unlockedByName: String = "has_log",
+		unlockedByCriterion: CriterionTriggerInstance = has(ItemTags.LOGS)
+	): ShapelessRecipeBuilder {
+		var temp = ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, count)
 
-		fun getIngredient(): Ingredient {
-			return when (this) {
-				is TagKeyIng -> tagKey.asIngredient()
-				is ItemLikeIng -> item.asIngredient()
-				is ItemStackIng -> itemStack.asIngredient()
-			}
+		for (requirement in requirements) {
+			temp = temp.requires(requirement)
 		}
+
+		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
 	}
 
-	protected fun ing(tagKey: TagKey<Item>) = IngredientType.TagKeyIng(tagKey)
-	protected fun ing(item: ItemLike) = IngredientType.ItemLikeIng(item)
-	protected fun ing(itemStack: ItemStack) = IngredientType.ItemStackIng(itemStack)
+	protected fun shapelessRecipe(
+		output: ItemLike,
+		requirements: List<Ingredient>,
+		unlockedByName: String = "has_log",
+		unlockedByCriterion: CriterionTriggerInstance = has(ItemTags.LOGS)
+	): ShapelessRecipeBuilder {
+		return shapelessRecipe(output, 1, requirements, unlockedByName, unlockedByCriterion)
+	}
 
-	protected fun <T : IngredientType> shapedRecipe(
+	protected fun shapedRecipe(
 		output: ItemStack,
 		patterns: String,
-		definitions: Map<Char, T>,
+		definitions: Map<Char, Ingredient>,
 		unlockedByName: String = "has_log",
-		unlockedByCriterion: AbstractCriterionTriggerInstance = has(ItemTags.LOGS)
+		unlockedByCriterion: CriterionTriggerInstance = has(ItemTags.LOGS)
 	): RecipeWithItemStackOutputBuilder {
 		var temp = RecipeWithItemStackOutputBuilder(RecipeCategory.MISC, output)
 
@@ -49,26 +53,20 @@ abstract class AaronRecipeProvider(
 			temp = temp.pattern(pattern)
 		}
 
-		for (definition in definitions) {
-			temp = when (val ing = definition.value) {
-				is IngredientType.TagKeyIng -> temp.define(definition.key, ing.getIngredient())
-				is IngredientType.ItemLikeIng -> temp.define(definition.key, ing.getIngredient())
-				is IngredientType.ItemStackIng -> temp.define(definition.key, ing.getIngredient())
-
-				else -> temp
-			}
+		for ((key, ingredient) in definitions) {
+			temp = temp.define(key, ingredient)
 		}
 
 		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
 	}
 
-	protected fun <T : IngredientType> shapedRecipe(
+	protected fun shapedRecipe(
 		output: ItemLike,
 		count: Int,
 		patterns: String,
-		definitions: Map<Char, T>,
+		definitions: Map<Char, Ingredient>,
 		unlockedByName: String = "has_log",
-		unlockedByCriterion: InventoryChangeTrigger.TriggerInstance = has(ItemTags.LOGS)
+		unlockedByCriterion: CriterionTriggerInstance = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
 		var temp = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, count)
 
@@ -76,24 +74,19 @@ abstract class AaronRecipeProvider(
 			temp = temp.pattern(pattern)
 		}
 
-		for (definition in definitions) {
-			temp = when (val ing = definition.value) {
-				is IngredientType.TagKeyIng -> temp.define(definition.key, ing.getIngredient())
-				is IngredientType.ItemLikeIng -> temp.define(definition.key, ing.getIngredient())
-				is IngredientType.ItemStackIng -> temp.define(definition.key, ing.getIngredient())
-				else -> temp
-			}
+		for ((key, ingredient) in definitions) {
+			temp = temp.define(key, ingredient)
 		}
 
 		return temp.unlockedBy(unlockedByName, unlockedByCriterion)
 	}
 
-	protected fun <T : IngredientType> shapedRecipe(
+	protected fun shapedRecipe(
 		output: ItemLike,
 		patterns: String,
-		definitions: Map<Char, T>,
+		definitions: Map<Char, Ingredient>,
 		unlockedByName: String = "has_log",
-		unlockedByCriterion: InventoryChangeTrigger.TriggerInstance = has(ItemTags.LOGS)
+		unlockedByCriterion: CriterionTriggerInstance = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
 		return shapedRecipe(output, 1, patterns, definitions, unlockedByName, unlockedByCriterion)
 	}
