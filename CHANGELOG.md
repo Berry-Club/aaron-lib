@@ -1,6 +1,9 @@
 # 1.7.0
 
 - ItemStack#hasEnchantment
+- FluidState#isFluid
+- CompoundTag#putUuidIfNotNull
+- Vector3f#toVec3
 
 # 1.5.3
 

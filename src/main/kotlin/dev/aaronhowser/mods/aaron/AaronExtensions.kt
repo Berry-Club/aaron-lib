@@ -33,11 +33,14 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.Fluid
+import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.crafting.PartialNBTIngredient
 import net.minecraftforge.common.crafting.StrictNBTIngredient
 import net.minecraftforge.registries.RegistryObject
+import org.joml.Vector3f
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -73,6 +76,10 @@ object AaronExtensions {
 	fun BlockBehaviour.BlockStateBase.isBlock(block: Block): Boolean = this.`is`(block)
 	fun BlockBehaviour.BlockStateBase.isBlock(holderSet: HolderSet<Block>): Boolean = this.`is`(holderSet)
 	fun BlockBehaviour.BlockStateBase.isBlock(tagKey: TagKey<Block>): Boolean = this.`is`(tagKey)
+
+	fun FluidState.isFluid(fluid: Fluid): Boolean = this.`is`(fluid)
+	fun FluidState.isFluid(tagKey: TagKey<Fluid>): Boolean = this.`is`(tagKey)
+	fun FluidState.isFluid(fluids: HolderSet<Fluid>): Boolean = this.`is`(fluids)
 
 	fun DamageSource.isDamageSource(tagKey: TagKey<DamageType>): Boolean = this.`is`(tagKey)
 	fun DamageSource.isDamageSource(resourceKey: ResourceKey<DamageType>): Boolean = this.`is`(resourceKey)
@@ -114,7 +121,16 @@ object AaronExtensions {
 		return if (this.hasUUID(key)) this.getUUID(key) else null
 	}
 
+	fun CompoundTag.putUuidIfNotNull(key: String, uuid: UUID?): CompoundTag {
+		if (uuid != null) this.putUUID(key, uuid)
+		return this
+	}
+
 	fun Vec3i.toVec3(): Vec3 {
+		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
+	}
+
+	fun Vector3f.toVec3(): Vec3 {
 		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
 	}
 
