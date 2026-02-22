@@ -6,6 +6,7 @@
 - Vector3f#toVec3
 - Long#toBlockPos
 - Long#toChunkPos
+- Update the recipe provider
 
 # 1.5.3
 
