@@ -4,6 +4,8 @@
 - FluidState#isFluid
 - CompoundTag#putUuidIfNotNull
 - Vector3f#toVec3
+- Long#toBlockPos
+- Long#toChunkPos
 
 # 1.5.3
 

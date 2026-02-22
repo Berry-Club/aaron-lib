@@ -27,6 +27,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
@@ -204,5 +205,8 @@ object AaronExtensions {
 	fun Entity.registryAccess(): RegistryAccess = this.level().registryAccess()
 
 	fun ItemStack.hasEnchantment(enchantment: Enchantment): Boolean = this.getEnchantmentLevel(enchantment) > 0
+
+	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
+	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)
 
 }
