@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.aaron.entity
 
 import com.mojang.authlib.GameProfile
+import net.minecraft.server.level.ServerLevel
+import net.minecraftforge.common.util.FakePlayer
 
 object BetterFakePlayerFactory {
 
