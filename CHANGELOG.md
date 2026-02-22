@@ -1,4 +1,6 @@
-# 1.6.0
+# 1.7.0
+
+- ItemStack#hasEnchantment
 
 # 1.5.3
 

@@ -26,6 +26,7 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
@@ -185,5 +186,7 @@ object AaronExtensions {
 	fun AttributeInstance.hasModifier(id: UUID): Boolean = getModifier(id) != null
 
 	fun Entity.registryAccess(): RegistryAccess = this.level().registryAccess()
+
+	fun ItemStack.hasEnchantment(enchantment: Enchantment): Boolean = this.getEnchantmentLevel(enchantment) > 0
 
 }
