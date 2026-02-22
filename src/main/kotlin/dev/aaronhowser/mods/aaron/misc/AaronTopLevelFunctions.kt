@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron
+package dev.aaronhowser.mods.aaron.misc
 
 import java.util.*
 

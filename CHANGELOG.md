@@ -7,6 +7,7 @@
 - Long#toBlockPos
 - Long#toChunkPos
 - Update the recipe provider
+- Moved some classes around
 
 # 1.5.3
 

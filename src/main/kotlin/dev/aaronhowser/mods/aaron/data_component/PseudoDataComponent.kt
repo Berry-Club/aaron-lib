@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.data_component
 
 import com.mojang.serialization.Codec
-import dev.aaronhowser.mods.aaron.AaronExtensions.isTrue
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import net.minecraft.nbt.NbtOps
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack

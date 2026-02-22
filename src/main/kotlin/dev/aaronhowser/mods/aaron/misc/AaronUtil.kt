@@ -1,9 +1,6 @@
-package dev.aaronhowser.mods.aaron
+package dev.aaronhowser.mods.aaron.misc
 
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.world.item.ItemStack
-import net.minecraftforge.common.UsernameCache
-import java.util.*
+import java.util.UUID
 
 object AaronUtil {
 

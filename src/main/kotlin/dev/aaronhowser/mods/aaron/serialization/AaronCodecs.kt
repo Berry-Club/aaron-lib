@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron
+package dev.aaronhowser.mods.aaron.serialization
 
 import com.mojang.serialization.Codec
 import net.minecraft.network.chat.Component
