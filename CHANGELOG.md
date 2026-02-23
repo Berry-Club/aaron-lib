@@ -11,6 +11,7 @@
 - Long#toBlockPos
 - Long#toChunkPos
 - ItemStack#asIngredient
+- IntrinsicHolderTagsProvider$IntrinsicTagAppender<T>#add(vararg values: Holder<T>)
 
 # 1.6.0
 

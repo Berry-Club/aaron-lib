@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.misc
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
@@ -214,5 +215,10 @@ object AaronExtensions {
 
 	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
 	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)
+
+	fun <T> IntrinsicHolderTagsProvider.IntrinsicTagAppender<T>.add(vararg values: Holder<T>): IntrinsicHolderTagsProvider.IntrinsicTagAppender<T> {
+		for (value in values) this.add(value)
+		return this
+	}
 
 }
