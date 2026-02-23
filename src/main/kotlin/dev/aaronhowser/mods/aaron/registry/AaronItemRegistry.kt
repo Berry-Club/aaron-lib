@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.registry.abstract
+package dev.aaronhowser.mods.aaron.registry
 
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob

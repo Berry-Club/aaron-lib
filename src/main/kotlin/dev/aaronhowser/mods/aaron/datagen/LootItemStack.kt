@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron.datagen
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.aaronhowser.mods.aaron.registry.AaronLootPoolEntryTypes
+import dev.aaronhowser.mods.aaron.registry.actual.AaronLootPoolEntryTypes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.storage.loot.LootContext
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType

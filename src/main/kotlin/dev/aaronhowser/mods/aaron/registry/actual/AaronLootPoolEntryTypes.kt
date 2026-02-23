@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.registry
+package dev.aaronhowser.mods.aaron.registry.actual
 
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.AaronLib
@@ -13,10 +13,10 @@ import java.util.function.Supplier
 object AaronLootPoolEntryTypes {
 
 	val LOOT_POOL_ENTRY_TYPE_REGISTRY: DeferredRegister<LootPoolEntryType> =
-		DeferredRegister.create(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, AaronLib.MOD_ID)
+		DeferredRegister.create(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, AaronLib.Companion.MOD_ID)
 
 	val ITEM_STACK: DeferredHolder<LootPoolEntryType, LootPoolEntryType> =
-		register("item_stack", LootItemStack.CODEC)
+		register("item_stack", LootItemStack.Companion.CODEC)
 
 	private fun register(
 		name: String,

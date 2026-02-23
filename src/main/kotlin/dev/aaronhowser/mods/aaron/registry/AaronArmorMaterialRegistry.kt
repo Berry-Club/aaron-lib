@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.registry.abstract
+package dev.aaronhowser.mods.aaron.registry
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import net.minecraft.core.Holder

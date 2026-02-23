@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.aaron
 
-import dev.aaronhowser.mods.aaron.registry.AaronLootPoolEntryTypes
+import dev.aaronhowser.mods.aaron.registry.actual.AaronLootPoolEntryTypes
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
