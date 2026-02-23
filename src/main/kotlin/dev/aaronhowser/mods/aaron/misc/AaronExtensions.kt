@@ -216,8 +216,8 @@ object AaronExtensions {
 	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
 	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)
 
-	fun <T> IntrinsicHolderTagsProvider.IntrinsicTagAppender<T>.add(vararg values: Holder<T>): IntrinsicHolderTagsProvider.IntrinsicTagAppender<T> {
-		for (value in values) this.add(value)
+	fun <T> IntrinsicHolderTagsProvider.IntrinsicTagAppender<T>.add(vararg holders: Holder<T>): IntrinsicHolderTagsProvider.IntrinsicTagAppender<T> {
+		for (holder in holders) this.add(holder.value())
 		return this
 	}
 
