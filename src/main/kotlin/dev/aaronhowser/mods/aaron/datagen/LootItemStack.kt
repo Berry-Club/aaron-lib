@@ -38,6 +38,12 @@ class LootItemStack(
 					.and(singletonFields(instance))
 					.apply(instance, ::LootItemStack)
 			}
+
+		fun lootTableStack(itemStack: ItemStack): Builder<*> {
+			return simpleBuilder { weight, quality, conditions, functions ->
+				LootItemStack(itemStack, weight, quality, conditions, functions)
+			}
+		}
 	}
 
 }
