@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.registry
+package dev.aaronhowser.mods.aaron.registry.abstract
 
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs

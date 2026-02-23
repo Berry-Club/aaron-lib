@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.registry
+package dev.aaronhowser.mods.aaron.registry.abstract
 
 import net.minecraft.world.effect.MobEffect
 import net.neoforged.neoforge.registries.DeferredHolder

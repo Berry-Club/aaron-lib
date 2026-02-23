@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.registry
+package dev.aaronhowser.mods.aaron.registry.abstract
 
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
