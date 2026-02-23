@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.aaron.datagen
 
-import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.registry.AaronLootPoolEntryTypes
