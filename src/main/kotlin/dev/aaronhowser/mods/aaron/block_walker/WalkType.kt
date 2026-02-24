@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.block
+package dev.aaronhowser.mods.aaron.block_walker
 
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i

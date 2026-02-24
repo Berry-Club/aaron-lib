@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.block
+package dev.aaronhowser.mods.aaron.block_walker
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
