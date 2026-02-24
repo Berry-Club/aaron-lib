@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron.block_walker
 
+import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.scheduleTaskInTicks
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import net.minecraft.core.BlockPos
@@ -68,10 +69,20 @@ class BlockWalker(
 				val neighborState = level.getBlockState(neighborPos)
 
 				if (visited.add(neighborPos.asLong()) && filter(level, neighborPos, neighborState)) {
-
+					pendingQueue.add(
+						ConnectedBlock(
+							PositionedBlock(neighborPos, neighborState),
+							current.distance + 1
+						)
+					)
 				}
 			}
+		}
 
+		if (pendingQueue.isEmpty()) {
+			finish()
+		} else {
+			level.scheduleTaskInTicks(1) { tick(maxIterationsPerTick) }
 		}
 	}
 
