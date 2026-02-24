@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.aaron.block_walker
 
 class ConnectedBlock(
-	val posBlock: PositionedBlock,
+	val block: PositionedBlock,
 	val distance: Int
 )

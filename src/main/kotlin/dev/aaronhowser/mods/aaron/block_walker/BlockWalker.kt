@@ -4,17 +4,17 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.state.pattern.BlockInWorld
-import java.util.function.Predicate
+import net.minecraft.world.level.block.state.BlockState
 
 // Largely copied from VidLib
 class BlockWalker(
 	private val level: Level,
 	private val walkType: WalkType,
 	startPos: BlockPos,
-	private val filter: Predicate<BlockInWorld>? = null,
+	private val filter: ((Level, BlockPos, BlockState) -> Boolean)? = null,
 	private val maxDistance: Int,
 	private val maxTotalBlocks: Int,
+	private val shouldStop: (ConnectedBlock) -> Boolean = { false },
 	private val onFinished: (List<ConnectedBlock>) -> Unit
 ) {
 
@@ -31,6 +31,8 @@ class BlockWalker(
 				0,
 			)
 		)
+
+		visited.add(startPos.asLong())
 	}
 
 	fun start(maxIterationsPerTick: Int) {
@@ -47,15 +49,37 @@ class BlockWalker(
 			val current = pendingQueue.removeFirst()
 
 			if (current.distance != 0) {
-
 				if (filter != null) {
-					val blockInWorld = BlockInWorld(level, current.posBlock.pos, current.posBlock.state)
+					if (!filter(level, current.block.pos, current.block.state)) {
+						continue
+					}
+				} else {
+					if (current.block.state.isAir) continue
 				}
+			}
 
+			collectedResults[current.block.pos.asLong()] = current
+
+			if (collectedResults.size >= maxTotalBlocks) {
+				finish()
+				return
+			}
+
+			if (current.distance + 1 > maxDistance) continue
+
+			for (offset in walkType.neighborOffsets) {
+				val neighborPos = current.block.pos.offset(offset)
+				val neighborState = level.getBlockState(neighborPos)
 			}
 
 		}
+	}
 
+	private fun finish() {
+		if (isFinished) return
+		isFinished = true
+
+		onFinished(collectedResults.values.toList())
 	}
 
 }
