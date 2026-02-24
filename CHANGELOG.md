@@ -12,6 +12,8 @@
 - Long#toChunkPos
 - ItemStack#asIngredient
 - IntrinsicHolderTagsProvider$IntrinsicTagAppender<T>#add(vararg values: Holder<T>)
+- Block walker stuff
+- ItemStack.setUnit
 
 # 1.6.0
 

@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
+import net.minecraft.util.Unit
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
@@ -46,6 +47,7 @@ import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
 import java.util.*
+import java.util.function.Supplier
 
 @Suppress("unused")
 object AaronExtensions {
@@ -220,5 +222,8 @@ object AaronExtensions {
 		for (holder in holders) this.add(holder.value())
 		return this
 	}
+
+	fun ItemStack.setUnit(dataComponent: DataComponentType<Unit>) = this.set(dataComponent, Unit.INSTANCE)
+	fun ItemStack.setUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = setUnit(dataComponent.get())
 
 }
