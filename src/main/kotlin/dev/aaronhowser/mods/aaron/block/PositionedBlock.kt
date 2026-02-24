@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron.block
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.BlockPos
 import net.minecraft.network.codec.StreamCodec
@@ -30,7 +30,7 @@ data class PositionedBlock(
 		val STREAM_CODEC: StreamCodec<ByteBuf, PositionedBlock> =
 			StreamCodec.composite(
 				BlockPos.STREAM_CODEC, PositionedBlock::pos,
-				AaronExtraCodecs.BLOCK_STATE_STREAM_CODEC, PositionedBlock::state,
+				AaronExtraStreamCodecs.BLOCK_STATE, PositionedBlock::state,
 				::PositionedBlock
 			)
 	}

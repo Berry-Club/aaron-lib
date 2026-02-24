@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.registry
 
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import net.minecraft.core.UUIDUtil
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -45,7 +46,7 @@ abstract class AaronDataComponentRegistry {
 	}
 
 	protected fun uint(name: String): DeferredHolder<DataComponentType<*>, DataComponentType<UInt>> {
-		return register(name, AaronExtraCodecs.UINT_CODEC, AaronExtraCodecs.UINT_STREAM_CODEC)
+		return register(name, AaronExtraCodecs.UINT, AaronExtraStreamCodecs.UINT)
 	}
 
 	protected fun uuid(name: String): DeferredHolder<DataComponentType<*>, DataComponentType<UUID>> {
