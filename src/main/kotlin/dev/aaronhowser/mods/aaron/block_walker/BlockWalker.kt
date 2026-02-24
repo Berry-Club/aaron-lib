@@ -11,7 +11,7 @@ class BlockWalker(
 	private val level: Level,
 	private val walkType: WalkType,
 	startPos: BlockPos,
-	private val filter: ((Level, BlockPos, BlockState) -> Boolean)? = null,
+	private val filter: (Level, BlockPos, BlockState) -> Boolean = { l, b, s -> true },
 	private val maxDistance: Int,
 	private val maxTotalBlocks: Int,
 	private val shouldStop: (ConnectedBlock) -> Boolean = { false },
@@ -49,18 +49,14 @@ class BlockWalker(
 			val current = pendingQueue.removeFirst()
 
 			if (current.distance != 0) {
-				if (filter != null) {
-					if (!filter(level, current.block.pos, current.block.state)) {
-						continue
-					}
-				} else {
-					if (current.block.state.isAir) continue
+				if (!filter(level, current.block.pos, current.block.state)) {
+					continue
 				}
 			}
 
 			collectedResults[current.block.pos.asLong()] = current
 
-			if (collectedResults.size >= maxTotalBlocks) {
+			if (shouldStop(current) || collectedResults.size >= maxTotalBlocks) {
 				finish()
 				return
 			}
@@ -70,6 +66,10 @@ class BlockWalker(
 			for (offset in walkType.neighborOffsets) {
 				val neighborPos = current.block.pos.offset(offset)
 				val neighborState = level.getBlockState(neighborPos)
+
+				if (visited.add(neighborPos.asLong()) && filter(level, neighborPos, neighborState)) {
+
+				}
 			}
 
 		}
