@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector2d
 
@@ -60,5 +62,8 @@ object AaronExtraCodecs {
 
 	val UINT_STREAM_CODEC: StreamCodec<ByteBuf, UInt> =
 		ByteBufCodecs.VAR_INT.map(Int::toUInt, UInt::toInt)
+
+	val BLOCK_STATE_STREAM_CODEC: StreamCodec<ByteBuf, BlockState> =
+		ByteBufCodecs.VAR_INT.map(Block::stateById, Block::getId)
 
 }
