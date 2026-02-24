@@ -16,6 +16,7 @@ class BlockWalker(
 	private val maxDistance: Int,
 	private val maxTotalBlocks: Int,
 	private val shouldStop: (ConnectedBlock) -> Boolean = { false },
+	private val onWalked: (ConnectedBlock) -> Unit = {},
 	private val onFinished: (List<ConnectedBlock>) -> Unit
 ) {
 
@@ -56,6 +57,8 @@ class BlockWalker(
 			}
 
 			collectedResults[current.block.pos.asLong()] = current
+
+			onWalked(current)
 
 			if (shouldStop(current) || collectedResults.size >= maxTotalBlocks) {
 				finish()
