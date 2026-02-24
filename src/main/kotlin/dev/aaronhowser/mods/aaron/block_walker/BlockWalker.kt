@@ -11,8 +11,7 @@ class BlockWalker(
 	private val level: Level,
 	private val walkType: WalkType,
 	startPos: BlockPos,
-	filter: (BlockState) -> Boolean = { true },
-	private val onlyExposed: Boolean = false,
+	private val filter: (BlockState) -> Boolean = { true },
 	private val maxDistance: Int,
 	private val maxTotalBlocks: Int,
 	private val onFinished: (List<ConnectedBlock>) -> Unit
@@ -21,5 +20,25 @@ class BlockWalker(
 	private val visited = LongOpenHashSet()
 	private val queue = ArrayDeque<ConnectedBlock>()
 	private val collectedResults = Long2ObjectOpenHashMap<ConnectedBlock>()
+
+	private var isFinished = false
+
+	init {
+		queue.add(
+			ConnectedBlock(
+				PositionedBlock(startPos, level.getBlockState(startPos)),
+				0,
+			)
+		)
+	}
+
+	fun start(maxIterationsPerTick: Int) {
+		if (isFinished) return
+		tick(maxIterationsPerTick)
+	}
+
+	private fun tick(maxIterationsPerTick: Int) {
+		if (isFinished) return
+	}
 
 }
