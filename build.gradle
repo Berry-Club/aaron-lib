@@ -166,6 +166,7 @@ processResources {
 publishing {
 	publications {
 		register('mavenJava', MavenPublication) {
+			artifactId = archiveName
 			from components.java
 		}
 	}
