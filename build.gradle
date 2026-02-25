@@ -102,7 +102,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
 	add sourceSets.main, "mixins.aaron.refmap.json"
-	config "aaron.mixins.json"
+	config "aaron.mixins.json" // comment
 }
 
 configurations {
