@@ -8,6 +8,7 @@
 - Long#toChunkPos
 - Update the recipe provider
 - Moved some classes around
+- IntrinsicHolderTagsProvider$IntrinsicTagAppender#add(vararg values: Holder)
 
 # 1.5.3
 
