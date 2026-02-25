@@ -133,10 +133,11 @@ obfuscation {
 	createRemappingConfiguration(configurations.localRuntime)
 }
 
+jar.finalizedBy('reobfJar')
+
 dependencies {
-	implementation "thedarkcolour:kotlinforforge:${kff_version}"
+	modImplementation "thedarkcolour:kotlinforforge:${kff_version}"
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
