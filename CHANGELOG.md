@@ -13,7 +13,8 @@
 - ItemStack#asIngredient
 - IntrinsicHolderTagsProvider$IntrinsicTagAppender<T>#add(vararg values: Holder<T>)
 - Block walker stuff
-- ItemStack.setUnit
+- ItemStack#setUnit
+- ModConfigSpec.Builder#section
 
 # 1.6.0
 
