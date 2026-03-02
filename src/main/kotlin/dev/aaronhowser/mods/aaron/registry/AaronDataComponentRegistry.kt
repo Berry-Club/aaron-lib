@@ -60,8 +60,8 @@ abstract class AaronDataComponentRegistry {
 		return register(name, ResourceKey.codec(registryKey), ResourceKey.streamCodec(registryKey))
 	}
 
-	protected fun <T> registryHolder(name: String, registry: Registry<T>, registryKey: ResourceKey<out Registry<T>>): DeferredHolder<DataComponentType<*>, DataComponentType<Holder<T>>> {
-		return register(name, registry.holderByNameCodec(), ByteBufCodecs.holderRegistry(registryKey))
+	protected fun <T> registryHolder(name: String, registry: Registry<T>): DeferredHolder<DataComponentType<*>, DataComponentType<Holder<T>>> {
+		return register(name, registry.holderByNameCodec(), ByteBufCodecs.holderRegistry(registry.key()))
 	}
 
 	protected fun <T> register(
