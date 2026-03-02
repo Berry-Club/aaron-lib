@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.registry
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
+import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.UUIDUtil
 import net.minecraft.core.component.DataComponentType
@@ -57,6 +58,10 @@ abstract class AaronDataComponentRegistry {
 
 	protected fun <T> registryKey(name: String, registryKey: ResourceKey<out Registry<T>>): DeferredHolder<DataComponentType<*>, DataComponentType<ResourceKey<T>>> {
 		return register(name, ResourceKey.codec(registryKey), ResourceKey.streamCodec(registryKey))
+	}
+
+	protected fun <T> registryHolder(name: String, registry: Registry<T>, registryKey: ResourceKey<out Registry<T>>): DeferredHolder<DataComponentType<*>, DataComponentType<Holder<T>>> {
+		return register(name, registry.holderByNameCodec(), ByteBufCodecs.holderRegistry(registryKey))
 	}
 
 	protected fun <T> register(

@@ -16,6 +16,7 @@
 - ItemStack#setUnit
 - ModConfigSpec.Builder#section
 - AaronDataComponentRegistry#registryKey
+- AaronDataComponentRegistry#registryHolder
 
 # 1.6.0
 
