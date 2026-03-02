@@ -15,7 +15,7 @@
 - Block walker stuff
 - ItemStack#setUnit
 - ModConfigSpec.Builder#section
-- AaronDataComponentRegistry#registry
+- AaronDataComponentRegistry#registryKey
 
 # 1.6.0
 
