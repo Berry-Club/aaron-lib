@@ -3,11 +3,13 @@ package dev.aaronhowser.mods.aaron.registry
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
+import net.minecraft.core.Registry
 import net.minecraft.core.UUIDUtil
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceKey
 import net.minecraft.util.Unit
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -51,6 +53,10 @@ abstract class AaronDataComponentRegistry {
 
 	protected fun uuid(name: String): DeferredHolder<DataComponentType<*>, DataComponentType<UUID>> {
 		return register(name, UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC)
+	}
+
+	protected fun <T> registry(name: String, registryKey: ResourceKey<out Registry<T>>): DeferredHolder<DataComponentType<*>, DataComponentType<ResourceKey<T>>> {
+		return register(name, ResourceKey.codec(registryKey), ResourceKey.streamCodec(registryKey))
 	}
 
 	protected fun <T> register(
