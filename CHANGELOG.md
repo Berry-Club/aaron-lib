@@ -17,10 +17,11 @@
 - ItemStack#setUnit
 - AaronDataComponentRegistry#registryKey
 - AaronDataComponentRegistry#registryHolder
-- ModConfigSpec.Builder#section
-- ModelBuilder<T>.element
-- ModelBuilder<T>.ElementBuilder.face
+- ModConfigSpec$Builder#section
+- ModelBuilder<T>#element
+- ModelBuilder<T>$ElementBuilder#face
 - ExtractOnlyInvWrapper
+- ItemModelBuilder#override
 
 # 1.6.0
 

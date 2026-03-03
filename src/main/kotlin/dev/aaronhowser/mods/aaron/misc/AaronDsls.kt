@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.misc
 
 import net.minecraft.core.Direction
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
 import net.neoforged.neoforge.client.model.generators.ModelBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
 
@@ -30,6 +31,14 @@ object AaronDsls {
 		val faceBuilder = this.face(direction)
 		faceBuilder.block()
 		return faceBuilder.end()
+	}
+
+	inline fun ItemModelBuilder.override(
+		block: ItemModelBuilder.OverrideBuilder.() -> Unit
+	): ItemModelBuilder {
+		val overrideBuilder = this.override()
+		overrideBuilder.block()
+		return overrideBuilder.end()
 	}
 
 }
