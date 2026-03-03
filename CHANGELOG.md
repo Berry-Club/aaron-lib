@@ -1,5 +1,6 @@
 # 1.7.0
 
+- Fixed ScheduledTaskHandler not handling tasks scheduled with 0 or lower delay
 - FluidState#isFluid
 - AaronRecipeProvider#shapelessRecipe
 - CompoundTag#putUuidIfNotNull
