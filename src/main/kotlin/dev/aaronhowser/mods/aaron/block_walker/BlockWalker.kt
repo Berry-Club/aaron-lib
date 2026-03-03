@@ -50,10 +50,8 @@ class BlockWalker(
 		while (pendingQueue.isNotEmpty() && iterationsThisTick++ < maxIterationsPerTick) {
 			val current = pendingQueue.removeFirst()
 
-			if (current.distance != 0) {
-				if (!filter.test(level, current.block.pos, current.block.state)) {
-					continue
-				}
+			if (!filter.test(level, current.block.pos, current.block.state)) {
+				continue
 			}
 
 			collectedResults[current.block.pos.asLong()] = current
