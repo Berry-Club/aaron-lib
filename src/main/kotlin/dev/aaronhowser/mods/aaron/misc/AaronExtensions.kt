@@ -42,7 +42,6 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.common.ModConfigSpec
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
@@ -226,11 +225,5 @@ object AaronExtensions {
 
 	fun ItemStack.setUnit(dataComponent: DataComponentType<Unit>) = this.set(dataComponent, Unit.INSTANCE)
 	fun ItemStack.setUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = setUnit(dataComponent.get())
-
-	inline fun ModConfigSpec.Builder.section(name: String, block: ModConfigSpec.Builder.() -> kotlin.Unit) {
-		push(name)
-		block()
-		pop()
-	}
 
 }

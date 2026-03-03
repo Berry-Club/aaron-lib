@@ -15,9 +15,10 @@
 - IntrinsicHolderTagsProvider$IntrinsicTagAppender<T>#add(vararg values: Holder<T>)
 - Block walker stuff
 - ItemStack#setUnit
-- ModConfigSpec.Builder#section
 - AaronDataComponentRegistry#registryKey
 - AaronDataComponentRegistry#registryHolder
+- ModConfigSpec.Builder#section
+- ModelBuilder<T>.element
 
 # 1.6.0
 
