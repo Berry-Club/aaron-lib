@@ -12,12 +12,12 @@ class BlockWalker(
 	private val level: Level,
 	private val walkType: WalkType,
 	startPos: BlockPos,
-	private val filter: (Level, BlockPos, BlockState) -> Boolean = { l, b, s -> true },
+	private val filter: BlockFilter = BlockFilter { _, _, _ -> true },
 	private val maxDistance: Int,
 	private val maxTotalBlocks: Int,
-	private val shouldStop: (ConnectedBlock) -> Boolean = { false },
-	private val onWalked: (ConnectedBlock) -> Unit = {},
-	private val onFinished: (List<ConnectedBlock>) -> Unit
+	private val shouldStop: ShouldStopPredicate = ShouldStopPredicate { false },
+	private val onWalked: OnWalkedConsumer = OnWalkedConsumer {},
+	private val onFinished: OnFinishedConsumer = OnFinishedConsumer {}
 ) {
 
 	private val visited = LongOpenHashSet()
@@ -51,16 +51,16 @@ class BlockWalker(
 			val current = pendingQueue.removeFirst()
 
 			if (current.distance != 0) {
-				if (!filter(level, current.block.pos, current.block.state)) {
+				if (!filter.test(level, current.block.pos, current.block.state)) {
 					continue
 				}
 			}
 
 			collectedResults[current.block.pos.asLong()] = current
 
-			onWalked(current)
+			onWalked.accept(current)
 
-			if (shouldStop(current) || collectedResults.size >= maxTotalBlocks) {
+			if (shouldStop.test(current) || collectedResults.size >= maxTotalBlocks) {
 				finish()
 				return
 			}
@@ -71,7 +71,7 @@ class BlockWalker(
 				val neighborPos = current.block.pos.offset(offset)
 				val neighborState = level.getBlockState(neighborPos)
 
-				if (visited.add(neighborPos.asLong()) && filter(level, neighborPos, neighborState)) {
+				if (visited.add(neighborPos.asLong()) && filter.test(level, neighborPos, neighborState)) {
 					pendingQueue.add(
 						ConnectedBlock(
 							PositionedBlock(neighborPos, neighborState),
@@ -93,7 +93,38 @@ class BlockWalker(
 		if (isFinished) return
 		isFinished = true
 
-		onFinished(collectedResults.values.toList())
+		onFinished.accept(collectedResults.values.toList())
+	}
+
+	fun interface BlockFilter {
+		/**
+		 * Ran on every block before it's added to the queue.
+		 * @return `true` to add the block to the queue, `false` to skip it.
+		 */
+		fun test(level: Level, pos: BlockPos, state: BlockState): Boolean
+	}
+
+	fun interface ShouldStopPredicate {
+		/**
+		 * Ran on every block in the queue after it's walked. This always matches the filter.
+		 * @return `true` to stop the entire walk immediately, `false` to continue as normal.
+		 */
+		fun test(block: ConnectedBlock): Boolean
+	}
+
+	fun interface OnWalkedConsumer {
+		/**
+		 * Ran on every block in the queue after it's walked. This always matches the filter.
+		 * This allows you to do something with the block as soon as it's walked, rather than waiting until the end of the entire walk.
+		 */
+		fun accept(block: ConnectedBlock)
+	}
+
+	fun interface OnFinishedConsumer {
+		/**
+		 * Ran once after the walk is finished, either because there are no more blocks to walk or because `shouldStop` returned `true`.
+		 */
+		fun accept(blocks: List<ConnectedBlock>)
 	}
 
 }
