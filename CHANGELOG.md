@@ -19,6 +19,7 @@
 - AaronDataComponentRegistry#registryHolder
 - ModConfigSpec.Builder#section
 - ModelBuilder<T>.element
+- ModelBuilder<T>.ElementBuilder.face
 
 # 1.6.0
 
