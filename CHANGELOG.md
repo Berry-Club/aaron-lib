@@ -24,6 +24,8 @@
 - ItemModelBuilder#override
 - CompoundTag#saveItems
 - CompoundTag#loadItems
+- CompoundTag#saveEnergy
+- CompoundTag#loadEnergy
 
 # 1.6.0
 

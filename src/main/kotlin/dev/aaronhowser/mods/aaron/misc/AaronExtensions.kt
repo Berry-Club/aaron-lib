@@ -5,6 +5,7 @@ import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.IntTag
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
@@ -45,6 +46,7 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient
+import net.neoforged.neoforge.energy.EnergyStorage
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
@@ -242,6 +244,17 @@ object AaronExtensions {
 
 	fun CompoundTag.loadItems(container: SimpleContainer, registries: HolderLookup.Provider) {
 		loadItems(container.items, registries)
+	}
+
+	fun CompoundTag.saveEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
+		this.put(name, energyStorage.serializeNBT(registries))
+	}
+
+	fun CompoundTag.loadEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
+		val energyTag = this.get(name)
+		if (energyTag is IntTag) {
+			energyStorage.deserializeNBT(registries, energyTag)
+		}
 	}
 
 }
