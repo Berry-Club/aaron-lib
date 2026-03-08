@@ -15,6 +15,8 @@ import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Unit
+import net.minecraft.world.ContainerHelper
+import net.minecraft.world.SimpleContainer
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
@@ -225,5 +227,21 @@ object AaronExtensions {
 
 	fun ItemStack.setUnit(dataComponent: DataComponentType<Unit>) = this.set(dataComponent, Unit.INSTANCE)
 	fun ItemStack.setUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = setUnit(dataComponent.get())
+
+	fun CompoundTag.saveItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
+		ContainerHelper.saveAllItems(this, items, registries)
+	}
+
+	fun CompoundTag.saveItems(container: SimpleContainer, registries: HolderLookup.Provider) {
+		saveItems(container.items, registries)
+	}
+
+	fun CompoundTag.loadItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
+		ContainerHelper.loadAllItems(this, items, registries)
+	}
+
+	fun CompoundTag.loadAllItems(container: SimpleContainer, registries: HolderLookup.Provider) {
+		loadItems(container.items, registries)
+	}
 
 }

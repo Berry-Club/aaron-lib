@@ -22,6 +22,8 @@
 - ModelBuilder<T>$ElementBuilder#face
 - ExtractOnlyInvWrapper
 - ItemModelBuilder#override
+- CompoundTag#saveItems
+- CompoundTag#loadItems
 
 # 1.6.0
 
