@@ -240,7 +240,7 @@ object AaronExtensions {
 		ContainerHelper.loadAllItems(this, items, registries)
 	}
 
-	fun CompoundTag.loadAllItems(container: SimpleContainer, registries: HolderLookup.Provider) {
+	fun CompoundTag.loadItems(container: SimpleContainer, registries: HolderLookup.Provider) {
 		loadItems(container.items, registries)
 	}
 
