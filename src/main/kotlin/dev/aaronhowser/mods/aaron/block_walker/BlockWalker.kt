@@ -13,6 +13,7 @@ class BlockWalker(
 	private val level: Level,
 	private val searchOffsets: List<Vec3i>,
 	startPos: BlockPos,
+	private val searchFromTail: Boolean = false,
 	private val filter: BlockFilter = BlockFilter { _, _, _ -> true },
 	private val maxDistance: Int,
 	private val maxTotalBlocks: Int,
@@ -25,6 +26,7 @@ class BlockWalker(
 		level: Level,
 		walkType: WalkType,
 		startPos: BlockPos,
+		searchFromTail: Boolean = false,
 		filter: BlockFilter = BlockFilter { _, _, _ -> true },
 		maxDistance: Int,
 		maxTotalBlocks: Int,
@@ -35,6 +37,7 @@ class BlockWalker(
 		level,
 		walkType.neighborOffsets,
 		startPos,
+		searchFromTail,
 		filter,
 		maxDistance,
 		maxTotalBlocks,
@@ -76,7 +79,7 @@ class BlockWalker(
 		var iterationsThisTick = 0
 
 		while (pendingQueue.isNotEmpty() && iterationsThisTick++ < maxIterationsPerTick) {
-			val current = pendingQueue.removeFirst()
+			val current = if (searchFromTail) pendingQueue.removeLast() else pendingQueue.removeFirst()
 
 			if (!filter.test(level, current.block.pos, current.block.state)) {
 				continue
@@ -156,6 +159,7 @@ class BlockWalker(
 	class Builder(private val level: Level) {
 		private var searchOffsets: List<Vec3i>? = null
 		private var startPos: BlockPos? = null
+		private var searchFromTail: Boolean = false
 		private var filter: BlockFilter = BlockFilter { _, _, _ -> true }
 		private var maxDistance: Int = Int.MAX_VALUE
 		private var maxTotalBlocks: Int = Int.MAX_VALUE
@@ -170,6 +174,11 @@ class BlockWalker(
 
 		fun startPos(startPos: BlockPos): Builder {
 			this.startPos = startPos
+			return this
+		}
+
+		fun searchFromTail(searchFromTail: Boolean): Builder {
+			this.searchFromTail = searchFromTail
 			return this
 		}
 
@@ -208,6 +217,7 @@ class BlockWalker(
 				level,
 				searchOffsets ?: throw IllegalStateException("Search offsets must be set"),
 				startPos ?: throw IllegalStateException("Start position must be set"),
+				searchFromTail,
 				filter,
 				maxDistance,
 				maxTotalBlocks,
