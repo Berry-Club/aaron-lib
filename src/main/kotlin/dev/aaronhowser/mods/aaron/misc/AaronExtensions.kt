@@ -70,7 +70,6 @@ object AaronExtensions {
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
 
-	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
 	fun DyeColor.getDyeName(): String = this.getName()
 	fun Direction.getDirectionName(): String = this.getName()
 
@@ -192,10 +191,6 @@ object AaronExtensions {
 		return total
 	}
 
-	fun ItemStack.isNotFull(): Boolean {
-		return this.count < this.maxStackSize
-	}
-
 	fun Player.getPovResult(range: Number = this.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)): BlockHitResult {
 		val asEntity = this as Entity
 		return asEntity.getPovResult(range)
@@ -218,6 +213,9 @@ object AaronExtensions {
 	}
 
 	fun ItemStack.hasEnchantment(enchantment: Holder<Enchantment>): Boolean = this.getEnchantmentLevel(enchantment) > 0
+	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
+	fun ItemStack.isFull(): Boolean = this.count >= this.maxStackSize
+	fun ItemStack.isNotFull(): Boolean = this.count < this.maxStackSize
 
 	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
 	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)

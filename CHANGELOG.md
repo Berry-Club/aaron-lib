@@ -26,6 +26,7 @@
 - CompoundTag#loadItems
 - CompoundTag#saveEnergy
 - CompoundTag#loadEnergy
+- ItemStack#isFull
 
 # 1.6.0
 
