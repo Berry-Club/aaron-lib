@@ -65,6 +65,11 @@ class BlockWalker(
 		tick(maxIterationsPerTick)
 	}
 
+	fun locateAllImmediately(): List<ConnectedBlock> {
+		start(Int.MAX_VALUE)
+		return collectedResults.values.toList()
+	}
+
 	private fun tick(maxIterationsPerTick: Int) {
 		if (isFinished) return
 
@@ -146,6 +151,71 @@ class BlockWalker(
 		 * Ran once after the walk is finished, either because there are no more blocks to walk or because `shouldStop` returned `true`.
 		 */
 		fun accept(blocks: List<ConnectedBlock>)
+	}
+
+	class Builder(private val level: Level) {
+		private var searchOffsets: List<Vec3i>? = null
+		private var startPos: BlockPos? = null
+		private var filter: BlockFilter = BlockFilter { _, _, _ -> true }
+		private var maxDistance: Int = Int.MAX_VALUE
+		private var maxTotalBlocks: Int = Int.MAX_VALUE
+		private var shouldStop: ShouldStopPredicate = ShouldStopPredicate { false }
+		private var onWalked: OnWalkedConsumer = OnWalkedConsumer {}
+		private var onFinished: OnFinishedConsumer = OnFinishedConsumer {}
+
+		fun searchOffsets(searchOffsets: List<Vec3i>): Builder {
+			this.searchOffsets = searchOffsets
+			return this
+		}
+
+		fun startPos(startPos: BlockPos): Builder {
+			this.startPos = startPos
+			return this
+		}
+
+		fun filter(filter: BlockFilter): Builder {
+			this.filter = filter
+			return this
+		}
+
+		fun maxDistance(maxDistance: Int): Builder {
+			this.maxDistance = maxDistance
+			return this
+		}
+
+		fun maxTotalBlocks(maxTotalBlocks: Int): Builder {
+			this.maxTotalBlocks = maxTotalBlocks
+			return this
+		}
+
+		fun shouldStop(shouldStop: ShouldStopPredicate): Builder {
+			this.shouldStop = shouldStop
+			return this
+		}
+
+		fun onWalked(onWalked: OnWalkedConsumer): Builder {
+			this.onWalked = onWalked
+			return this
+		}
+
+		fun onFinished(onFinished: OnFinishedConsumer): Builder {
+			this.onFinished = onFinished
+			return this
+		}
+
+		fun build(): BlockWalker {
+			return BlockWalker(
+				level,
+				searchOffsets ?: throw IllegalStateException("Search offsets must be set"),
+				startPos ?: throw IllegalStateException("Start position must be set"),
+				filter,
+				maxDistance,
+				maxTotalBlocks,
+				shouldStop,
+				onWalked,
+				onFinished
+			)
+		}
 	}
 
 }
