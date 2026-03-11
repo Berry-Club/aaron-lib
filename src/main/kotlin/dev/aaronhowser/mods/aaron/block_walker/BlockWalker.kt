@@ -4,13 +4,14 @@ import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.scheduleTaskInTi
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Vec3i
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
 // Largely copied from VidLib
 class BlockWalker(
 	private val level: Level,
-	private val walkType: WalkType,
+	private val searchOffsets: List<Vec3i>,
 	startPos: BlockPos,
 	private val filter: BlockFilter = BlockFilter { _, _, _ -> true },
 	private val maxDistance: Int,
@@ -19,6 +20,28 @@ class BlockWalker(
 	private val onWalked: OnWalkedConsumer = OnWalkedConsumer {},
 	private val onFinished: OnFinishedConsumer = OnFinishedConsumer {}
 ) {
+
+	constructor(
+		level: Level,
+		walkType: WalkType,
+		startPos: BlockPos,
+		filter: BlockFilter = BlockFilter { _, _, _ -> true },
+		maxDistance: Int,
+		maxTotalBlocks: Int,
+		shouldStop: ShouldStopPredicate = ShouldStopPredicate { false },
+		onWalked: OnWalkedConsumer = OnWalkedConsumer {},
+		onFinished: OnFinishedConsumer = OnFinishedConsumer {}
+	) : this(
+		level,
+		walkType.neighborOffsets,
+		startPos,
+		filter,
+		maxDistance,
+		maxTotalBlocks,
+		shouldStop,
+		onWalked,
+		onFinished
+	)
 
 	private val visited = LongOpenHashSet()
 	private val pendingQueue = ArrayDeque<ConnectedBlock>()
@@ -65,7 +88,7 @@ class BlockWalker(
 
 			if (current.distance + 1 > maxDistance) continue
 
-			for (offset in walkType.neighborOffsets) {
+			for (offset in searchOffsets) {
 				val neighborPos = current.block.pos.offset(offset)
 				val neighborState = level.getBlockState(neighborPos)
 
