@@ -84,4 +84,8 @@ abstract class AaronItemRegistry {
 			}
 	}
 
+	companion object {
+		val PROPERTIES_SINGLE_STACK: Item.Properties = Item.Properties().stacksTo(1)
+	}
+
 }

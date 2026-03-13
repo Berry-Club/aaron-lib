@@ -27,6 +27,7 @@
 - CompoundTag#saveEnergy
 - CompoundTag#loadEnergy
 - ItemStack#isFull
+- AaronItemRegistry.PROPERTIES_SINGLE_STACK
 
 # 1.6.0
 
