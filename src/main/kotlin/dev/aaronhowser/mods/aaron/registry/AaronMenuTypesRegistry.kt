@@ -19,6 +19,13 @@ abstract class AaronMenuTypesRegistry {
 		return getMenuTypeRegistry().register(name, Supplier { MenuType(constructor, FeatureFlags.DEFAULT_FLAGS) })
 	}
 
+	protected fun <T : AbstractContainerMenu> register(
+		name: String,
+		supplier: () -> MenuType<T>
+	): DeferredHolder<MenuType<*>, MenuType<T>> {
+		return getMenuTypeRegistry().register(name, Supplier { supplier() })
+	}
+
 	abstract fun registerScreens(event: RegisterMenuScreensEvent)
 
 }
