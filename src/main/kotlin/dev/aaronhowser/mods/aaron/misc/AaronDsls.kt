@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.misc
 
 import net.minecraft.core.Direction
+import net.minecraft.world.item.ItemDisplayContext
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
 import net.neoforged.neoforge.client.model.generators.ModelBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
@@ -39,6 +40,21 @@ object AaronDsls {
 		val overrideBuilder = this.override()
 		overrideBuilder.block()
 		return overrideBuilder.end()
+	}
+
+	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.transforms(block: ModelBuilder<T>.TransformsBuilder.() -> Unit): T {
+		val transformsBuilder = this.transforms()
+		transformsBuilder.block()
+		return transformsBuilder.end()
+	}
+
+	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.TransformsBuilder.transform(
+		type: ItemDisplayContext,
+		block: ModelBuilder<T>.TransformsBuilder.TransformVecBuilder.() -> Unit
+	): ModelBuilder<T>.TransformsBuilder {
+		val transformVecBuilder = this.transform(type)
+		transformVecBuilder.block()
+		return transformVecBuilder.end()
 	}
 
 }

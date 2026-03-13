@@ -28,6 +28,8 @@
 - CompoundTag#loadEnergy
 - ItemStack#isFull
 - AaronItemRegistry.PROPERTIES_SINGLE_STACK
+- ModelBuilder<T>#transforms
+- ModelBuilder<T>$TransformsBuilder#transform
 
 # 1.6.0
 
