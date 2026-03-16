@@ -7,9 +7,7 @@ import net.minecraft.network.codec.StreamCodec
 
 data class BlockStateIngredientType<T : BlockStateIngredient>(
 	val codec: MapCodec<T>,
-	val streamCodec: StreamCodec<out RegistryFriendlyByteBuf, T>
+	val streamCodec: StreamCodec<RegistryFriendlyByteBuf, T>
 ) {
-
 	constructor(codec: MapCodec<T>) : this(codec, ByteBufCodecs.fromCodecWithRegistries(codec.codec()))
-
 }

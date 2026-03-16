@@ -94,7 +94,7 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 		fun empty() = EmptyBlockStateIngredient
 		fun of() = empty()
 		fun of(tag: TagKey<Block>) = TagBlockStateIngredient(tag)
-		fun single(state: BlockState) = SingleBlockIngredient(state)
+		fun single(state: BlockState) = SingleBlockIngredient(state.block)
 
 		private fun singleOrTagCodec(): MapCodec<BlockStateIngredient> {
 			return MapCodec.recursive("BlockStateIngredient.SINGLE_OR_TAG_CODEC") {
