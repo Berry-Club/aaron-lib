@@ -45,6 +45,9 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 				return@validate DataResult.success(list)
 			}
 
+		val CODEC: Codec<BlockStateIngredient> = codec(allowEmpty = true)
+		val CODEC_NON_EMPTY: Codec<BlockStateIngredient> = codec(allowEmpty = false)
+
 		fun empty() = EmptyBlockStateIngredient
 		fun of() = empty()
 		fun of(tag: TagKey<Block>) = TagBlockStateIngredient(tag)
@@ -93,12 +96,23 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 			}
 		}
 
-		private fun codec(allowEmpty: Boolean) {
+		private fun codec(allowEmpty: Boolean): Codec<BlockStateIngredient> {
 			val listCodec = Codec.lazyInitialized { if (allowEmpty) LIST_CODEC else LIST_CODEC_NON_EMPTY }
 
 			return Codec.either(listCodec, MAP_CODEC_CODEC)
 				.xmap(
-					{ either -> either.map }
+					{ either ->
+						either.map(::CompoundBlockStateIngredient, { it })
+					},
+					{ ingredient ->
+						if (ingredient is CompoundBlockStateIngredient) {
+							return@xmap Either.left(ingredient.children)
+						} else if (ingredient.isEmpty()) {
+							return@xmap Either.left(emptyList())
+						}
+
+						return@xmap Either.right(ingredient)
+					}
 				)
 		}
 	}
