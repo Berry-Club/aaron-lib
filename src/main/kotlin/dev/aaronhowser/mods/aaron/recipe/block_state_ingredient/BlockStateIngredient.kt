@@ -71,7 +71,7 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 
 				override fun encode(buf: RegistryFriendlyByteBuf, ingredient: BlockStateIngredient) {
 					if (ingredient.isSimple) {
-						BLOCK_LIST_CODEC.encode(buf, ingredient.blockStates.toList())
+						BLOCK_LIST_CODEC.encode(buf, ingredient.blockStates)
 					} else {
 						buf.writeVarInt(-1)
 						DISPATCH_CODEC.encode(buf, ingredient)
