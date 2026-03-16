@@ -1,6 +1,9 @@
 package dev.aaronhowser.mods.aaron.recipe.block_state_ingredient
 
+import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
+import dev.aaronhowser.mods.aaron.registry.actual.AaronBlockStateIngredientTypeRegistry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import java.util.stream.Stream
@@ -15,9 +18,7 @@ class SingleBlockIngredient(
 
 	override fun generateStates(): Stream<BlockState> = Stream.of(block.defaultBlockState())
 
-	override fun getType(): BlockStateIngredientType<*> {
-		TODO("Not yet implemented")
-	}
+	override fun getType(): BlockStateIngredientType<*> = AaronBlockStateIngredientTypeRegistry.SINGLE.get()
 
 	override fun hashCode(): Int {
 		return block.hashCode()
@@ -30,4 +31,12 @@ class SingleBlockIngredient(
 		if (block != other.block) return false
 		return true
 	}
+
+	companion object {
+		val CODEC: MapCodec<SingleBlockIngredient> =
+			BuiltInRegistries.BLOCK.byNameCodec()
+				.xmap(::SingleBlockIngredient, SingleBlockIngredient::block)
+				.fieldOf("block")
+	}
+
 }
