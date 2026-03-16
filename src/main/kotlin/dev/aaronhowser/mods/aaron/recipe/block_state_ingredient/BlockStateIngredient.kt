@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.recipe.block_state_ingredient
 
 import com.mojang.datafixers.util.Either
+import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.registry.actual.AaronBlockStateIngredientTypeRegistry
@@ -29,8 +30,20 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 	fun isEmpty(): Boolean = this === empty()
 
 	companion object {
-		val SINGLE_OR_TAG_CODEC: MapCodec<BlockStateIngredient> =
-			MapCodec.recursive("BlockStateIngredient.SINGLE_OR_TAG_CODEC") {
+		val SINGLE_OR_TAG_CODEC: MapCodec<BlockStateIngredient> = singleOrTagCodec()
+		val MAP_CODEC_NONEMPTY: MapCodec<BlockStateIngredient> = makeMapCodec()
+
+
+		val MAP_CODEC_CODEC: Codec<BlockStateIngredient> = MAP_CODEC_NONEMPTY.codec()
+
+		val LIST_CODEC: Codec<List<BlockStateIngredient>> = MAP_CODEC_CODEC.listOf()
+
+		fun empty() = EmptyBlockStateIngredient
+		fun of() = empty()
+		fun of(tag: TagKey<Block>) = TagBlockStateIngredient(tag)
+
+		private fun singleOrTagCodec(): MapCodec<BlockStateIngredient> {
+			return MapCodec.recursive("BlockStateIngredient.SINGLE_OR_TAG_CODEC") {
 				NeoForgeExtraCodecs.xor(
 					SingleBlockIngredient.CODEC,
 					TagBlockStateIngredient.CODEC,
@@ -47,9 +60,10 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 					}
 				)
 			}
+		}
 
-		val MAP_CODEC_NONEMPTY: MapCodec<BlockStateIngredient> =
-			NeoForgeExtraCodecs.dispatchMapOrElse(
+		private fun makeMapCodec(): MapCodec<BlockStateIngredient> {
+			return NeoForgeExtraCodecs.dispatchMapOrElse(
 				AaronBlockStateIngredientTypeRegistry.BUILDER.byNameCodec(),
 				BlockStateIngredient::getType,
 				BlockStateIngredientType<*>::codec,
@@ -70,10 +84,7 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 
 				return@validate DataResult.success(ingredient)
 			}
-
-		fun empty() = EmptyBlockStateIngredient
-		fun of() = empty()
-		fun of(tag: TagKey<Block>) = TagBlockStateIngredient(tag)
+		}
 	}
 
 }
