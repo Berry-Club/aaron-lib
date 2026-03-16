@@ -5,6 +5,11 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.registry.actual.AaronBlockStateIngredientTypeRegistry
+import net.minecraft.core.NonNullList
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
@@ -47,6 +52,35 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 
 		val CODEC: Codec<BlockStateIngredient> = codec(allowEmpty = true)
 		val CODEC_NON_EMPTY: Codec<BlockStateIngredient> = codec(allowEmpty = false)
+
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, BlockStateIngredient> =
+			object : StreamCodec<RegistryFriendlyByteBuf, BlockStateIngredient> {
+				val DISPATCH_CODEC: StreamCodec<RegistryFriendlyByteBuf, BlockStateIngredient> =
+					ByteBufCodecs
+						.registry(AaronBlockStateIngredientTypeRegistry.KEY)
+						.dispatch(BlockStateIngredient::getType, BlockStateIngredientType<*>::streamCodec)
+
+				val BLOCK_LIST_CODEC: StreamCodec<RegistryFriendlyByteBuf, List<Block>> =
+					ByteBufCodecs
+						.registry(Registries.BLOCK)
+						.apply(ByteBufCodecs.collection(NonNullList<Block>::createWithCapacity))
+
+				override fun encode(buf: RegistryFriendlyByteBuf, ingredient: BlockStateIngredient) {
+					if (ingredient.isSimple) {
+						BLOCK_LIST_CODEC.encode(buf, ingredient.blockStates.toList())
+					}
+				}
+
+				override fun decode(buf: RegistryFriendlyByteBuf): BlockStateIngredient {
+					val size = buf.readVarInt()
+
+					if (size == -1) {
+						return DISPATCH_CODEC.decode(buf)
+					}
+
+				}
+
+			}
 
 		fun empty() = EmptyBlockStateIngredient
 		fun of() = empty()
