@@ -33,10 +33,17 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 		val SINGLE_OR_TAG_CODEC: MapCodec<BlockStateIngredient> = singleOrTagCodec()
 		val MAP_CODEC_NONEMPTY: MapCodec<BlockStateIngredient> = makeMapCodec()
 
-
 		val MAP_CODEC_CODEC: Codec<BlockStateIngredient> = MAP_CODEC_NONEMPTY.codec()
 
 		val LIST_CODEC: Codec<List<BlockStateIngredient>> = MAP_CODEC_CODEC.listOf()
+		val LIST_CODEC_NON_EMPTY: Codec<List<BlockStateIngredient>> =
+			LIST_CODEC.validate { list ->
+				if (list.isEmpty()) {
+					return@validate DataResult.error { "BlockStateIngredient list cannot be empty" }
+				}
+
+				return@validate DataResult.success(list)
+			}
 
 		fun empty() = EmptyBlockStateIngredient
 		fun of() = empty()
@@ -84,6 +91,15 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 
 				return@validate DataResult.success(ingredient)
 			}
+		}
+
+		private fun codec(allowEmpty: Boolean) {
+			val listCodec = Codec.lazyInitialized { if (allowEmpty) LIST_CODEC else LIST_CODEC_NON_EMPTY }
+
+			return Codec.either(listCodec, MAP_CODEC_CODEC)
+				.xmap(
+					{ either -> either.map}
+				)
 		}
 	}
 
