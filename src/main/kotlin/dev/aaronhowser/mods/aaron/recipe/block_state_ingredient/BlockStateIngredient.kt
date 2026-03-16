@@ -22,9 +22,9 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 	abstract override fun hashCode(): Int
 	abstract override fun equals(other: Any?): Boolean
 
-	protected abstract fun generateStates(): Stream<BlockState>
-	protected abstract fun getType(): BlockStateIngredientType<*>
-	protected abstract val isSimple: Boolean
+	abstract fun generateStates(): Stream<BlockState>
+	abstract fun getType(): BlockStateIngredientType<*>
+	abstract val isSimple: Boolean
 
 	fun hasNoStates(): Boolean = blockStates.isEmpty()
 	fun isEmpty(): Boolean = this === empty()
@@ -98,7 +98,7 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 
 			return Codec.either(listCodec, MAP_CODEC_CODEC)
 				.xmap(
-					{ either -> either.map}
+					{ either -> either.map }
 				)
 		}
 	}

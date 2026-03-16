@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.registry.actual
 
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.recipe.block_state_ingredient.BlockStateIngredientType
+import dev.aaronhowser.mods.aaron.recipe.block_state_ingredient.CompoundBlockStateIngredient
 import dev.aaronhowser.mods.aaron.recipe.block_state_ingredient.EmptyBlockStateIngredient
 import dev.aaronhowser.mods.aaron.recipe.block_state_ingredient.SingleBlockIngredient
 import dev.aaronhowser.mods.aaron.recipe.block_state_ingredient.TagBlockStateIngredient
@@ -27,7 +28,9 @@ object AaronBlockStateIngredientTypeRegistry {
 		BLOCK_STATE_INGREDIENT_TYPES.register("single", Supplier { BlockStateIngredientType(SingleBlockIngredient.CODEC) })
 	val TAG: DeferredHolder<BlockStateIngredientType<*>, BlockStateIngredientType<TagBlockStateIngredient>> =
 		BLOCK_STATE_INGREDIENT_TYPES.register("tag", Supplier { BlockStateIngredientType(TagBlockStateIngredient.CODEC) })
-	val EMPTY: DeferredHolder<BlockStateIngredientType<*>, BlockStateIngredientType<*>> =
+	val EMPTY: DeferredHolder<BlockStateIngredientType<*>, BlockStateIngredientType<EmptyBlockStateIngredient>> =
 		BLOCK_STATE_INGREDIENT_TYPES.register("empty", Supplier { BlockStateIngredientType(EmptyBlockStateIngredient.CODEC) })
+	val COMPOUND: DeferredHolder<BlockStateIngredientType<*>, BlockStateIngredientType<CompoundBlockStateIngredient>> =
+		BLOCK_STATE_INGREDIENT_TYPES.register("compound", Supplier { BlockStateIngredientType(CompoundBlockStateIngredient.CODEC) })
 
 }
