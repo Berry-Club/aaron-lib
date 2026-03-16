@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.aaron.recipe.block_state_ingredient
 
+import com.mojang.datafixers.util.Either
+import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.registry.actual.AaronBlockStateIngredientTypeRegistry
 import net.minecraft.tags.TagKey
@@ -24,24 +26,50 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 	protected abstract val isSimple: Boolean
 
 	fun hasNoStates(): Boolean = blockStates.isEmpty()
+	fun isEmpty(): Boolean = this === empty()
 
 	companion object {
-		val SINGLE_OR_TAG_CODEC =
-			MapCodec.recursive(
-				"BlockStateIngredient.SINGLE_OR_TAG_CODEC"
-			) {
+		val SINGLE_OR_TAG_CODEC: MapCodec<BlockStateIngredient> =
+			MapCodec.recursive("BlockStateIngredient.SINGLE_OR_TAG_CODEC") {
 				NeoForgeExtraCodecs.xor(
+					SingleBlockIngredient.CODEC,
 					TagBlockStateIngredient.CODEC,
-					TagBlockStateIngredient.CODEC,
+				).xmap(
+					{ either ->
+						either.map({ it }, { it })
+					},
+					{ ingredient ->
+						when (ingredient) {
+							is SingleBlockIngredient -> Either.left(ingredient)
+							is TagBlockStateIngredient -> Either.right(ingredient)
+							else -> throw IllegalStateException()
+						}
+					}
 				)
 			}
 
-		val MAP_CODEC_NONEMPTY =
+		val MAP_CODEC_NONEMPTY: MapCodec<BlockStateIngredient> =
 			NeoForgeExtraCodecs.dispatchMapOrElse(
 				AaronBlockStateIngredientTypeRegistry.BUILDER.byNameCodec(),
 				BlockStateIngredient::getType,
 				BlockStateIngredientType<*>::codec,
-			)
+				SINGLE_OR_TAG_CODEC
+			).xmap(
+				{ either -> either.map({ it }, { it }) },
+				{ ingredient ->
+					if (ingredient is SingleBlockIngredient || ingredient is TagBlockStateIngredient) {
+						Either.right(ingredient)
+					} else {
+						Either.left(ingredient)
+					}
+				}
+			).validate { ingredient ->
+				if (ingredient.isEmpty()) {
+					return@validate DataResult.error { "Cannot serialize an empty BlockStateIngredient" }
+				}
+
+				return@validate DataResult.success(ingredient)
+			}
 
 		fun empty() = EmptyBlockStateIngredient
 		fun of() = empty()
