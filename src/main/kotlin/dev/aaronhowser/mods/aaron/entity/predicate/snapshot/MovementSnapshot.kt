@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.aaronhowser.mods.aaron.serialization.AaronExtraCodecs
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.critereon.MinMaxBounds
