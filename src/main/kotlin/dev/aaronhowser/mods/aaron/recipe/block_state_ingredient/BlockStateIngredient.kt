@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron.recipe.block_state_ingredient
 
+import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.registry.actual.AaronBlockStateIngredientTypeRegistry
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
@@ -25,10 +26,21 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 	fun hasNoStates(): Boolean = blockStates.isEmpty()
 
 	companion object {
+		val SINGLE_OR_TAG_CODEC =
+			MapCodec.recursive(
+				"BlockStateIngredient.SINGLE_OR_TAG_CODEC"
+			) {
+				NeoForgeExtraCodecs.xor(
+					TagBlockStateIngredient.CODEC,
+					TagBlockStateIngredient.CODEC,
+				)
+			}
+
 		val MAP_CODEC_NONEMPTY =
 			NeoForgeExtraCodecs.dispatchMapOrElse(
-				AaronBlockStateIngredientTypeRegistry.BLOCK_STATE_INGREDIENT_TYPES.byNameCodec(),
-
+				AaronBlockStateIngredientTypeRegistry.BUILDER.byNameCodec(),
+				BlockStateIngredient::getType,
+				BlockStateIngredientType<*>::codec,
 			)
 
 		fun empty() = EmptyBlockStateIngredient
