@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState
 // Largely copied from VidLib
 class BlockWalker(
 	private val level: Level,
-	private val searchOffsets: List<Vec3i>,
+	private val searchOffsets: Set<Vec3i>,
 	startPos: BlockPos,
 	private val searchFromTail: Boolean = false,
 	private val filter: BlockFilter = BlockFilter { _, _, _ -> true },
@@ -157,7 +157,7 @@ class BlockWalker(
 	}
 
 	class Builder(private val level: Level) {
-		private var searchOffsets: List<Vec3i>? = null
+		private var searchOffsets: Set<Vec3i>? = null
 		private var startPos: BlockPos? = null
 		private var searchFromTail: Boolean = false
 		private var filter: BlockFilter = BlockFilter { _, _, _ -> true }
@@ -167,7 +167,7 @@ class BlockWalker(
 		private var onWalked: OnWalkedConsumer = OnWalkedConsumer {}
 		private var onFinished: OnFinishedConsumer = OnFinishedConsumer {}
 
-		fun searchOffsets(searchOffsets: List<Vec3i>): Builder {
+		fun searchOffsets(searchOffsets: Set<Vec3i>): Builder {
 			this.searchOffsets = searchOffsets
 			return this
 		}

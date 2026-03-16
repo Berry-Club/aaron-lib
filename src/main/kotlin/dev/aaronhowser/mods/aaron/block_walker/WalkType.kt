@@ -15,14 +15,10 @@ enum class WalkType(
 
 	;
 
-	val neighborOffsets: List<Vec3i>
-
-	init {
-		val offsets = mutableListOf<Vec3i>()
-
+	val neighborOffsets: Set<Vec3i> = buildSet {
 		if (!includeDiagonals && !horizontalOnly) {
 			for (dir in Direction.entries) {
-				offsets.add(Vec3i(dir.stepX, dir.stepY, dir.stepZ))
+				add(Vec3i(dir.stepX, dir.stepY, dir.stepZ))
 			}
 		} else {
 			val verticalRange = if (horizontalOnly) 0..0 else -1..1
@@ -32,17 +28,15 @@ enum class WalkType(
 				if (includeDiagonals) {
 					for (dx in -1..1) for (dz in -1..1) {
 						if (dx == 0 && dy == 0 && dz == 0) continue
-						offsets.add(Vec3i(dx, dy, dz))
+						add(Vec3i(dx, dy, dz))
 					}
 				} else {
 					for (dir in Direction.Plane.HORIZONTAL) {
-						offsets.add(Vec3i(dir.stepX, dy, dir.stepZ))
+						add(Vec3i(dir.stepX, dy, dir.stepZ))
 					}
 				}
 			}
 		}
-
-		this.neighborOffsets = offsets
 	}
 
 }
