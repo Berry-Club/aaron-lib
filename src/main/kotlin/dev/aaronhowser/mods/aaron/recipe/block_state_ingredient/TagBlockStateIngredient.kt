@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.aaron.recipe.block_state_ingredient
 
-import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import net.minecraft.core.HolderSet
 import net.minecraft.core.registries.BuiltInRegistries
@@ -27,9 +27,10 @@ class TagBlockStateIngredient(
 	override val isSimple: Boolean = true
 
 	companion object {
-		val CODEC: Codec<TagBlockStateIngredient> =
+		val CODEC: MapCodec<TagBlockStateIngredient> =
 			TagKey.codec(Registries.BLOCK)
 				.xmap(::TagBlockStateIngredient, TagBlockStateIngredient::tag)
+				.fieldOf("tag")
 	}
 
 }

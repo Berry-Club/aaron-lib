@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron
 
 import dev.aaronhowser.mods.aaron.registry.actual.AaronLootPoolEntryTypes
+import dev.aaronhowser.mods.aaron.registry.actual.AaronBlockStateIngredientTypeRegistry
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
@@ -20,6 +21,7 @@ class AaronLib(
 		LOGGER.log(Level.INFO, "On the scene.")
 
 		AaronLootPoolEntryTypes.LOOT_POOL_ENTRY_TYPE_REGISTRY.register(MOD_BUS)
+		AaronBlockStateIngredientTypeRegistry.BLOCK_STATE_INGREDIENT_TYPES.register(MOD_BUS)
 	}
 
 	companion object {
