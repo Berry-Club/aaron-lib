@@ -82,11 +82,14 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 					val size = buf.readVarInt()
 					if (size == -1) return DISPATCH_CODEC.decode(buf)
 
-					return CompoundBlockStateIngredient.of(
-						Stream.generate { ByteBufCodecs.fromCodec(BlockState.CODEC).decode(buf) }
-							.limit(size.toLong())
-							.map(BlockStateIngredient::single)
-					)
+					val states = mutableListOf<BlockState>()
+
+					for (i in 0 until size) {
+						val state = ByteBufCodecs.fromCodec(BlockState.CODEC).decode(buf)
+						states.add(state)
+					}
+
+					return CompoundBlockStateIngredient(states.map(BlockStateIngredient::single))
 				}
 
 			}
