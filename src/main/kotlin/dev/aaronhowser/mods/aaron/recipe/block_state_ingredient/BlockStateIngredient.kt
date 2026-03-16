@@ -60,24 +60,33 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 						.registry(AaronBlockStateIngredientTypeRegistry.KEY)
 						.dispatch(BlockStateIngredient::getType, BlockStateIngredientType<*>::streamCodec)
 
-				val BLOCK_LIST_CODEC: StreamCodec<RegistryFriendlyByteBuf, List<Block>> =
+				val BLOCK_LIST_CODEC: StreamCodec<RegistryFriendlyByteBuf, List<BlockState>> =
 					ByteBufCodecs
 						.registry(Registries.BLOCK)
-						.apply(ByteBufCodecs.collection(NonNullList<Block>::createWithCapacity))
+						.map(
+							{ block -> block.defaultBlockState() },
+							{ state -> state.block }
+						)
+						.apply(ByteBufCodecs.collection(NonNullList<BlockState>::createWithCapacity))
 
 				override fun encode(buf: RegistryFriendlyByteBuf, ingredient: BlockStateIngredient) {
 					if (ingredient.isSimple) {
 						BLOCK_LIST_CODEC.encode(buf, ingredient.blockStates.toList())
+					} else {
+						buf.writeVarInt(-1)
+						DISPATCH_CODEC.encode(buf, ingredient)
 					}
 				}
 
 				override fun decode(buf: RegistryFriendlyByteBuf): BlockStateIngredient {
 					val size = buf.readVarInt()
+					if (size == -1) DISPATCH_CODEC.decode(buf)
 
-					if (size == -1) {
-						return DISPATCH_CODEC.decode(buf)
-					}
-
+					return CompoundBlockStateIngredient.of(
+						Stream.generate { ByteBufCodecs.fromCodec(BlockState.CODEC).decode(buf) }
+							.limit(size.toLong())
+							.map(BlockStateIngredient::single)
+					)
 				}
 
 			}
@@ -85,6 +94,7 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 		fun empty() = EmptyBlockStateIngredient
 		fun of() = empty()
 		fun of(tag: TagKey<Block>) = TagBlockStateIngredient(tag)
+		fun single(state: BlockState) = SingleBlockIngredient(state)
 
 		private fun singleOrTagCodec(): MapCodec<BlockStateIngredient> {
 			return MapCodec.recursive("BlockStateIngredient.SINGLE_OR_TAG_CODEC") {

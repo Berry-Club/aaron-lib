@@ -39,6 +39,10 @@ class CompoundBlockStateIngredient(
 			NeoForgeExtraCodecs
 				.aliasedFieldOf(LIST_CODEC_NON_EMPTY, "children", "ingredients")
 				.xmap(::CompoundBlockStateIngredient, CompoundBlockStateIngredient::children)
+
+		fun of(stream: Stream<BlockStateIngredient>): CompoundBlockStateIngredient {
+			return CompoundBlockStateIngredient(stream.toList())
+		}
 	}
 
 }
