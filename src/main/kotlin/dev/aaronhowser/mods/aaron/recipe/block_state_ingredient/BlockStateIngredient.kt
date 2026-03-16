@@ -9,6 +9,11 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 	abstract override fun test(state: BlockState): Boolean
 
 	protected abstract fun generateStates(): Stream<BlockState>
+	protected abstract fun getType(): BlockStateIngredientType<*>
 	protected abstract val isSimple: Boolean
+
+	val blockStates: List<BlockState> by lazy {
+		generateStates().toList()
+	}
 
 }
