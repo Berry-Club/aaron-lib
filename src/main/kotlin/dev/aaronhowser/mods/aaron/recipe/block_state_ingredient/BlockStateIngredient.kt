@@ -80,7 +80,7 @@ abstract class BlockStateIngredient : Predicate<BlockState> {
 
 				override fun decode(buf: RegistryFriendlyByteBuf): BlockStateIngredient {
 					val size = buf.readVarInt()
-					if (size == -1) DISPATCH_CODEC.decode(buf)
+					if (size == -1) return DISPATCH_CODEC.decode(buf)
 
 					return CompoundBlockStateIngredient.of(
 						Stream.generate { ByteBufCodecs.fromCodec(BlockState.CODEC).decode(buf) }
