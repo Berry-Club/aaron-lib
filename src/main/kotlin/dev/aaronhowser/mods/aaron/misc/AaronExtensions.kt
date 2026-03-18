@@ -136,6 +136,12 @@ object AaronExtensions {
 		return this
 	}
 
+	fun ItemLike.withCount(count: Int): ItemStack {
+		val stack = getDefaultInstance()
+		stack.count = count
+		return stack
+	}
+
 	fun Player.giveOrDropStack(itemStack: ItemStack): Boolean {
 		if (this.inventory.add(itemStack)) return true
 

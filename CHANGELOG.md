@@ -30,6 +30,7 @@
 - AaronItemRegistry.PROPERTIES_SINGLE_STACK
 - ModelBuilder<T>#transforms
 - ModelBuilder<T>$TransformsBuilder#transform
+- ItemLike#withCount
 
 # 1.6.0
 
