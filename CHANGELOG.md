@@ -33,6 +33,7 @@
 - ItemLike#withCount
 - AaronMobEffectsRegistry#registerSimple
 - AaronMobEffectsRegistry#registerSimpleInstantaneous
+- Heal command now also feeds
 
 # 1.6.0
 

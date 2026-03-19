@@ -7,6 +7,7 @@ import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 
 object HealCommand {
 
@@ -45,6 +46,9 @@ object HealCommand {
 		)
 
 		target.heal(target.maxHealth)
+		if (target is Player) {
+			target.foodData.eat(100, 100f)
+		}
 
 		return 1
 	}
