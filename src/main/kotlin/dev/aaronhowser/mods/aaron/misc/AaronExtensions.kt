@@ -136,6 +136,17 @@ object AaronExtensions {
 		return this
 	}
 
+	fun ItemLike.withoutComponent(componentType: DataComponentType<*>): ItemStack {
+		val stack = this.asItem().defaultInstance
+		stack.remove(componentType)
+		return stack
+	}
+
+	fun ItemStack.withoutComponent(componentType: DataComponentType<*>): ItemStack {
+		this.remove(componentType)
+		return this
+	}
+
 	fun ItemLike.withCount(count: Int): ItemStack {
 		val stack = getDefaultInstance()
 		stack.count = count

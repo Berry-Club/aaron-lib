@@ -34,6 +34,8 @@
 - AaronMobEffectsRegistry#registerSimple
 - AaronMobEffectsRegistry#registerSimpleInstantaneous
 - Heal command now also feeds
+- ItemLike#withoutComponent
+- ItemStack#withoutComponent
 
 # 1.6.0
 
