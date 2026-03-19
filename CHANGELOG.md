@@ -31,6 +31,8 @@
 - ModelBuilder<T>#transforms
 - ModelBuilder<T>$TransformsBuilder#transform
 - ItemLike#withCount
+- AaronMobEffectsRegistry#registerSimple
+- AaronMobEffectsRegistry#registerSimpleInstantaneous
 
 # 1.6.0
 
