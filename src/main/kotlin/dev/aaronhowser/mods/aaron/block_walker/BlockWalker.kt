@@ -167,6 +167,11 @@ class BlockWalker(
 		private var onWalked: OnWalkedConsumer = OnWalkedConsumer {}
 		private var onFinished: OnFinishedConsumer = OnFinishedConsumer {}
 
+		fun walkType(walkType: WalkType): Builder {
+			this.searchOffsets = walkType.neighborOffsets
+			return this
+		}
+
 		fun searchOffsets(searchOffsets: List<Vec3i>): Builder {
 			this.searchOffsets = searchOffsets
 			return this
