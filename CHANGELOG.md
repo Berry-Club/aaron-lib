@@ -36,6 +36,10 @@
 - Heal command now also feeds
 - ItemLike#withoutComponent
 - ItemStack#withoutComponent
+- IntegerColors
+- Int#toRgb
+- Int#toArgb
+- Int#toRgba
 
 # 1.6.0
 

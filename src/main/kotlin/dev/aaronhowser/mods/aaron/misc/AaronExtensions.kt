@@ -272,4 +272,8 @@ object AaronExtensions {
 		}
 	}
 
+	fun Int.toRgb(): RGB = RGB.fromInt(this)
+	fun Int.toArgb(): ARGB = ARGB.fromInt(this)
+	fun Int.toRgba(): RGBA = RGBA.fromInt(this)
+
 }
