@@ -5,6 +5,11 @@ data class RGB(
 	val green: Int,
 	val blue: Int
 ) {
+
+	fun toInt(): Int {
+		return (red shl 16) or (green shl 8) or blue
+	}
+
 	companion object {
 		fun fromInt(rgb: Int): RGB {
 			val red = (rgb shr 16) and 0xFF
@@ -21,6 +26,11 @@ data class ARGB(
 	val green: Int,
 	val blue: Int
 ) {
+
+	fun toInt(): Int {
+		return (alpha shl 24) or (red shl 16) or (green shl 8) or blue
+	}
+
 	companion object {
 		fun fromInt(argb: Int): ARGB {
 			val alpha = (argb shr 24) and 0xFF
@@ -38,6 +48,11 @@ data class RGBA(
 	val blue: Int,
 	val alpha: Int
 ) {
+
+	fun toInt(): Int {
+		return (red shl 24) or (green shl 16) or (blue shl 8) or alpha
+	}
+
 	companion object {
 		fun fromInt(rgba: Int): RGBA {
 			val red = (rgba shr 24) and 0xFF
