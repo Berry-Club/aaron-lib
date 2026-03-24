@@ -45,6 +45,7 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
+import net.neoforged.neoforge.client.model.generators.ModelBuilder
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient
 import net.neoforged.neoforge.energy.EnergyStorage
 import net.neoforged.neoforge.fluids.FluidStack
@@ -275,5 +276,9 @@ object AaronExtensions {
 	fun Int.toRgb(): RGB = RGB.fromInt(this)
 	fun Int.toArgb(): ARGB = ARGB.fromInt(this)
 	fun Int.toRgba(): RGBA = RGBA.fromInt(this)
+
+	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: ResourceLocation): T {
+		return texture("particle", location)
+	}
 
 }

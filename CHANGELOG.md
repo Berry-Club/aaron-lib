@@ -40,6 +40,7 @@
 - Int#toRgb
 - Int#toArgb
 - Int#toRgba
+- ModelBuilder<T>#particle
 
 # 1.6.0
 
