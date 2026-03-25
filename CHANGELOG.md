@@ -42,6 +42,7 @@
 - Int#toRgba
 - ModelBuilder<T>#particle
 - PoseStack#withPose
+- SyncingBlockEntity
 
 # 1.6.0
 
