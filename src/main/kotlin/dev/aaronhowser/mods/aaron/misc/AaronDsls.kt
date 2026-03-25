@@ -11,7 +11,7 @@ object AaronDsls {
 
 	inline fun ModConfigSpec.Builder.section(
 		name: String,
-		block: ModConfigSpec.Builder.() -> Unit
+		block: () -> Unit
 	) {
 		push(name)
 		block()
@@ -58,7 +58,7 @@ object AaronDsls {
 		return transformVecBuilder.end()
 	}
 
-	inline fun PoseStack.withPose(block: PoseStack.() -> Unit) {
+	inline fun PoseStack.withPose(block: () -> Unit) {
 		pushPose()
 
 		try {
