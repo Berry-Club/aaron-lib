@@ -41,6 +41,7 @@
 - Int#toArgb
 - Int#toRgba
 - ModelBuilder<T>#particle
+- PoseStack#withPose
 
 # 1.6.0
 

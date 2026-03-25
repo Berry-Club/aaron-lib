@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron.misc
 
+import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemDisplayContext
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
@@ -55,6 +56,16 @@ object AaronDsls {
 		val transformVecBuilder = this.transform(type)
 		transformVecBuilder.block()
 		return transformVecBuilder.end()
+	}
+
+	inline fun PoseStack.withPose(block: PoseStack.() -> Unit) {
+		pushPose()
+
+		try {
+			block()
+		} finally {
+			popPose()
+		}
 	}
 
 }
