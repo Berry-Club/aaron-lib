@@ -43,6 +43,7 @@
 - ModelBuilder<T>#particle
 - PoseStack#withPose
 - SyncingBlockEntity
+- Label offsets in BaseScreen
 
 # 1.6.0
 
