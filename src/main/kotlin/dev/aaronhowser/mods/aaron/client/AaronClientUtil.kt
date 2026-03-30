@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.client
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
@@ -25,7 +26,7 @@ object AaronClientUtil {
 			return Minecraft.getInstance().player
 		}
 
-	fun getBiomeDisplay(biomeKey: ResourceKey<Biome>): Component {
+	fun getBiomeDisplay(biomeKey: ResourceKey<Biome>): MutableComponent {
 		val probableTranslationKey = "biome.${biomeKey.location().namespace}.${biomeKey.location().path}"
 		val hasTranslation = I18n.exists(probableTranslationKey)
 
