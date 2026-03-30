@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import java.util.function.Supplier
 
-class ItemStackButton(
+open class ItemStackButton(
 	x: Int = 0,
 	y: Int = 0,
 	width: Int,

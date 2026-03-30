@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import java.util.function.Supplier
 
-class MultiStageSpriteButton(
+open class MultiStageSpriteButton(
 	x: Int = 0,
 	y: Int = 0,
 	width: Int,
