@@ -44,6 +44,7 @@
 - PoseStack#withPose
 - SyncingBlockEntity
 - Label offsets in BaseScreen
+- AaronClientUtil#getBiomeDisplay
 
 # 1.6.0
 
