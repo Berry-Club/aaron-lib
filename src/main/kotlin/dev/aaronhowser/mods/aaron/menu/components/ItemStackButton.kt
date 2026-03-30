@@ -6,14 +6,13 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-import java.util.function.Supplier
 
 open class ItemStackButton(
 	x: Int = 0,
 	y: Int = 0,
 	width: Int,
 	height: Int,
-	val stackGetter: Supplier<ItemStack>,
+	val itemStack: ItemStack,
 	onPress: OnPress,
 	message: Component = Component.empty(),
 	private val font: Font
@@ -39,11 +38,10 @@ open class ItemStackButton(
 	}
 
 	private fun renderItemStack(guiGraphics: GuiGraphics) {
-		val stack = stackGetter.get()
-		if (stack.isEmpty) return
+		if (itemStack.isEmpty) return
 
 		guiGraphics.renderItem(
-			stack,
+			itemStack,
 			x + (width - 16) / 2,
 			y + (height - 16) / 2
 		)

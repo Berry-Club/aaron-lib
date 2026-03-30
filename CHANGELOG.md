@@ -45,8 +45,6 @@
 - SyncingBlockEntity
 - Label offsets in BaseScreen
 - AaronClientUtil#getBiomeDisplay
-- ItemStackButton now uses a Supplier<ItemStack> instead of just an ItemStack
-- Made some classes open
 
 # 1.6.0
 
