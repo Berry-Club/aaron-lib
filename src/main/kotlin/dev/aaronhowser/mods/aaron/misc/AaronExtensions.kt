@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.*
+import net.minecraft.core.component.DataComponentPredicate
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider
 import net.minecraft.nbt.CompoundTag
@@ -112,22 +113,11 @@ object AaronExtensions {
 		}
 	}
 
-	fun ItemStack.asIngredientWithComponents(
-		strict: Boolean = false,
-		vararg matchedComponents: DataComponentType<*>
+	fun ItemLike.asIngredient(
+		predicate: DataComponentPredicate,
+		strict: Boolean = false
 	): Ingredient {
-		val copy = this.copy()
-		val copyComponents = copy.components.keySet()
-
-		for (component in copyComponents) {
-			if (component !in matchedComponents) {
-				copy.remove(component)
-			}
-		}
-
-		require(matchedComponents.all { copy.has(it) }) { "Not all matched components were present in the ItemStack" }
-
-		return asIngredient(strict)
+		return DataComponentIngredient.of(strict, predicate, this)
 	}
 
 	fun Entity.isMovingHorizontally(): Boolean {

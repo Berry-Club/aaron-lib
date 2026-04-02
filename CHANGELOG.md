@@ -1,6 +1,6 @@
 # 1.8.0
 
-- ItemStack#asIngredientWithComponents
+- ItemStack#asIngredient with predicate
 
 # 1.7.0
 
