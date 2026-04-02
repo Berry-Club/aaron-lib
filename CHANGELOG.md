@@ -1,3 +1,7 @@
+# 1.8.0
+
+- ItemStack#asIngredientWithComponents
+
 # 1.7.0
 
 - Fixed ScheduledTaskHandler not handling tasks scheduled with 0 or lower delay

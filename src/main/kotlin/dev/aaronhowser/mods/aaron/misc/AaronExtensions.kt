@@ -112,6 +112,24 @@ object AaronExtensions {
 		}
 	}
 
+	fun ItemStack.asIngredientWithComponents(
+		strict: Boolean = false,
+		vararg matchedComponents: DataComponentType<*>
+	): Ingredient {
+		val copy = this.copy()
+		val copyComponents = copy.components.keySet()
+
+		for (component in copyComponents) {
+			if (component !in matchedComponents) {
+				copy.remove(component)
+			}
+		}
+
+		require(matchedComponents.all { copy.has(it) }) { "Not all matched components were present in the ItemStack" }
+
+		return asIngredient(strict)
+	}
+
 	fun Entity.isMovingHorizontally(): Boolean {
 		return this.deltaMovement.horizontalDistance() > 0.015
 	}
