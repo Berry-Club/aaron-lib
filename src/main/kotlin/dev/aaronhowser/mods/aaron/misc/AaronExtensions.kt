@@ -120,6 +120,14 @@ object AaronExtensions {
 		return DataComponentIngredient.of(strict, predicate, this)
 	}
 
+	fun <T> ItemLike.asIngredient(
+		componentType: DataComponentType<in T>,
+		component: T,
+	): Ingredient {
+		val predicate = DataComponentPredicate.builder().expect(componentType, component).build()
+		return asIngredient(predicate)
+	}
+
 	fun Entity.isMovingHorizontally(): Boolean {
 		return this.deltaMovement.horizontalDistance() > 0.015
 	}
