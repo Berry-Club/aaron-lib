@@ -8,6 +8,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.util.ByIdMap
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
@@ -53,4 +54,20 @@ object AaronExtraStreamCodecs {
 		)
 	}
 
+	fun <E : Enum<E>> enumStreamCodec(
+		enumClass: Class<E>
+	): StreamCodec<ByteBuf, E> {
+		val values = enumClass.enumConstants
+
+		val byId = ByIdMap.continuous(
+			{ enumValue -> enumValue.ordinal },
+			values,
+			ByIdMap.OutOfBoundsStrategy.WRAP
+		)
+
+		return ByteBufCodecs.idMapper(
+			byId,
+			{ enumValue -> enumValue.ordinal }
+		)
+	}
 }

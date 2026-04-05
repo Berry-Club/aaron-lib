@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.entity.predicate
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -46,7 +47,7 @@ sealed interface EntityPredicate {
 
 		companion object {
 			val CODEC: StringRepresentable.EnumCodec<Type> = StringRepresentable.fromEnum(Type::values)
-			val STREAM_CODEC: StreamCodec<ByteBuf, Type> = ByteBufCodecs.fromCodec(CODEC)
+			val STREAM_CODEC: StreamCodec<ByteBuf, Type> = AaronExtraStreamCodecs.enumStreamCodec(Type::class.java)
 		}
 	}
 

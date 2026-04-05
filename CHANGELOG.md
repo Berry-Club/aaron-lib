@@ -1,6 +1,7 @@
 # 1.8.0
 
 - ItemStack#asIngredient with predicate
+- AaronExtraStreamCodecs#enumStreamCodec
 
 # 1.7.0
 
