@@ -1,6 +1,7 @@
 # 1.9.0
 
 - ContainerContainer
+- SimpleContainerBlock
 
 # 1.8.0
 
