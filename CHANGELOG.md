@@ -1,3 +1,7 @@
+# 1.9.0
+
+- ContainerContainer
+
 # 1.8.0
 
 - ItemStack#asIngredient with predicate
