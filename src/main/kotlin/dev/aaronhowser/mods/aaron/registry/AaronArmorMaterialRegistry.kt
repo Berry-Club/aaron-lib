@@ -1,18 +1,19 @@
 package dev.aaronhowser.mods.aaron.registry
 
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import net.minecraft.core.Holder
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
+import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.TagKey
-import net.minecraft.world.item.ArmorItem
-import net.minecraft.world.item.ArmorMaterial
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.equipment.ArmorMaterial
+import net.minecraft.world.item.equipment.ArmorType
+import net.minecraft.world.item.equipment.EquipmentAsset
+import net.minecraft.world.item.equipment.EquipmentAssets
+import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
-import java.util.function.Supplier
 
 abstract class AaronArmorMaterialRegistry {
 
@@ -21,18 +22,22 @@ abstract class AaronArmorMaterialRegistry {
 	protected inner class Builder(
 		private val path: String
 	) {
-		private val armorMap: MutableMap<ArmorItem.Type, Int> = mutableMapOf()
+		private val armorMap: MutableMap<ArmorType, Int> = mutableMapOf()
 
+		private var durability = 15
 		private var toughness = 0f
 		private var knockbackResist = 0f
 		private var enchantValue = 10
 		private var equipSound: Holder<SoundEvent> = SoundEvents.ARMOR_EQUIP_GENERIC
-		private var repairIngredient = Supplier { Ingredient.EMPTY }
-		private val layers = mutableListOf<ArmorMaterial.Layer>()
+		private var repairTag: TagKey<Item> = Tags.Items.INGOTS_IRON
+		private var equipmentAsset: ResourceKey<EquipmentAsset> = ResourceKey.create(
+			EquipmentAssets.ROOT_ID,
+			Identifier.fromNamespaceAndPath(getArmorMaterialRegistry().namespace, path)
+		)
 
-		init {
-			val id = ResourceLocation.fromNamespaceAndPath(getArmorMaterialRegistry().namespace, path)
-			addLayer(ArmorMaterial.Layer(id))
+		fun durability(value: Int): Builder {
+			durability = value
+			return this
 		}
 
 		fun enchantValue(value: Int): Builder {
@@ -40,23 +45,38 @@ abstract class AaronArmorMaterialRegistry {
 			return this
 		}
 
+		fun toughness(value: Float): Builder {
+			toughness = value
+			return this
+		}
+
+		fun knockbackResist(value: Float): Builder {
+			knockbackResist = value
+			return this
+		}
+
+		fun equipSound(sound: Holder<SoundEvent>): Builder {
+			equipSound = sound
+			return this
+		}
+
 		fun boot(armorAmount: Int): Builder {
-			armorMap[ArmorItem.Type.BOOTS] = armorAmount
+			armorMap[ArmorType.BOOTS] = armorAmount
 			return this
 		}
 
 		fun leg(armorAmount: Int): Builder {
-			armorMap[ArmorItem.Type.LEGGINGS] = armorAmount
+			armorMap[ArmorType.LEGGINGS] = armorAmount
 			return this
 		}
 
 		fun chestplate(armorAmount: Int): Builder {
-			armorMap[ArmorItem.Type.CHESTPLATE] = armorAmount
+			armorMap[ArmorType.CHESTPLATE] = armorAmount
 			return this
 		}
 
 		fun helmet(armorAmount: Int): Builder {
-			armorMap[ArmorItem.Type.HELMET] = armorAmount
+			armorMap[ArmorType.HELMET] = armorAmount
 			return this
 		}
 
@@ -65,34 +85,29 @@ abstract class AaronArmorMaterialRegistry {
 			chestplate(armorAmount)
 			leg(armorAmount)
 			boot(armorAmount)
-
 			return this
 		}
 
 		fun repair(tag: TagKey<Item>): Builder {
-			repairIngredient = Supplier { tag.asIngredient() }
+			repairTag = tag
 			return this
 		}
 
-		fun repair(itemHolder: Holder<Item>): Builder {
-			repairIngredient = Supplier { itemHolder.value().asIngredient() }
-			return this
-		}
-
-		fun addLayer(layer: ArmorMaterial.Layer): Builder {
-			layers.add(layer)
+		fun equipmentAsset(key: ResourceKey<EquipmentAsset>): Builder {
+			equipmentAsset = key
 			return this
 		}
 
 		fun build(): ArmorMaterial {
 			return ArmorMaterial(
+				durability,
 				armorMap,
 				enchantValue,
 				equipSound,
-				repairIngredient,
-				layers,
 				toughness,
-				knockbackResist
+				knockbackResist,
+				repairTag,
+				equipmentAsset
 			)
 		}
 
@@ -100,5 +115,4 @@ abstract class AaronArmorMaterialRegistry {
 			return getArmorMaterialRegistry().register(path, ::build)
 		}
 	}
-
 }

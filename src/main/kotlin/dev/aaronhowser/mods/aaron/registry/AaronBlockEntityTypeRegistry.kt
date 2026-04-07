@@ -11,17 +11,17 @@ abstract class AaronBlockEntityTypeRegistry {
 
 	abstract fun getBlockEntityRegistry(): DeferredRegister<BlockEntityType<*>>
 
-	@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 	protected fun <T : BlockEntity> register(
 		name: String,
 		builder: BlockEntityType.BlockEntitySupplier<out T>,
 		vararg validBlocks: DeferredBlock<*>
 	): DeferredHolder<BlockEntityType<*>, BlockEntityType<T>> {
 		return getBlockEntityRegistry().register(name, Supplier {
-			BlockEntityType.Builder.of(
+			BlockEntityType(
 				builder,
+				false,
 				*validBlocks.map(DeferredBlock<*>::get).toTypedArray()
-			).build(null)
+			)
 		})
 	}
 

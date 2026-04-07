@@ -5,15 +5,14 @@ import net.minecraft.core.NonNullList
 import net.minecraft.core.Registry
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.util.ByIdMap
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
-import org.joml.Vector2d
 
 object AaronExtraStreamCodecs {
 
@@ -22,17 +21,6 @@ object AaronExtraStreamCodecs {
 
 	val BLOCK_STATE: StreamCodec<ByteBuf, BlockState> =
 		ByteBufCodecs.VAR_INT.map(Block::stateById, Block::getId)
-
-	val VECTOR2D: StreamCodec<ByteBuf, Vector2d> =
-		object : StreamCodec<ByteBuf, Vector2d> {
-			override fun decode(buffer: ByteBuf): Vector2d =
-				Vector2d(buffer.readDouble(), buffer.readDouble())
-
-			override fun encode(buffer: ByteBuf, value: Vector2d) {
-				buffer.writeDouble(value.x)
-				buffer.writeDouble(value.y)
-			}
-		}
 
 	val STACK_LIST: StreamCodec<ByteBuf, NonNullList<ItemStack>> =
 		ByteBufCodecs.fromCodec(NonNullList.codecOf(ItemStack.OPTIONAL_CODEC))
@@ -47,8 +35,8 @@ object AaronExtraStreamCodecs {
 			}
 		}
 
-	fun <T> tagKeyStreamCodec(registry: ResourceKey<out Registry<T>>): StreamCodec<ByteBuf, TagKey<T>> {
-		return ResourceLocation.STREAM_CODEC.map(
+	fun <T : Any> tagKeyStreamCodec(registry: ResourceKey<out Registry<T>>): StreamCodec<ByteBuf, TagKey<T>> {
+		return Identifier.STREAM_CODEC.map(
 			{ TagKey.create(registry, it) },
 			{ it.location() }
 		)
