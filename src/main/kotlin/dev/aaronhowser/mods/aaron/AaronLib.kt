@@ -19,7 +19,7 @@ class AaronLib(
 		LOGGER.log(Level.INFO, "Arriving.")
 		LOGGER.log(Level.INFO, "On the scene.")
 
-		AaronLootPoolEntryTypes.LOOT_POOL_ENTRY_TYPE_REGISTRY.register(MOD_BUS)
+//		AaronLootPoolEntryTypes.LOOT_POOL_ENTRY_TYPE_REGISTRY.register(MOD_BUS)
 	}
 
 	companion object {

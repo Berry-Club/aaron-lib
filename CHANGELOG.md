@@ -6,6 +6,7 @@
 - requiresAdmin
 - Removed SimpleContainerBlock, it's handled by BlockEntity#preRemoveSideEffects now
 - Commented out a lot of rendering stuff because wow
+- Also commented out some Loot stuff bc i don't remember what it does and it was complaining
 
 # 1.9.0
 
