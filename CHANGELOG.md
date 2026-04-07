@@ -1,3 +1,10 @@
+# 1.10.0
+
+- Updated to 26.1
+- requiresModerator
+- requiresGameMaster
+- requiresAdmin
+
 # 1.9.0
 
 - ContainerContainer

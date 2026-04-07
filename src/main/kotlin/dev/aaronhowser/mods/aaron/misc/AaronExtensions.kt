@@ -1,6 +1,9 @@
 package dev.aaronhowser.mods.aaron.misc
 
+import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.datafixers.util.Either
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.predicates.DataComponentPredicate
@@ -279,6 +282,18 @@ object AaronExtensions {
 
 	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: ResourceLocation): T {
 		return texture("particle", location)
+	}
+
+	fun <S : CommandSourceStack, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.requiresModerator(): T {
+		return this.requires(Commands.hasPermission(Commands.LEVEL_MODERATORS))
+	}
+
+	fun <S : CommandSourceStack, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.requiresGameMaster(): T {
+		return this.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+	}
+
+	fun <S : CommandSourceStack, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.requiresAdmin(): T {
+		return this.requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
 	}
 
 }

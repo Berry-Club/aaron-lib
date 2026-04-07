@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.command
 
 import com.mojang.brigadier.builder.ArgumentBuilder
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.requiresGameMaster
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
@@ -15,7 +16,7 @@ object HealCommand {
 
 	fun register(): ArgumentBuilder<CommandSourceStack, *> {
 		return Commands.literal("heal")
-			.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+			.requiresGameMaster()
 			.executes {
 				val source = it.source
 				val target = source.playerOrException
