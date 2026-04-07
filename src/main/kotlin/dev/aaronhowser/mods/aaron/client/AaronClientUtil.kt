@@ -15,25 +15,25 @@ object AaronClientUtil {
 	@JvmStatic
 	val localLevel: Level?
 		get() {
-			if (!FMLEnvironment.dist.isClient) return null
+			if (!FMLEnvironment.getDist().isClient) return null
 			return Minecraft.getInstance().level
 		}
 
 	@JvmStatic
 	val localPlayer: Player?
 		get() {
-			if (!FMLEnvironment.dist.isClient) return null
+			if (!FMLEnvironment.getDist().isClient) return null
 			return Minecraft.getInstance().player
 		}
 
 	fun getBiomeDisplay(biomeKey: ResourceKey<Biome>): MutableComponent {
-		val probableTranslationKey = "biome.${biomeKey.location().namespace}.${biomeKey.location().path}"
+		val probableTranslationKey = "biome.${biomeKey.identifier().namespace}.${biomeKey.identifier().path}"
 		val hasTranslation = I18n.exists(probableTranslationKey)
 
 		return if (hasTranslation) {
 			Component.translatable(probableTranslationKey)
 		} else {
-			Component.literal(biomeKey.location().toString())
+			Component.literal(biomeKey.identifier().toString())
 		}
 	}
 

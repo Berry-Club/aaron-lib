@@ -236,7 +236,7 @@ object AaronExtensions {
 	fun ItemStack.isNotFull(): Boolean = this.count < this.maxStackSize
 
 	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
-	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)
+	fun Long.toChunkPos(): ChunkPos = ChunkPos.unpack(this)
 
 	fun <T> IntrinsicHolderTagsProvider.IntrinsicTagAppender<T>.add(vararg holders: Holder<T>): IntrinsicHolderTagsProvider.IntrinsicTagAppender<T> {
 		for (holder in holders) this.add(holder.value())

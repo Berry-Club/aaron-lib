@@ -15,7 +15,7 @@ object HealCommand {
 
 	fun register(): ArgumentBuilder<CommandSourceStack, *> {
 		return Commands.literal("heal")
-			.requires { it.hasPermission(2) }
+			.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 			.executes {
 				val source = it.source
 				val target = source.playerOrException
