@@ -5,38 +5,28 @@ plugins {
 	id 'idea'
 	id 'maven-publish'
 	id 'net.neoforged.moddev' version '2.0.141'
-	id 'org.jetbrains.kotlin.jvm' version '2.1.21'
-	id "me.shedaniel.unified-publishing" version "0.1.+"
+
+	id 'org.jetbrains.kotlin.jvm' version '2.3.0'
 }
-
-def ENV = System.getenv()
-def isLocal = !ENV.containsKey("GITHUB_RUN_NUMBER")
-
-def archiveName = "${mod_id.replace("_", "-")}-${minecraft_version}"
-
-version = "${mod_version}-${isLocal ? "local.${Instant.now().epochSecond}" : "build.${ENV.GITHUB_RUN_NUMBER}"}"
-group = project.mod_group_id
-base.archivesName = archiveName
-
-println("Building version: ${version}")
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(25)
-compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_25
 
 tasks.named('wrapper', Wrapper).configure {
 	distributionType = Wrapper.DistributionType.BIN
 }
 
+version = mod_version
+group = mod_group_id
+
+base.archivesName = mod_id
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_25
+
 neoForge {
+	version = project.neo_version
 
-	enable {
-		version = neo_version
-		validateAccessTransformers = ENV.CI != "true"
-		disableRecompilation = ENV.CI == "true"
-	}
-
-	accessTransformers {
-		publish(project.file('src/main/resources/META-INF/accesstransformer.cfg'))
+	parchment {
+		mappingsVersion = project.parchment_mappings_version
+		minecraftVersion = project.parchment_minecraft_version
 	}
 
 	runs {
@@ -45,37 +35,17 @@ neoForge {
 			logLevel = org.slf4j.event.Level.DEBUG
 		}
 
-		"Client-One" {
+		client {
 			client()
-			ideName = "Client One"
 			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-
-			if (ENV.MC_CLIENT_ARGS) {
-				programArguments.addAll(ENV.MC_CLIENT_ARGS.split(' '))
-			}
-
-			gameDirectory = file 'runs/client'
-		}
-
-		"Client-Two" {
-			client()
-			ideName = "Client Two"
-			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-
-			gameDirectory = file 'runs/client'
-
-			if (ENV.MC_CLIENT_2_ARGS) {
-				programArguments.addAll(ENV.MC_CLIENT_2_ARGS.split(' '))
-			}
 		}
 
 		server {
 			server()
-			ideName = "Server"
-			programArgument '--nogui'
-			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
 
-			gameDirectory = file 'runs/server'
+			gameDirectory = project.file('run/server')
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+			programArgument '--nogui'
 		}
 
 		gameTestServer {
@@ -87,7 +57,6 @@ neoForge {
 			clientData()
 
 			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-			gameDirectory = file 'runs/client'
 		}
 	}
 
@@ -98,10 +67,7 @@ neoForge {
 	}
 }
 
-sourceSets.main.resources {
-	srcDir 'src/generated/resources'
-	exclude 'src/generated/**/.cache'
-}
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 configurations {
 	runtimeClasspath.extendsFrom localRuntime
@@ -113,44 +79,12 @@ repositories {
 	maven {
 		name = 'Kotlin for Forge'
 		url = 'https://thedarkcolour.github.io/KotlinForForge/'
+		content { includeGroup "thedarkcolour" }
 	}
-
-	// For EMI
-	maven {
-		name = "TerraformersMC"
-		url = "https://maven.terraformersmc.com/"
-	}
-
-	// For Curios
-	repositories {
-		maven {
-			name = "Illusive Soulworks maven"
-			url = "https://maven.theillusivec4.top/"
-		}
-	}
-
-	// For Modonomicon
-	maven {
-		url "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
-		content {
-			includeGroup "com.klikli_dev"
-		}
-	}
-
-	// For Patchouli DataGen
-	maven {
-		url "https://maven.latvian.dev/releases"
-		content {
-			includeGroup "dev.aaronhowser.mods"
-		}
-	}
-
-	maven { url 'https://maven.blamejared.com' }
-
 }
 
 dependencies {
-	implementation "thedarkcolour:kotlinforforge-neoforge:${kff_version}"
+	implementation 'thedarkcolour:kotlinforforge-neoforge:6.1.0a'
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
@@ -158,10 +92,13 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 			minecraft_version      : minecraft_version,
 			minecraft_version_range: minecraft_version_range,
 			neo_version            : neo_version,
+			loader_version_range   : loader_version_range,
 			mod_id                 : mod_id,
 			mod_name               : mod_name,
 			mod_license            : mod_license,
 			mod_version            : mod_version,
+			mod_authors            : mod_authors,
+			mod_description        : mod_description
 	]
 	inputs.properties replaceProperties
 	expand replaceProperties
@@ -172,94 +109,26 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 
-//tasks.withType(ProcessResources).configureEach {
-//	var replaceProperties = [
-//			minecraft_version      : minecraft_version,
-//			minecraft_version_range: minecraft_version_range,
-//			neo_version            : neo_version,
-//			neo_version_range      : neo_version_range,
-//			loader_version_range   : loader_version_range,
-//			mod_id                 : mod_id,
-//			mod_name               : mod_name,
-//			mod_license            : mod_license,
-//			mod_version            : mod_version,
-//			mod_authors            : mod_authors,
-//			mod_description        : mod_description,
-//			kff_version_range      : kff_version_range,
-//	]
-//	inputs.properties replaceProperties
-//
-//	filesMatching(['META-INF/neoforge.mods.toml']) {
-//		expand replaceProperties
-//	}
-//}
-
 publishing {
 	publications {
-		mavenNeoForge(MavenPublication) {
-			artifactId = archiveName
+		register('mavenJava', MavenPublication) {
 			from components.java
 		}
 	}
-
 	repositories {
-		if (ENV.MAVEN_URL && ENV.MAVEN_USERNAME && ENV.MAVEN_TOKEN) {
-			maven {
-				url = ENV.MAVEN_URL
-				credentials {
-					username = ENV.MAVEN_USERNAME
-					password = ENV.MAVEN_TOKEN
-				}
-			}
+		maven {
+			url "file://${project.projectDir}/repo"
 		}
 	}
 }
 
 tasks.withType(JavaCompile).configureEach {
-	options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+	options.encoding = 'UTF-8'
 }
 
 idea {
 	module {
 		downloadSources = true
 		downloadJavadoc = true
-	}
-}
-
-java {
-	withSourcesJar()
-	withJavadocJar()
-}
-
-unifiedPublishing {
-	project {
-		displayName = "Aaron ${project.minecraft_version} ${project.version}"
-		gameVersions = [project.minecraft_version]
-		gameLoaders = ["neoforge"]
-
-		changelog = "https://github.com/Berry-Club/aaron-lib/blob/master/CHANGELOG.md#" + project.mod_version.toString().replace(".", "")
-
-		mainPublication jar
-
-		relations {
-			depends {
-				curseforge = modrinth = "kotlin-for-forge"
-			}
-		}
-
-		if (ENV.CURSEFORGE_KEY) {
-			curseforge {
-				token = ENV.CURSEFORGE_KEY
-				id = project.curseforge_id
-			}
-		}
-
-		if (ENV.MODRINTH_TOKEN) {
-			modrinth {
-				token = ENV.MODRINTH_TOKEN
-				id = project.modrinth_id
-			}
-		}
-
 	}
 }
