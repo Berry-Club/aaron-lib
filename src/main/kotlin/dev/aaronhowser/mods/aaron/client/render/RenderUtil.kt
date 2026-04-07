@@ -4,17 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.core.Direction
-import net.minecraft.resources.Identifier
 import net.minecraft.util.RandomSource
-import net.minecraft.world.inventory.InventoryMenu
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions
-import net.neoforged.neoforge.fluids.FluidStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.sqrt
@@ -198,119 +192,119 @@ object RenderUtil {
 		poseStack.popPose()
 	}
 
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		center: Vec3,
-		width: Float,
-		color: Int
-	) {
-		renderCubeThroughWalls(
-			poseStack,
-			center.x - width / 2,
-			center.y - width / 2,
-			center.z - width / 2,
-			width,
-			width,
-			width,
-			color
-		)
-	}
+//	fun renderCubeThroughWalls(
+//		poseStack: PoseStack,
+//		center: Vec3,
+//		width: Float,
+//		color: Int
+//	) {
+//		renderCubeThroughWalls(
+//			poseStack,
+//			center.x - width / 2,
+//			center.y - width / 2,
+//			center.z - width / 2,
+//			width,
+//			width,
+//			width,
+//			color
+//		)
+//	}
 
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		posX: Number,
-		posY: Number,
-		posZ: Number,
-		width: Float,
-		length: Float,
-		height: Float,
-		color: Int
-	) {
-		val vertexConsumer = Minecraft.getInstance()
-			.renderBuffers()
-			.bufferSource()
-			.getBuffer(AaronRenderTypes.quadsThroughWalls())
+//	fun renderCubeThroughWalls(
+//		poseStack: PoseStack,
+//		posX: Number,
+//		posY: Number,
+//		posZ: Number,
+//		width: Float,
+//		length: Float,
+//		height: Float,
+//		color: Int
+//	) {
+//		val vertexConsumer = Minecraft.getInstance()
+//			.renderBuffers()
+//			.bufferSource()
+//			.getBuffer(AaronRenderTypes.quadsThroughWalls())
+//
+//		poseStack.pushPose()
+//		poseStack.translate(posX.toDouble(), posY.toDouble(), posZ.toDouble())
+//
+//		for (direction in Direction.entries) {
+//			val pose = poseStack.last()
+//			val vertices = getVertices(direction, width, if (direction.axis.isVertical) length else height)
+//
+//			for (vertex in vertices) {
+//				addVertex(
+//					pose,
+//					vertexConsumer,
+//					color,
+//					vertex.x, vertex.y, vertex.z,
+//					0f, 0f
+//				)
+//			}
+//		}
+//
+//		poseStack.popPose()
+//	}
 
-		poseStack.pushPose()
-		poseStack.translate(posX.toDouble(), posY.toDouble(), posZ.toDouble())
-
-		for (direction in Direction.entries) {
-			val pose = poseStack.last()
-			val vertices = getVertices(direction, width, if (direction.axis.isVertical) length else height)
-
-			for (vertex in vertices) {
-				addVertex(
-					pose,
-					vertexConsumer,
-					color,
-					vertex.x, vertex.y, vertex.z,
-					0f, 0f
-				)
-			}
-		}
-
-		poseStack.popPose()
-	}
-
-	fun renderTexturedCube(
-		poseStack: PoseStack,
-		renderType: RenderType,
-		topTextureLocation: Identifier,
-		bottomTextureLocation: Identifier,
-		northTextureLocation: Identifier,
-		southTextureLocation: Identifier,
-		eastTextureLocation: Identifier,
-		westTextureLocation: Identifier,
-		light: Int = 0xF000F0,
-		overlay: Int = OverlayTexture.NO_OVERLAY
-	) {
-		val textureAtlas = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-
-		val topSprite = textureAtlas.apply(topTextureLocation)
-		val bottomSprite = textureAtlas.apply(bottomTextureLocation)
-		val westSprite = textureAtlas.apply(westTextureLocation)
-		val eastSprite = textureAtlas.apply(eastTextureLocation)
-		val northSprite = textureAtlas.apply(northTextureLocation)
-		val southSprite = textureAtlas.apply(southTextureLocation)
-
-		val map = mapOf(
-			Direction.UP to topSprite,
-			Direction.DOWN to bottomSprite,
-			Direction.WEST to westSprite,
-			Direction.EAST to eastSprite,
-			Direction.NORTH to northSprite,
-			Direction.SOUTH to southSprite,
-		)
-
-		val vertexConsumer = Minecraft.getInstance()
-			.renderBuffers()
-			.bufferSource()
-			.getBuffer(renderType)
-
-		val pose = poseStack.last()
-
-		for ((direction, sprite) in map) {
-			if (direction == Direction.DOWN) continue
-
-			val vertices = getVertices(direction, 1f, 1f)
-
-			for ((index, vector) in vertices.withIndex()) {
-				val u = if (index == 0 || index == 3) sprite.u0 else sprite.u1
-				val v = if (index == 0 || index == 1) sprite.v1 else sprite.v0
-
-				addVertex(
-					pose,
-					vertexConsumer,
-					0xFFFFFFFF.toInt(),
-					vector.x, vector.y, vector.z,
-					u, v,
-					light = light,
-					overlay = overlay
-				)
-			}
-		}
-
-	}
+//	fun renderTexturedCube(
+//		poseStack: PoseStack,
+//		renderType: RenderType,
+//		topTextureLocation: Identifier,
+//		bottomTextureLocation: Identifier,
+//		northTextureLocation: Identifier,
+//		southTextureLocation: Identifier,
+//		eastTextureLocation: Identifier,
+//		westTextureLocation: Identifier,
+//		light: Int = 0xF000F0,
+//		overlay: Int = OverlayTexture.NO_OVERLAY
+//	) {
+//		val textureAtlas = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+//
+//		val topSprite = textureAtlas.apply(topTextureLocation)
+//		val bottomSprite = textureAtlas.apply(bottomTextureLocation)
+//		val westSprite = textureAtlas.apply(westTextureLocation)
+//		val eastSprite = textureAtlas.apply(eastTextureLocation)
+//		val northSprite = textureAtlas.apply(northTextureLocation)
+//		val southSprite = textureAtlas.apply(southTextureLocation)
+//
+//		val map = mapOf(
+//			Direction.UP to topSprite,
+//			Direction.DOWN to bottomSprite,
+//			Direction.WEST to westSprite,
+//			Direction.EAST to eastSprite,
+//			Direction.NORTH to northSprite,
+//			Direction.SOUTH to southSprite,
+//		)
+//
+//		val vertexConsumer = Minecraft.getInstance()
+//			.renderBuffers()
+//			.bufferSource()
+//			.getBuffer(renderType)
+//
+//		val pose = poseStack.last()
+//
+//		for ((direction, sprite) in map) {
+//			if (direction == Direction.DOWN) continue
+//
+//			val vertices = getVertices(direction, 1f, 1f)
+//
+//			for ((index, vector) in vertices.withIndex()) {
+//				val u = if (index == 0 || index == 3) sprite.u0 else sprite.u1
+//				val v = if (index == 0 || index == 1) sprite.v1 else sprite.v0
+//
+//				addVertex(
+//					pose,
+//					vertexConsumer,
+//					0xFFFFFFFF.toInt(),
+//					vector.x, vector.y, vector.z,
+//					u, v,
+//					light = light,
+//					overlay = overlay
+//				)
+//			}
+//		}
+//
+//	}
 
 	/** @param length is used as height for UP and DOWN faces */
 	fun getVertices(direction: Direction, width: Float, length: Float): List<Vector3f> {
@@ -374,65 +368,65 @@ object RenderUtil {
 			.setNormal(pose, normalX, normalY, normalZ)
 	}
 
-	fun getColorFromFluid(fluidStack: FluidStack): Int {
-		val clientExt = IClientFluidTypeExtensions.of(fluidStack.fluid)
-		val tintColor = clientExt.getTintColor(fluidStack)
+//	fun getColorFromFluid(fluidStack: FluidStack): Int {
+//		val clientExt = IClientFluidTypeExtensions.of(fluidStack.fluid)
+//		val tintColor = clientExt.getTintColor(fluidStack)
+//
+//		if (tintColor != -1) return tintColor
+//
+//		val sprite = Minecraft.getInstance()
+//			.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+//			.apply(clientExt.getStillTexture(fluidStack))
+//
+//		return getSpriteAverageColor(sprite)
+//	}
 
-		if (tintColor != -1) return tintColor
+//	private val SPRITE_AVERAGE_COLOR_CACHE: MutableMap<TextureAtlasSprite, Int> = mutableMapOf()
 
-		val sprite = Minecraft.getInstance()
-			.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-			.apply(clientExt.getStillTexture(fluidStack))
-
-		return getSpriteAverageColor(sprite)
-	}
-
-	private val SPRITE_AVERAGE_COLOR_CACHE: MutableMap<TextureAtlasSprite, Int> = mutableMapOf()
-
-	fun getSpriteAverageColor(sprite: TextureAtlasSprite): Int {
-		val cachedColor = SPRITE_AVERAGE_COLOR_CACHE[sprite]
-		if (cachedColor != null) return cachedColor
-
-		val nativeImage = sprite.contents().originalImage
-		val width = nativeImage.width
-		val height = nativeImage.height
-
-		var totalRed = 0
-		var totalGreen = 0
-		var totalBlue = 0
-		var totalPixels = 0
-
-		// There's some bullfuckery going on here, and I blame Mojang
-		// Putting `lava_still.png` into https://matkl.github.io/average-color/ returns `rgb(212, 90, 18)`
-		// However, putting that image through `getPixelRGBA` and then averaging it all out returns `rgb(255, 18, 90)`
-		// I have no god damn idea why it's doing that, but the simplest fix for me is to just accept that r is super wrong and then flip b and g
-		// So instead of an rgba like it should be giving, i'm treating it as an rbga
-
-		for (x in 0 until width) for (y in 0 until height) {
-			val color = nativeImage.getPixelRGBA(x, y)
-
-			val a = color and 0xFF
-			if (a <= 0) continue
-
-			val r = (color shr 24) and 0xFF
-			val b = (color shr 16) and 0xFF
-			val g = (color shr 8) and 0xFF
-
-			totalRed += r
-			totalGreen += g
-			totalBlue += b
-			totalPixels++
-		}
-
-		if (totalPixels == 0) return 0xFFFFFFFF.toInt()
-
-		val averageRed = totalRed / totalPixels
-		val averageGreen = totalGreen / totalPixels
-		val averageBlue = totalBlue / totalPixels
-
-		val averageColor = (0xFF shl 24) or (averageRed shl 16) or (averageGreen shl 8) or averageBlue
-		SPRITE_AVERAGE_COLOR_CACHE[sprite] = averageColor
-		return averageColor
-	}
+//	fun getSpriteAverageColor(sprite: TextureAtlasSprite): Int {
+//		val cachedColor = SPRITE_AVERAGE_COLOR_CACHE[sprite]
+//		if (cachedColor != null) return cachedColor
+//
+//		val nativeImage = sprite.contents().originalImage
+//		val width = nativeImage.width
+//		val height = nativeImage.height
+//
+//		var totalRed = 0
+//		var totalGreen = 0
+//		var totalBlue = 0
+//		var totalPixels = 0
+//
+//		// There's some bullfuckery going on here, and I blame Mojang
+//		// Putting `lava_still.png` into https://matkl.github.io/average-color/ returns `rgb(212, 90, 18)`
+//		// However, putting that image through `getPixelRGBA` and then averaging it all out returns `rgb(255, 18, 90)`
+//		// I have no god damn idea why it's doing that, but the simplest fix for me is to just accept that r is super wrong and then flip b and g
+//		// So instead of an rgba like it should be giving, i'm treating it as an rbga
+//
+//		for (x in 0 until width) for (y in 0 until height) {
+//			val color = nativeImage.getPixelRGBA(x, y)
+//
+//			val a = color and 0xFF
+//			if (a <= 0) continue
+//
+//			val r = (color shr 24) and 0xFF
+//			val b = (color shr 16) and 0xFF
+//			val g = (color shr 8) and 0xFF
+//
+//			totalRed += r
+//			totalGreen += g
+//			totalBlue += b
+//			totalPixels++
+//		}
+//
+//		if (totalPixels == 0) return 0xFFFFFFFF.toInt()
+//
+//		val averageRed = totalRed / totalPixels
+//		val averageGreen = totalGreen / totalPixels
+//		val averageBlue = totalBlue / totalPixels
+//
+//		val averageColor = (0xFF shl 24) or (averageRed shl 16) or (averageGreen shl 8) or averageBlue
+//		SPRITE_AVERAGE_COLOR_CACHE[sprite] = averageColor
+//		return averageColor
+//	}
 
 }

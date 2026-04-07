@@ -5,6 +5,7 @@
 - requiresGameMaster
 - requiresAdmin
 - Removed SimpleContainerBlock, it's handled by BlockEntity#preRemoveSideEffects now
+- Commented out a lot of rendering stuff because wow
 
 # 1.9.0
 
