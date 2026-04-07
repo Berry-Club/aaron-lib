@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.menu
 
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
@@ -42,30 +43,6 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 
 	open fun baseInit() {}
 
-	override fun renderLabels(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
-		if (showTitleLabel) {
-			guiGraphics.drawString(
-				font,
-				title,
-				titleLabelX + titleLabelOffsetX,
-				titleLabelY + titleLabelOffsetY,
-				4210752,
-				false
-			)
-		}
-
-		if (showInventoryLabel) {
-			guiGraphics.drawString(
-				font,
-				playerInventoryTitle,
-				inventoryLabelX + inventoryLabelOffsetX,
-				inventoryLabelY + inventoryLabelOffsetY,
-				4210752,
-				false
-			)
-		}
-	}
-
 	override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
 		super.render(guiGraphics, mouseX, mouseY, partialTick)
 		this.renderTooltip(guiGraphics, mouseX, mouseY)
@@ -77,5 +54,29 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 			leftPos = this.leftPos,
 			topPos = this.topPos
 		)
+	}
+
+	override fun extractLabels(graphics: GuiGraphicsExtractor, xm: Int, ym: Int) {
+		if (showTitleLabel) {
+			graphics.text(
+				font,
+				title,
+				titleLabelX + titleLabelOffsetX,
+				titleLabelY + titleLabelOffsetY,
+				-12566464,
+				false
+			)
+		}
+
+		if (showInventoryLabel) {
+			graphics.text(
+				font,
+				playerInventoryTitle,
+				inventoryLabelX + inventoryLabelOffsetX,
+				inventoryLabelY + inventoryLabelOffsetY,
+				-12566464,
+				false
+			)
+		}
 	}
 }
