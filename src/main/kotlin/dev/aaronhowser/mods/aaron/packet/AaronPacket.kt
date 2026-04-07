@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
+import net.neoforged.neoforge.client.network.ClientPacketDistributor
 import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
@@ -34,7 +35,7 @@ abstract class AaronPacket : CustomPacketPayload {
 
 	fun messagePlayer(player: ServerPlayer) = PacketDistributor.sendToPlayer(player, this)
 	fun messageAllPlayers() = PacketDistributor.sendToAllPlayers(this)
-	fun messageServer() = PacketDistributor.sendToServer(this)
+	fun messageServer() = ClientPacketDistributor.sendToServer(this)
 	fun messageNearbyPlayers(serverLevel: ServerLevel, pos: BlockPos, radius: Double) = messageNearbyPlayers(serverLevel, pos.center, radius)
 	fun messageNearbyPlayers(serverLevel: ServerLevel, origin: Vec3, radius: Double) = PacketDistributor.sendToPlayersNear(serverLevel, null, origin.x, origin.y, origin.z, radius, this)
 	fun messageAllPlayersTrackingChunk(serverLevel: ServerLevel, chunkPos: ChunkPos) = PacketDistributor.sendToPlayersTrackingChunk(serverLevel, chunkPos, this)
