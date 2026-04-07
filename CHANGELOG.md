@@ -4,6 +4,7 @@
 - requiresModerator
 - requiresGameMaster
 - requiresAdmin
+- Removed SimpleContainerBlock, it's handled by BlockEntity#preRemoveSideEffects now
 
 # 1.9.0
 
