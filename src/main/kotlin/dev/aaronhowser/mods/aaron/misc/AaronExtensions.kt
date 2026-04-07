@@ -280,7 +280,7 @@ object AaronExtensions {
 	fun Int.toArgb(): ARGB = ARGB.fromInt(this)
 	fun Int.toRgba(): RGBA = RGBA.fromInt(this)
 
-	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: ResourceLocation): T {
+	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: Identifier): T {
 		return texture("particle", location)
 	}
 

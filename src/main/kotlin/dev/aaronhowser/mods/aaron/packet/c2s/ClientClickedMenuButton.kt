@@ -31,7 +31,7 @@ class ClientClickedMenuButton(
 
 	companion object {
 		val TYPE: CustomPacketPayload.Type<ClientClickedMenuButton> =
-			CustomPacketPayload.Type(AaronLib.modId("client_clicked_menu_button"))
+			CustomPacketPayload.Type(AaronLib.modResource("client_clicked_menu_button"))
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, ClientClickedMenuButton> =
 			StreamCodec.composite(

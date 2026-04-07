@@ -6,7 +6,7 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.function.Supplier
 
 open class MultiStageSpriteButton(
@@ -109,7 +109,7 @@ open class MultiStageSpriteButton(
 
 		fun addStage(
 			message: Component,
-			sprite: ResourceLocation?,
+			sprite: Identifier?,
 			spriteWidth: Int = 0,
 			spriteHeight: Int = 0
 		): Builder {
@@ -173,7 +173,7 @@ open class MultiStageSpriteButton(
 
 	class Stage(
 		val message: Component,
-		val sprite: ResourceLocation?,
+		val sprite: Identifier?,
 		val spriteWidth: Int,
 		val spriteHeight: Int
 	)

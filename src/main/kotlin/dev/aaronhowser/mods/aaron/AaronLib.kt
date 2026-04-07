@@ -26,7 +26,7 @@ class AaronLib(
 		const val MOD_ID = "aaron"
 		val LOGGER: Logger = LogManager.getLogger(MOD_ID)
 
-		fun modId(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
+		fun modResource(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
 	}
 
 }

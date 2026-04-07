@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 
 open class ImprovedSpriteButton(
@@ -17,7 +17,7 @@ open class ImprovedSpriteButton(
 	height: Int,
 	private val spriteWidth: Int,
 	private val spriteHeight: Int,
-	private val sprite: ResourceLocation,
+	private val sprite: Identifier,
 	onPress: OnPress,
 	message: Component = Component.empty(),
 	private val font: Font

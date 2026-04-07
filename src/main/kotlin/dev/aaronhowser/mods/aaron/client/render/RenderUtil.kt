@@ -4,11 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.rendertype.RenderType
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.RandomSource
 import net.minecraft.world.inventory.InventoryMenu
 import net.minecraft.world.phys.Vec3
@@ -68,7 +69,7 @@ object RenderUtil {
 		renderRays(
 			poseStack = poseStack,
 			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderType.dragonRays()),
+			vertexConsumer = bufferSource.getBuffer(RenderTypes.dragonRays()),
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -90,7 +91,7 @@ object RenderUtil {
 		renderRays(
 			poseStack = poseStack,
 			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderType.dragonRaysDepth()),
+			vertexConsumer = bufferSource.getBuffer(RenderTypes.dragonRaysDepth()),
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -254,12 +255,12 @@ object RenderUtil {
 	fun renderTexturedCube(
 		poseStack: PoseStack,
 		renderType: RenderType,
-		topTextureLocation: ResourceLocation,
-		bottomTextureLocation: ResourceLocation,
-		northTextureLocation: ResourceLocation,
-		southTextureLocation: ResourceLocation,
-		eastTextureLocation: ResourceLocation,
-		westTextureLocation: ResourceLocation,
+		topTextureLocation: Identifier,
+		bottomTextureLocation: Identifier,
+		northTextureLocation: Identifier,
+		southTextureLocation: Identifier,
+		eastTextureLocation: Identifier,
+		westTextureLocation: Identifier,
 		light: Int = 0xF000F0,
 		overlay: Int = OverlayTexture.NO_OVERLAY
 	) {

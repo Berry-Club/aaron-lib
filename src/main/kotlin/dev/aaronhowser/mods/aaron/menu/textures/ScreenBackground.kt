@@ -1,10 +1,10 @@
 package dev.aaronhowser.mods.aaron.menu.textures
 
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 open class ScreenBackground(
-	private val texture: ResourceLocation,
+	private val texture: Identifier,
 	val width: Int,
 	val height: Int,
 	private val canvasSize: Int = 256
