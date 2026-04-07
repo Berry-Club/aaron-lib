@@ -2,8 +2,8 @@ package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.*
-import net.minecraft.core.component.DataComponentPredicate
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.component.predicates.DataComponentPredicate
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.IntTag
@@ -11,8 +11,8 @@ import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.Style
+import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
@@ -23,7 +23,6 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
@@ -39,19 +38,14 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.material.Fluid
-import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.client.model.generators.ModelBuilder
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient
 import net.neoforged.neoforge.energy.EnergyStorage
-import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
+import java.net.URI
 import java.util.*
 import java.util.function.Supplier
 
@@ -63,11 +57,11 @@ object AaronExtensions {
 	val Entity.isClientSide: Boolean get() = this.level().isClientSide
 	val Entity.isServerSide: Boolean get() = this.level().isServerSide
 
-	fun Player.status(message: Component) = this.displayClientMessage(message, true)
+	fun Player.status(message: Component) = this.sendOverlayMessage(message)
 	fun Player.status(message: String) = this.status(Component.literal(message))
 
-	fun LivingEntity.tell(message: Component) = this.sendSystemMessage(message)
-	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
+	fun Player.tell(message: Component) = this.sendSystemMessage(message)
+	fun Player.tell(message: String) = this.tell(Component.literal(message))
 
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
@@ -75,33 +69,22 @@ object AaronExtensions {
 	fun DyeColor.getDyeName(): String = this.getName()
 	fun Direction.getDirectionName(): String = this.getName()
 
-	fun ItemStack.isItem(item: Holder<Item>): Boolean = this.`is`(item)
-	fun ItemStack.isItem(item: Item): Boolean = this.`is`(item)
-	fun ItemStack.isItem(tag: TagKey<Item>): Boolean = this.`is`(tag)
+	fun <T : Any> Holder<T>.isHolder(location: Identifier): Boolean = this.`is`(location)
+	fun <T : Any> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
+	fun <T : Any> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
+	fun <T : Any> Holder<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
 
-	fun <T> Holder<T>.isHolder(location: ResourceLocation): Boolean = this.`is`(location)
-	fun <T> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
-	fun <T> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
-	fun <T> Holder<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
-
-	fun BlockBehaviour.BlockStateBase.isBlock(block: Block): Boolean = this.`is`(block)
-	fun BlockBehaviour.BlockStateBase.isBlock(blockHolder: Holder<Block>): Boolean = this.`is`(blockHolder)
-	fun BlockBehaviour.BlockStateBase.isBlock(resourceKey: ResourceKey<Block>): Boolean = this.`is`(resourceKey)
-	fun BlockBehaviour.BlockStateBase.isBlock(tagKey: TagKey<Block>): Boolean = this.`is`(tagKey)
-
-	fun FluidStack.isFluid(fluid: Fluid): Boolean = this.`is`(fluid)
-	fun FluidStack.isFluid(tagKey: TagKey<Fluid>): Boolean = this.`is`(tagKey)
-	fun FluidStack.isFluid(fluids: HolderSet<Fluid>): Boolean = this.`is`(fluids)
-
-	fun FluidState.isFluid(fluid: Fluid): Boolean = this.`is`(fluid)
-	fun FluidState.isFluid(tagKey: TagKey<Fluid>): Boolean = this.`is`(tagKey)
-	fun FluidState.isFluid(fluids: HolderSet<Fluid>): Boolean = this.`is`(fluids)
+	fun <T : Any> TypedInstance<T>.isTag(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
+	fun <T : Any> TypedInstance<T>.isHolderSet(holderSet: HolderSet<T>): Boolean = this.`is`(holderSet)
+	fun <T : Any> TypedInstance<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
+	fun <T : Any> TypedInstance<T>.isResourceKey(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
+	fun <T : Any> TypedInstance<T>.isRawType(rawType: T): Boolean = this.`is`(rawType)
 
 	fun DamageSource.isDamageSource(tagKey: TagKey<DamageType>): Boolean = this.`is`(tagKey)
 	fun DamageSource.isDamageSource(resourceKey: ResourceKey<DamageType>): Boolean = this.`is`(resourceKey)
 
 	fun EntityType<*>.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.`is`(tagKey)
-	fun Entity.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.type.`is`(tagKey)
+	fun Entity.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.`is`(tagKey)
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
 	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
@@ -142,13 +125,13 @@ object AaronExtensions {
 
 	fun ItemLike.getDefaultInstance(): ItemStack = this.asItem().defaultInstance
 
-	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+	fun <T : Any> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		val stack = this.asItem().defaultInstance
 		stack.set(componentType, component)
 		return stack
 	}
 
-	fun <T> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+	fun <T : Any> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		this.set(componentType, component)
 		return this
 	}
@@ -198,12 +181,13 @@ object AaronExtensions {
 	@Suppress("UNCHECKED_CAST")
 	fun <T> Any?.cast(): T = this as T
 
-	fun Style.withHoverText(component: Component): Style = withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, component))
+	fun Style.withHoverText(component: Component): Style = withHoverEvent(HoverEvent.ShowText(component))
 	fun Style.withHoverText(text: String): Style = withHoverText(Component.literal(text))
-	fun Style.withClickToRunCommand(command: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
-	fun Style.withClickToSuggestCommand(command: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command))
-	fun Style.withClickToOpenUrl(url: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, url))
-	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text))
+	fun Style.withClickToRunCommand(command: String): Style = withClickEvent(ClickEvent.RunCommand(command))
+	fun Style.withClickToSuggestCommand(command: String): Style = withClickEvent(ClickEvent.SuggestCommand(command))
+	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent.CopyToClipboard(text))
+	fun Style.withClickToOpenUrl(uri: URI): Style = withClickEvent(ClickEvent.OpenUrl(uri))
+	fun Style.withClickToOpenUrl(uri: String): Style = withClickToOpenUrl(URI(uri))
 
 	fun DeferredBlock<*>.defaultBlockState(): BlockState = this.get().defaultBlockState()
 

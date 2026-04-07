@@ -29,7 +29,7 @@ class UpdateClientScreenString(
 
 	companion object {
 		val TYPE: CustomPacketPayload.Type<UpdateClientScreenString> =
-			CustomPacketPayload.Type(AaronLib.modResource("update_client_screen_string"))
+			CustomPacketPayload.Type(AaronLib.modId("update_client_screen_string"))
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, UpdateClientScreenString> =
 			StreamCodec.composite(

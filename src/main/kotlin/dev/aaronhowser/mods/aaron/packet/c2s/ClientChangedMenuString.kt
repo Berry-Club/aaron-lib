@@ -30,7 +30,7 @@ class ClientChangedMenuString(
 
 	companion object {
 		val TYPE: CustomPacketPayload.Type<ClientChangedMenuString> =
-			CustomPacketPayload.Type(AaronLib.modResource("client_changed_menu_string"))
+			CustomPacketPayload.Type(AaronLib.modId("client_changed_menu_string"))
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, ClientChangedMenuString> =
 			StreamCodec.composite(
