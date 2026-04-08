@@ -86,7 +86,6 @@ object AaronExtensions {
 	fun DamageSource.isDamageSource(tagKey: TagKey<DamageType>): Boolean = this.`is`(tagKey)
 	fun DamageSource.isDamageSource(resourceKey: ResourceKey<DamageType>): Boolean = this.`is`(resourceKey)
 
-	fun EntityType<*>.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.`is`(tagKey)
 	fun Entity.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.`is`(tagKey)
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)

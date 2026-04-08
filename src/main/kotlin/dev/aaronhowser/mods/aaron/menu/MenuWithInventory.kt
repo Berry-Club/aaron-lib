@@ -20,7 +20,7 @@ abstract class MenuWithInventory(
 				val slotIndex = column + row * 9 + 9
 				val x = 8 + column * 18
 
-				this.addSlot(Slot(playerInventory, slotIndex, x, y))
+				addSlot(Slot(playerInventory, slotIndex, x, y))
 			}
 		}
 
@@ -30,10 +30,10 @@ abstract class MenuWithInventory(
 		for (hotbarIndex in 0..8) {
 			val x = 8 + hotbarIndex * 18
 
-			this.addSlot(Slot(playerInventory, hotbarIndex, x, playerHotbarY))
+			addSlot(Slot(playerInventory, hotbarIndex, x, playerHotbarY))
 		}
 	}
 
-	open fun addSlots() {}
+	protected open fun addSlots() {}
 
 }

@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.menu.textures
 
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
 
 open class ScreenBackground(
@@ -9,17 +10,18 @@ open class ScreenBackground(
 	val height: Int,
 	private val canvasSize: Int = 256
 ) {
-	fun render(guiGraphics: GuiGraphics, leftPos: Int, topPos: Int) {
+	fun extract(guiGraphics: GuiGraphicsExtractor, leftPos: Int, topPos: Int) {
 		guiGraphics.blit(
-			this.texture,
+			RenderPipelines.GUI_TEXTURED,
+			texture,
 			leftPos,
 			topPos,
 			0f,
 			0f,
-			this.width,
-			this.height,
-			this.canvasSize,
-			this.canvasSize
+			width,
+			height,
+			canvasSize,
+			canvasSize
 		)
 	}
 }

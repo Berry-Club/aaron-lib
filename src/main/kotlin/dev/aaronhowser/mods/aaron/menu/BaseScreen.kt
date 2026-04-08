@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.aaron.menu
 
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
@@ -43,14 +42,9 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 
 	open fun baseInit() {}
 
-	override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-		super.render(guiGraphics, mouseX, mouseY, partialTick)
-		this.renderTooltip(guiGraphics, mouseX, mouseY)
-	}
-
-	override fun renderBg(guiGraphics: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {
-		this.background.render(
-			guiGraphics = guiGraphics,
+	override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, a: Float) {
+		this.background.extract(
+			guiGraphics = graphics,
 			leftPos = this.leftPos,
 			topPos = this.topPos
 		)
