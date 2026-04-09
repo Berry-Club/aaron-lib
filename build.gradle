@@ -137,13 +137,21 @@ neoForge.ideSyncTask generateModMetadata
 
 publishing {
 	publications {
-		register('mavenJava', MavenPublication) {
+		mavenNeoForge(MavenPublication) {
+			artifactId = archiveName
 			from components.java
 		}
 	}
+
 	repositories {
-		maven {
-			url "file://${project.projectDir}/repo"
+		if (ENV.MAVEN_URL && ENV.MAVEN_USERNAME && ENV.MAVEN_TOKEN) {
+			maven {
+				url = ENV.MAVEN_URL
+				credentials {
+					username = ENV.MAVEN_USERNAME
+					password = ENV.MAVEN_TOKEN
+				}
+			}
 		}
 	}
 }
@@ -157,4 +165,9 @@ idea {
 		downloadSources = true
 		downloadJavadoc = true
 	}
+}
+
+java {
+	withSourcesJar()
+	withJavadocJar()
 }
