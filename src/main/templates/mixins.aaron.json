@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.aaronhowser.mods.aaron.mixin",
+	"mixins": [
+		"LevelMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
