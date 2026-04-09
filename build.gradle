@@ -13,10 +13,15 @@ tasks.named('wrapper', Wrapper).configure {
 	distributionType = Wrapper.DistributionType.BIN
 }
 
-version = mod_version
-group = mod_group_id
 
-base.archivesName = mod_id
+def ENV = System.getenv()
+def isLocal = !ENV.containsKey("GITHUB_RUN_NUMBER")
+
+def archiveName = "${mod_id.replace("_", "-")}-${minecraft_version}"
+
+version = "${mod_version}-${isLocal ? "local.${Instant.now().epochSecond}" : "build.${ENV.GITHUB_RUN_NUMBER}"}"
+group = project.mod_group_id
+base.archivesName = archiveName
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_25
@@ -35,17 +40,37 @@ neoForge {
 			logLevel = org.slf4j.event.Level.DEBUG
 		}
 
-		client {
+		"Client-One" {
 			client()
+			ideName = "Client One"
 			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+
+			if (ENV.MC_CLIENT_ARGS) {
+				programArguments.addAll(ENV.MC_CLIENT_ARGS.split(' '))
+			}
+
+			gameDirectory = file 'runs/client'
+		}
+
+		"Client-Two" {
+			client()
+			ideName = "Client Two"
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+
+			gameDirectory = file 'runs/client'
+
+			if (ENV.MC_CLIENT_2_ARGS) {
+				programArguments.addAll(ENV.MC_CLIENT_2_ARGS.split(' '))
+			}
 		}
 
 		server {
 			server()
-
-			gameDirectory = project.file('run/server')
-			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+			ideName = "Server"
 			programArgument '--nogui'
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+
+			gameDirectory = file 'runs/server'
 		}
 
 		gameTestServer {
