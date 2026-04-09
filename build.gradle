@@ -109,7 +109,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'thedarkcolour:kotlinforforge-neoforge:6.1.0a'
+	implementation "thedarkcolour:kotlinforforge-neoforge:$kff_version"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
