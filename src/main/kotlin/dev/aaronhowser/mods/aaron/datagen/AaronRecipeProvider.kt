@@ -2,8 +2,6 @@ package dev.aaronhowser.mods.aaron.datagen
 
 import net.minecraft.advancements.Criterion
 import net.minecraft.core.HolderLookup
-import net.minecraft.core.component.DataComponentType
-import net.minecraft.core.component.predicates.DataComponentPredicate
 import net.minecraft.data.recipes.*
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
@@ -28,20 +26,20 @@ abstract class AaronRecipeProvider(
 		}
 	}
 
-	fun ItemLike.asIngredient(
-		predicate: DataComponentPredicate,
-		strict: Boolean = false
-	): Ingredient {
-		return DataComponentIngredient.of(strict, predicate, this)
-	}
-
-	fun <T> ItemLike.asIngredient(
-		componentType: DataComponentType<in T>,
-		component: T,
-	): Ingredient {
-		val predicate = DataComponentPredicate.Single(componentType, component)
-		return asIngredient(predicate)
-	}
+//	fun ItemLike.asIngredient(
+//		predicate: DataComponentPredicate,
+//		strict: Boolean = false
+//	): Ingredient {
+//		return DataComponentIngredient.of(strict, predicate, this)
+//	}
+//
+//	fun <T> ItemLike.asIngredient(
+//		componentType: DataComponentType<in T>,
+//		component: T,
+//	): Ingredient {
+//		val predicate = DataComponentPredicate.Single(componentType, component)
+//		return asIngredient(predicate)
+//	}
 
 	protected fun shapeless(
 		output: ItemLike,
