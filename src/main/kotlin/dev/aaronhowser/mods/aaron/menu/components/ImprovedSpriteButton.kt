@@ -1,15 +1,5 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
-import com.mojang.blaze3d.systems.RenderSystem
-import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Button
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.Identifier
-import net.minecraft.util.Mth
-
 //open class ImprovedSpriteButton(
 //	x: Int = 0,
 //	y: Int = 0,

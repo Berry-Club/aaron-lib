@@ -6,10 +6,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
-import net.minecraft.core.component.predicates.DataComponentPredicate
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.IntTag
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
@@ -20,8 +17,6 @@ import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Unit
-import net.minecraft.world.ContainerHelper
-import net.minecraft.world.SimpleContainer
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
@@ -30,12 +25,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.alchemy.PotionContents
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.ClipContext
@@ -44,13 +37,12 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.common.crafting.DataComponentIngredient
-import net.neoforged.neoforge.energy.EnergyStorage
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
 import java.net.URI
 import java.util.*
 import java.util.function.Supplier
+import kotlin.jvm.optionals.getOrNull
 
 @Suppress("unused")
 object AaronExtensions {
@@ -87,31 +79,6 @@ object AaronExtensions {
 	fun DamageSource.isDamageSource(resourceKey: ResourceKey<DamageType>): Boolean = this.`is`(resourceKey)
 
 	fun Entity.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.`is`(tagKey)
-
-	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
-	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
-	fun ItemStack.asIngredient(strict: Boolean = false): Ingredient {
-		return if (isComponentsPatchEmpty) {
-			Ingredient.of(this)
-		} else {
-			DataComponentIngredient.of(strict, this)
-		}
-	}
-
-	fun ItemLike.asIngredient(
-		predicate: DataComponentPredicate,
-		strict: Boolean = false
-	): Ingredient {
-		return DataComponentIngredient.of(strict, predicate, this)
-	}
-
-	fun <T> ItemLike.asIngredient(
-		componentType: DataComponentType<in T>,
-		component: T,
-	): Ingredient {
-		val predicate = DataComponentPredicate.builder().expect(componentType, component).build()
-		return asIngredient(predicate)
-	}
 
 	fun Entity.isMovingHorizontally(): Boolean {
 		return this.deltaMovement.horizontalDistance() > 0.015
@@ -164,11 +131,17 @@ object AaronExtensions {
 	}
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
-		return if (this.hasUUID(key)) this.getUUID(key) else null
+		val intArray = getIntArray(key).getOrNull() ?: return null
+		if (intArray.size != 4) return null
+		return UUIDUtil.uuidFromIntArray(intArray)
 	}
 
 	fun CompoundTag.putUuidIfNotNull(key: String, uuid: UUID?): CompoundTag {
-		if (uuid != null) this.putUUID(key, uuid)
+		if (uuid == null) {
+			return this
+		}
+
+		putIntArray(key, UUIDUtil.uuidToIntArray(uuid))
 		return this
 	}
 
@@ -196,12 +169,12 @@ object AaronExtensions {
 	fun Either<*, *>.isLeft(): Boolean = this.left().isPresent
 	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
 
-	fun Entity.getMinimalTag(stripUniqueness: Boolean = true): CompoundTag {
-		val nbt = CompoundTag()
-		this.save(nbt)
-		AaronUtil.cleanEntityNbt(nbt, stripUniqueness)
-		return nbt
-	}
+//	fun Entity.getMinimalTag(stripUniqueness: Boolean = true): CompoundTag {
+//		val nbt = CompoundTag()
+//		this.save(nbt)
+//		AaronUtil.cleanEntityNbt(nbt, stripUniqueness)
+//		return nbt
+//	}
 
 	fun List<ItemStack>.totalCount(): Int {
 		var total = 0
@@ -240,48 +213,48 @@ object AaronExtensions {
 	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
 	fun Long.toChunkPos(): ChunkPos = ChunkPos.unpack(this)
 
-	fun <T> IntrinsicHolderTagsProvider.IntrinsicTagAppender<T>.add(vararg holders: Holder<T>): IntrinsicHolderTagsProvider.IntrinsicTagAppender<T> {
-		for (holder in holders) this.add(holder.value())
-		return this
-	}
+//	fun <T> IntrinsicHolderTagsProvider.IntrinsicTagAppender<T>.add(vararg holders: Holder<T>): IntrinsicHolderTagsProvider.IntrinsicTagAppender<T> {
+//		for (holder in holders) this.add(holder.value())
+//		return this
+//	}
 
 	fun ItemStack.setUnit(dataComponent: DataComponentType<Unit>) = this.set(dataComponent, Unit.INSTANCE)
 	fun ItemStack.setUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = setUnit(dataComponent.get())
 
-	fun CompoundTag.saveItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
-		ContainerHelper.saveAllItems(this, items, registries)
-	}
+//	fun CompoundTag.saveItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
+//		ContainerHelper.saveAllItems(this, items, registries)
+//	}
 
-	fun CompoundTag.saveItems(container: SimpleContainer, registries: HolderLookup.Provider) {
-		saveItems(container.items, registries)
-	}
+//	fun CompoundTag.saveItems(container: SimpleContainer, registries: HolderLookup.Provider) {
+//		saveItems(container.items, registries)
+//	}
 
-	fun CompoundTag.loadItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
-		ContainerHelper.loadAllItems(this, items, registries)
-	}
+//	fun CompoundTag.loadItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
+//		ContainerHelper.loadAllItems(this, items, registries)
+//	}
+//
+//	fun CompoundTag.loadItems(container: SimpleContainer, registries: HolderLookup.Provider) {
+//		loadItems(container.items, registries)
+//	}
 
-	fun CompoundTag.loadItems(container: SimpleContainer, registries: HolderLookup.Provider) {
-		loadItems(container.items, registries)
-	}
+//	fun CompoundTag.saveEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
+//		this.put(name, energyStorage.serializeNBT(registries))
+//	}
 
-	fun CompoundTag.saveEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
-		this.put(name, energyStorage.serializeNBT(registries))
-	}
-
-	fun CompoundTag.loadEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
-		val energyTag = this.get(name)
-		if (energyTag is IntTag) {
-			energyStorage.deserializeNBT(registries, energyTag)
-		}
-	}
+//	fun CompoundTag.loadEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
+//		val energyTag = this.get(name)
+//		if (energyTag is IntTag) {
+//			energyStorage.deserializeNBT(registries, energyTag)
+//		}
+//	}
 
 	fun Int.toRgb(): RGB = RGB.fromInt(this)
 	fun Int.toArgb(): ARGB = ARGB.fromInt(this)
 	fun Int.toRgba(): RGBA = RGBA.fromInt(this)
 
-	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: Identifier): T {
-		return texture("particle", location)
-	}
+//	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: Identifier): T {
+//		return texture("particle", location)
+//	}
 
 	fun <S : CommandSourceStack, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.requiresModerator(): T {
 		return this.requires(Commands.hasPermission(Commands.LEVEL_MODERATORS))

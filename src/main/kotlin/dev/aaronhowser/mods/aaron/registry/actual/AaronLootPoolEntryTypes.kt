@@ -1,15 +1,5 @@
 package dev.aaronhowser.mods.aaron.registry.actual
 
-import com.mojang.serialization.MapCodec
-import dev.aaronhowser.mods.aaron.AaronLib
-import dev.aaronhowser.mods.aaron.datagen.LootItemStack
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType
-import net.neoforged.neoforge.registries.DeferredHolder
-import net.neoforged.neoforge.registries.DeferredRegister
-import java.util.function.Supplier
-
 object AaronLootPoolEntryTypes {
 
 //	val LOOT_POOL_ENTRY_TYPE_REGISTRY: DeferredRegister<LootPoolEntryType> =
