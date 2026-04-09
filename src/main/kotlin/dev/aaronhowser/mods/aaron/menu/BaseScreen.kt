@@ -10,10 +10,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu
 abstract class BaseScreen<M : AbstractContainerMenu>(
 	menu: M,
 	playerInventory: Inventory,
-	title: Component
-) : AbstractContainerScreen<M>(menu, playerInventory, title) {
-
-	protected abstract val background: ScreenBackground
+	title: Component,
+	protected val background: ScreenBackground
+) : AbstractContainerScreen<M>(menu, playerInventory, title, background.width, background.height) {
 
 	override fun isPauseScreen(): Boolean = false
 	protected open val showTitleLabel = true
@@ -31,12 +30,7 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 	open val inventoryLabelOffsetY: Int = 0
 
 	final override fun init() {
-		imageWidth = background.width
-		imageHeight = background.height
-
-		leftPos = (width - imageWidth) / 2
-		topPos = (height - imageHeight) / 2
-
+		super.init()
 		baseInit()
 	}
 
