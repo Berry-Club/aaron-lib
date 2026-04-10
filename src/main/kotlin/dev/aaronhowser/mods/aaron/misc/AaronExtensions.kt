@@ -21,6 +21,7 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
@@ -52,11 +53,17 @@ object AaronExtensions {
 	val Entity.isClientSide: Boolean get() = this.level().isClientSide
 	val Entity.isServerSide: Boolean get() = this.level().isServerSide
 
-	fun Player.status(message: Component) = this.sendOverlayMessage(message)
-	fun Player.status(message: String) = this.status(Component.literal(message))
+	fun LivingEntity.status(message: Component) {
+		if (this is Player) this.sendOverlayMessage(message)
+	}
 
-	fun Player.tell(message: Component) = this.sendSystemMessage(message)
-	fun Player.tell(message: String) = this.tell(Component.literal(message))
+	fun LivingEntity.status(message: String) = this.status(Component.literal(message))
+
+	fun LivingEntity.tell(message: Component) {
+		if (this is Player) sendSystemMessage(message)
+	}
+
+	fun LivingEntity.tell(message: String) = tell(Component.literal(message))
 
 	fun Boolean?.isTrue(): Boolean = this == true
 	fun Boolean?.isNotTrue(): Boolean = this != true
