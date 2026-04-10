@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.command
 
 import com.mojang.brigadier.builder.ArgumentBuilder
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.requiresGameMaster
+import dev.aaronhowser.mods.aaron.misc.extensions.AaronMiscExtensions.requiresGameMaster
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
