@@ -7,11 +7,7 @@ import dev.aaronhowser.mods.aaron.misc.RGB
 import dev.aaronhowser.mods.aaron.misc.RGBA
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.core.Direction
-import net.minecraft.core.Holder
-import net.minecraft.core.HolderSet
-import net.minecraft.core.TypedInstance
-import net.minecraft.core.UUIDUtil
+import net.minecraft.core.*
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
@@ -28,7 +24,7 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.block.state.BlockState
 import net.neoforged.neoforge.registries.DeferredBlock
 import java.net.URI
-import java.util.UUID
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Suppress("unused")
@@ -125,9 +121,9 @@ object AaronMiscExtensions {
 //		}
 //	}
 
-	fun Int.toRgb(): RGB = RGB.Companion.fromInt(this)
-	fun Int.toArgb(): ARGB = ARGB.Companion.fromInt(this)
-	fun Int.toRgba(): RGBA = RGBA.Companion.fromInt(this)
+	fun Int.toRgb(): RGB = RGB.fromInt(this)
+	fun Int.toArgb(): ARGB = ARGB.fromInt(this)
+	fun Int.toRgba(): RGBA = RGBA.fromInt(this)
 
 //	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: Identifier): T {
 //		return texture("particle", location)
