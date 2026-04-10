@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron.misc.extensions
 
+import dev.aaronhowser.mods.aaron.misc.extensions.AaronLevelExtensions.isServerSide
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.Entity
