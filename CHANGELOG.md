@@ -1,3 +1,7 @@
+# 1.10.0
+
+- getGridSpiralPos
+
 # 1.9.0
 
 - ContainerContainer
