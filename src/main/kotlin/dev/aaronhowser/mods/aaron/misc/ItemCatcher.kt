@@ -25,6 +25,7 @@ object ItemCatcher {
 	fun getCaughtItemEntities(): List<ItemEntity> {
 		val entities = caughtItemEntities.toList()
 		caughtItemEntities.clear()
+		isCatchingDrops = false
 		return entities
 	}
 
@@ -32,6 +33,32 @@ object ItemCatcher {
 	fun getCaughtItemStacks(): List<ItemStack> {
 		val stacks = getCaughtItemEntities().map(ItemEntity::getItem)
 		return stacks
+	}
+
+	@JvmStatic
+	fun catchDuring(block: Runnable): List<ItemEntity> {
+		startCatchingItems()
+
+		try {
+			block.run()
+		} finally {
+			isCatchingDrops = false
+		}
+
+		return getCaughtItemEntities()
+	}
+
+	@JvmStatic
+	fun catchStacksDuring(block: Runnable): List<ItemStack> {
+		startCatchingItems()
+
+		try {
+			block.run()
+		} finally {
+			isCatchingDrops = false
+		}
+
+		return getCaughtItemStacks()
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
