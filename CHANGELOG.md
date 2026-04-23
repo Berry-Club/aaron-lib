@@ -1,3 +1,7 @@
+# 1.11.0
+
+- ItemCatcher
+
 # 1.10.0
 
 - getGridSpiralPos
