@@ -36,7 +36,7 @@ object ItemCatcher {
 	}
 
 	@JvmStatic
-	fun catchDuring(block: Runnable): List<ItemEntity> {
+	fun catchEntitiesDuring(block: Runnable): List<ItemEntity> {
 		startCatchingItems()
 
 		try {
