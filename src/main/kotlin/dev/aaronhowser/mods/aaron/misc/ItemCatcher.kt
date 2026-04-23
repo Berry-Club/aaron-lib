@@ -38,8 +38,16 @@ object ItemCatcher {
 	}
 
 	@JvmStatic
-	fun getCaughtItemStacks(): List<ItemStack> {
-		val stacks = getCaughtItemEntities().map(ItemEntity::getItem)
+	fun getCaughtItemStacks(discardEntities: Boolean = true): List<ItemStack> {
+		val entities = getCaughtItemEntities()
+		val stacks = entities.map(ItemEntity::getItem)
+
+		if (discardEntities) {
+			for (entity in entities) {
+				entity.discard()
+			}
+		}
+
 		return stacks
 	}
 
