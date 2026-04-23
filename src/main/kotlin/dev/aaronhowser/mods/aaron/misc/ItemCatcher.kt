@@ -22,10 +22,18 @@ object ItemCatcher {
 	}
 
 	@JvmStatic
+	fun stopCatchingItems() {
+		isCatchingDrops = false
+		caughtItemEntities.clear()
+	}
+
+	@JvmStatic
+	fun isCatchingItems(): Boolean = isCatchingDrops
+
+	@JvmStatic
 	fun getCaughtItemEntities(): List<ItemEntity> {
 		val entities = caughtItemEntities.toList()
-		caughtItemEntities.clear()
-		isCatchingDrops = false
+		stopCatchingItems()
 		return entities
 	}
 
