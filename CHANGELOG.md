@@ -1,3 +1,7 @@
+# 1.12.0
+
+- ItemStack#toggleUnit
+
 # 1.11.0
 
 - ItemCatcher

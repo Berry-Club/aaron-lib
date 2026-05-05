@@ -262,6 +262,16 @@ object AaronExtensions {
 	fun ItemStack.setUnit(dataComponent: DataComponentType<Unit>) = this.set(dataComponent, Unit.INSTANCE)
 	fun ItemStack.setUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = setUnit(dataComponent.get())
 
+	fun ItemStack.toggleUnit(dataComponent: DataComponentType<Unit>) {
+		if (this.has(dataComponent)) {
+			this.remove(dataComponent)
+		} else {
+			this.setUnit(dataComponent)
+		}
+	}
+
+	fun ItemStack.toggleUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = toggleUnit(dataComponent.get())
+
 	fun CompoundTag.saveItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
 		ContainerHelper.saveAllItems(this, items, registries)
 	}
