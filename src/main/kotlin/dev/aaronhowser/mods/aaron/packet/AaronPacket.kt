@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.packet
 
 import net.minecraft.core.BlockPos
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
@@ -40,5 +41,11 @@ abstract class AaronPacket : CustomPacketPayload {
 	fun messageAllPlayersTrackingChunk(serverLevel: ServerLevel, chunkPos: ChunkPos) = PacketDistributor.sendToPlayersTrackingChunk(serverLevel, chunkPos, this)
 	fun messageAllPlayersTrackingEntity(entity: Entity) = PacketDistributor.sendToPlayersTrackingEntity(entity, this)
 	fun messageAllPlayersTrackingEntityAndSelf(entity: Entity) = PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, this)
+
+	companion object {
+		protected fun <T : AaronPacket> makeType(id: ResourceLocation): CustomPacketPayload.Type<T> {
+			return CustomPacketPayload.Type<T>(id)
+		}
+	}
 
 }

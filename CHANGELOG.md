@@ -3,6 +3,7 @@
 - ItemStack#toggleUnit
 - Improved heal command
 - AaronCommandHelper
+- AaronPacket#makeType
 
 # 1.11.0
 
