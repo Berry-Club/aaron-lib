@@ -1,6 +1,8 @@
 # 1.12.0
 
 - ItemStack#toggleUnit
+- Improved heal command
+- AaronCommandHelper
 
 # 1.11.0
 
