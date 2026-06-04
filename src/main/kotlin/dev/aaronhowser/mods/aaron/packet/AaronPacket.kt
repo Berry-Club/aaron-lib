@@ -47,6 +47,11 @@ abstract class AaronPacket : CustomPacketPayload {
 		protected fun <T : AaronPacket> makeType(id: ResourceLocation): CustomPacketPayload.Type<T> {
 			return CustomPacketPayload.Type<T>(id)
 		}
+
+		@JvmStatic
+		protected fun <T : AaronPacket> makeType(namespace: String, path: String): CustomPacketPayload.Type<T> {
+			return makeType(ResourceLocation.fromNamespaceAndPath(namespace, path))
+		}
 	}
 
 }
