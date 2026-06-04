@@ -43,6 +43,7 @@ abstract class AaronPacket : CustomPacketPayload {
 	fun messageAllPlayersTrackingEntityAndSelf(entity: Entity) = PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, this)
 
 	companion object {
+		@JvmStatic
 		protected fun <T : AaronPacket> makeType(id: ResourceLocation): CustomPacketPayload.Type<T> {
 			return CustomPacketPayload.Type<T>(id)
 		}

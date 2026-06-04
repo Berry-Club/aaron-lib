@@ -2,6 +2,7 @@
 
 - Added a server config
 - What NBT keys are removed by `AaronUtil#cleanEntityNbt` can now be configured
+- Fix AaronPacket#makeType
 
 # 1.12.0
 
