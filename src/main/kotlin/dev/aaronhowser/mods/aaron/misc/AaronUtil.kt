@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron.misc
 
+import dev.aaronhowser.mods.aaron.config.ServerConfig
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
@@ -25,35 +26,15 @@ object AaronUtil {
 	}
 
 	fun cleanEntityNbt(compoundTag: CompoundTag, stripUniqueness: Boolean = false) {
-		val badTags = buildList {
-			addAll(
-				listOf(
-					"HurtByTimestamp",
-					"Sitting",
-					"FallFlying",
-					"PortalCooldown",
-					"FallDistance",
-					"InLove",
-					"DeathTime",
-					"ForcedAge",
-					"Motion",
-					"Air",
-					"OnGround",
-					"Rotation",
-					"Pos",
-					"HurtTime"
-				)
-			)
+		val removeKeys = buildList {
+			addAll(ServerConfig.CONFIG.cleanEntityNbtKeys.get())
 
 			if (stripUniqueness) {
-				add("id")
-				add("UUID")
-				add("Owner")
-				add("Age")
+				addAll(ServerConfig.CONFIG.cleanEntityNbtKeysStripUniqueness.get())
 			}
 		}
 
-		for (tag in badTags) {
+		for (tag in removeKeys) {
 			compoundTag.remove(tag)
 		}
 	}

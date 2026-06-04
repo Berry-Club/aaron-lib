@@ -1,3 +1,8 @@
+# 1.13.0
+
+- Added a server config
+- What NBT keys are removed by `AaronUtil#cleanEntityNbt` can now be configured
+
 # 1.12.0
 
 - ItemStack#toggleUnit
