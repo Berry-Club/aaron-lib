@@ -1,9 +1,11 @@
 package dev.aaronhowser.mods.aaron.menu
 
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.inventory.Slot
+import net.minecraft.world.item.ItemStack
 
 abstract class MenuWithInventory(
 	menuType: MenuType<*>?,
@@ -35,5 +37,41 @@ abstract class MenuWithInventory(
 	}
 
 	open fun addSlots() {}
+
+	override fun quickMoveStack(player: Player, clickedSlotIndex: Int): ItemStack {
+		val clickedSlot = slots.getOrNull(clickedSlotIndex)
+		if (clickedSlot == null || !clickedSlot.hasItem()) return ItemStack.EMPTY
+
+		val clickedStack = clickedSlot.item
+		val originalStack = clickedStack.copy()
+
+		val totalSlotCount = slots.size
+		val playerInventoryStartIndex = totalSlotCount - 36
+		val playerInventoryEndIndex = totalSlotCount - 1
+		val machineSlotEndIndex = playerInventoryStartIndex - 1
+
+		val clickedSlotIsInMachine = clickedSlotIndex <= machineSlotEndIndex
+		val clickedSlotIsInPlayerInventory = clickedSlotIndex in playerInventoryStartIndex..playerInventoryEndIndex
+
+		val wasItemMoved = when {
+			clickedSlotIsInMachine -> moveItemStackTo(clickedStack, playerInventoryStartIndex, totalSlotCount, true)
+			clickedSlotIsInPlayerInventory -> moveItemStackTo(clickedStack, 0, playerInventoryStartIndex, false)
+			else -> false
+		}
+
+		if (!wasItemMoved) return ItemStack.EMPTY
+
+		if (clickedStack.isEmpty) {
+			clickedSlot.setByPlayer(ItemStack.EMPTY)
+		} else {
+			clickedSlot.setChanged()
+		}
+
+		val stackCountChanged = clickedStack.count != originalStack.count
+		if (!stackCountChanged) return ItemStack.EMPTY
+
+		clickedSlot.onTake(player, clickedStack)
+		return originalStack
+	}
 
 }

@@ -1,3 +1,7 @@
+# 1.14.0
+
+- Added a default MenuWithInventory#quickMoveStack
+
 # 1.13.0
 
 - Added a server config
