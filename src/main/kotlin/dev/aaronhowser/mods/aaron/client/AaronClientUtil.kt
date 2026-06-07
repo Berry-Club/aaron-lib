@@ -15,7 +15,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 
 object AaronClientUtil {
 
-	private val FLUID_COLORS: MutableMap<Fluid, Int> = mutableMapOf()
+	val FLUID_COLORS: MutableMap<Fluid, Int> = mutableMapOf()
 
 	@JvmStatic
 	val localLevel: Level?

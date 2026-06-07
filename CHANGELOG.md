@@ -1,6 +1,8 @@
 # 1.14.0
 
 - Added a default MenuWithInventory#quickMoveStack
+- AaronClientUtil#getFluidColor and AaronClientUtil#computeFluidColor
+	- Uses the tintIndex or the texture, resets on asset reload
 
 # 1.13.0
 
