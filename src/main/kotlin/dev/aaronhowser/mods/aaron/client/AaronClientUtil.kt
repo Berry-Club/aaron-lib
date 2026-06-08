@@ -43,7 +43,12 @@ object AaronClientUtil {
 	}
 
 	fun getFluidColor(fluid: Fluid): Int {
-		return FLUID_COLORS.computeIfAbsent(fluid, ::computeFluidColor)
+		val existing = FLUID_COLORS[fluid]
+		if (existing != null) return existing
+
+		val new = computeFluidColor(fluid)
+		FLUID_COLORS[fluid] = new
+		return new
 	}
 
 	fun computeFluidColor(fluid: Fluid): Int {
