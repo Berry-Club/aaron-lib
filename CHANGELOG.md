@@ -3,6 +3,8 @@
 - Added a default MenuWithInventory#quickMoveStack
 - AaronClientUtil#getFluidColor and AaronClientUtil#computeFluidColor
 	- Uses the tintIndex or the texture, resets on asset reload
+- String#toComponent
+- String#toGrayComponent
 
 # 1.13.0
 

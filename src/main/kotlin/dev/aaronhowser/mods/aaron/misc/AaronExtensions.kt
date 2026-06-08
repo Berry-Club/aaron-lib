@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
+import net.minecraft.ChatFormatting
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentPredicate
 import net.minecraft.core.component.DataComponentType
@@ -10,6 +11,7 @@ import net.minecraft.nbt.IntTag
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -306,5 +308,8 @@ object AaronExtensions {
 	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: ResourceLocation): T {
 		return texture("particle", location)
 	}
+
+	fun String.toComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args)
+	fun String.toGrayComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args).withStyle(ChatFormatting.GRAY)
 
 }
