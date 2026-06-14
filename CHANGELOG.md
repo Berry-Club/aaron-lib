@@ -1,3 +1,8 @@
+# 1.15.0
+
+- RandomSource#roll
+- RandomSource#rollDie
+
 # 1.14.0
 
 - Added a default MenuWithInventory#quickMoveStack
