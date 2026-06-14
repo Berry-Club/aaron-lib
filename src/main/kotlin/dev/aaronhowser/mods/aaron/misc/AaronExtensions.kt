@@ -140,7 +140,7 @@ object AaronExtensions {
 	fun RandomSource.chance(chance: Number): Boolean = nextDouble() <= chance.toDouble()
 
 	fun RandomSource.roll(chance: Number): Boolean = nextDouble() <= chance.toDouble()
-	fun RandomSource.rollDie(sides: Int): Boolean = nextInt(0, sides) == 0
+	fun RandomSource.rollD(sides: Int): Boolean = nextInt(0, sides) == 0
 
 	fun Number.toDegrees(): Double = Math.toDegrees(this.toDouble())
 	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
