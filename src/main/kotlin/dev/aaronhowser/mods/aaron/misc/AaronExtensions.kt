@@ -318,4 +318,20 @@ object AaronExtensions {
 	fun BlockPos.closerThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) < distance.toDouble().pow(2)
 	fun Vec3.closerThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) < distance.toDouble().pow(2)
 
+	fun <T> Collection<T>.random(random: RandomSource): T {
+		val size = count()
+		require(size > 0)
+
+		if (size == 1) return first()
+
+		val index = random.nextInt(size)
+		return elementAt(index)
+	}
+
+	fun <T> Collection<T>.randomOrNull(random: RandomSource): T? {
+		val size = count()
+		val index = random.nextInt(size)
+		return elementAtOrNull(index)
+	}
+
 }

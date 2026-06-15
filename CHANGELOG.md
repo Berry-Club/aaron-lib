@@ -7,6 +7,8 @@
 - Vec3#furtherThan
 - BlockPos#closerThan
 - Vec3#closerThan
+- Collection#random(RandomSource)
+- Collection#randomOrNull(RandomSource)
 
 # 1.14.0
 
