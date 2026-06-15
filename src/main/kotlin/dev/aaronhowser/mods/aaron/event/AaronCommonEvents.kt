@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.event
 
 import dev.aaronhowser.mods.aaron.AaronLib
+import dev.aaronhowser.mods.aaron.actor.LevelActor
 import dev.aaronhowser.mods.aaron.command.AaronCommands
 import dev.aaronhowser.mods.aaron.packet.AaronPacketRegister
 import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.getSchedulerRaw
@@ -29,7 +30,10 @@ object AaronCommonEvents {
 
 	@SubscribeEvent
 	fun afterLevelTick(event: LevelTickEvent.Post) {
-		event.level.getSchedulerRaw()?.tick()
+		val level = event.level
+
+		level.getSchedulerRaw()?.tick()
+		LevelActor.tickActors(level)
 	}
 
 	@SubscribeEvent
