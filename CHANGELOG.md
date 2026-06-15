@@ -9,6 +9,10 @@
 - Vec3#closerThan
 - Collection#random(RandomSource)
 - Collection#randomOrNull(RandomSource)
+- AABB#randomX
+- AABB#randomY
+- AABB#randomZ
+- AABB#randomPos
 
 # 1.14.0
 

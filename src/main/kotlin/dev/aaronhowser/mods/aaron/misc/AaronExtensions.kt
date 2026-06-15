@@ -42,6 +42,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.client.model.generators.ModelBuilder
@@ -332,6 +333,13 @@ object AaronExtensions {
 		val size = count()
 		val index = random.nextInt(size)
 		return elementAtOrNull(index)
+	}
+
+	fun AABB.randomX(random: RandomSource): Double = minX + (xsize * random.nextDouble())
+	fun AABB.randomY(random: RandomSource): Double = minY + (ysize * random.nextDouble())
+	fun AABB.randomZ(random: RandomSource): Double = minZ + (zsize * random.nextDouble())
+	fun AABB.randomPos(random: RandomSource): Vec3 {
+		return Vec3(randomX(random), randomY(random), randomZ(random))
 	}
 
 }
