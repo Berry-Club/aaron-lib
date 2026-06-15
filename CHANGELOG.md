@@ -2,6 +2,7 @@
 
 - RandomSource#roll
 - RandomSource#rollDie
+- LevelActor
 
 # 1.14.0
 
