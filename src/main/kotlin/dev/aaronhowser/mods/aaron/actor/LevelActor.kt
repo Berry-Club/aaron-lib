@@ -10,7 +10,7 @@ abstract class LevelActor(
 	var isRemoved: Boolean = false
 		private set
 
-	fun remove() {
+	fun markForRemoval() {
 		isRemoved = true
 	}
 
