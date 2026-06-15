@@ -8,11 +8,7 @@ import net.minecraft.core.component.DataComponentType
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.IntTag
-import net.minecraft.network.chat.ClickEvent
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.HoverEvent
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.*
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
@@ -56,6 +52,7 @@ import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
 import java.util.*
 import java.util.function.Supplier
+import kotlin.math.pow
 
 @Suppress("unused")
 object AaronExtensions {
@@ -314,5 +311,11 @@ object AaronExtensions {
 
 	fun String.toComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args)
 	fun String.toGrayComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args).withStyle(ChatFormatting.GRAY)
+
+	fun BlockPos.furtherThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) > distance.toDouble().pow(2)
+	fun Vec3.furtherThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) > distance.toDouble().pow(2)
+
+	fun BlockPos.closerThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) < distance.toDouble().pow(2)
+	fun Vec3.closerThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) < distance.toDouble().pow(2)
 
 }

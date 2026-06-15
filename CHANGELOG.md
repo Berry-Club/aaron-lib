@@ -3,6 +3,10 @@
 - RandomSource#roll
 - RandomSource#rollDie
 - LevelActor
+- BlockPos#furtherThan
+- Vec3#furtherThan
+- BlockPos#closerThan
+- Vec3#closerThan
 
 # 1.14.0
 
