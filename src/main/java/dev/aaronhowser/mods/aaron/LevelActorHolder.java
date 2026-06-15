@@ -10,8 +10,4 @@ public interface LevelActorHolder {
 		throw new IllegalStateException();
 	}
 
-	default void aaron$addLevelActor(LevelActor actor) {
-		aaron$getLevelActors().add(actor);
-	}
-
 }
