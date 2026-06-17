@@ -342,4 +342,7 @@ object AaronExtensions {
 		return Vec3(randomX(random), randomY(random), randomZ(random))
 	}
 
+	fun Player.allItems(): List<ItemStack> = inventory.compartments.flatten()
+	fun Player.allItemsSequence(): Sequence<ItemStack> = inventory.compartments.asSequence().flatten()
+
 }

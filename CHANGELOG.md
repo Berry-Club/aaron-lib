@@ -13,6 +13,8 @@
 - AABB#randomY
 - AABB#randomZ
 - AABB#randomPos
+- Player#allItems
+- Player#allItemsSequence
 
 # 1.14.0
 
