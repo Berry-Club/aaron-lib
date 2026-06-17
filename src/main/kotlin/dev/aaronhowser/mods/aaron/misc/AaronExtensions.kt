@@ -343,8 +343,8 @@ object AaronExtensions {
 		return Vec3(randomX(random), randomY(random), randomZ(random))
 	}
 
-	fun Player.allItems(): List<ItemStack> = inventory.compartments.flatten()
-	fun Player.allItemsSequence(): Sequence<ItemStack> = inventory.compartments.asSequence().flatten()
-	fun Player.getFirstStack(predicate: Predicate<ItemStack>): ItemStack? = allItemsSequence().firstOrNull(predicate::test)
+	fun Player.allItemStacks(): List<ItemStack> = inventory.compartments.flatten()
+	fun Player.allItemStacksSequence(): Sequence<ItemStack> = inventory.compartments.asSequence().flatten()
+	fun Player.getFirstItemStack(predicate: Predicate<ItemStack>): ItemStack? = allItemStacksSequence().firstOrNull(predicate::test)
 
 }
