@@ -1,13 +1,27 @@
 package dev.aaronhowser.mods.aaron.client.render
 
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import dev.aaronhowser.mods.aaron.AaronLib
 import net.minecraft.client.renderer.RenderStateShard.*
 import net.minecraft.client.renderer.RenderType
+import org.lwjgl.opengl.GL11
 import java.util.*
 
 object AaronRenderTypes {
+
+	private val ALWAYS_SUCCEED_DEPTH_TEST: DepthTestStateShard =
+		object : DepthTestStateShard("always", GL11.GL_ALWAYS) {
+			override fun setupRenderState() {
+				RenderSystem.enableDepthTest()
+				RenderSystem.depthFunc(GL11.GL_ALWAYS)
+			}
+
+			override fun clearRenderState() {
+				RenderSystem.depthFunc(GL11.GL_LEQUAL)
+			}
+		}
 
 	@Suppress("INFERRED_INVISIBLE_RETURN_TYPE_WARNING")
 	val LINES_THROUGH_WALL_RENDER_TYPE: RenderType.CompositeRenderType =
@@ -25,7 +39,7 @@ object AaronRenderTypes {
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setOutputState(ITEM_ENTITY_TARGET)
 				.setCullState(NO_CULL)
-				.setDepthTestState(NO_DEPTH_TEST)
+				.setDepthTestState(ALWAYS_SUCCEED_DEPTH_TEST)
 				.setWriteMaskState(COLOR_WRITE)
 				.createCompositeState(false)
 		)
@@ -43,7 +57,7 @@ object AaronRenderTypes {
 				.setShaderState(POSITION_COLOR_SHADER)
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setCullState(NO_CULL)
-				.setDepthTestState(NO_DEPTH_TEST)
+				.setDepthTestState(ALWAYS_SUCCEED_DEPTH_TEST)
 				.setWriteMaskState(COLOR_WRITE)
 				.createCompositeState(false)
 		)

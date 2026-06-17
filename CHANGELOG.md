@@ -1,3 +1,7 @@
+# 1.16.0
+
+- Fixed the through-walls renderers to work with Sodium
+
 # 1.15.0
 
 - RandomSource#roll
