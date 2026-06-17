@@ -321,19 +321,13 @@ object AaronExtensions {
 	fun Vec3.closerThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) < distance.toDouble().pow(2)
 
 	fun <T> Collection<T>.random(random: RandomSource): T {
-		val size = count()
-		require(size > 0)
-
-		if (size == 1) return first()
-
-		val index = random.nextInt(size)
-		return elementAt(index)
+		if (isEmpty()) throw NoSuchElementException("Collection is empty.")
+		return elementAt(random.nextInt(size))
 	}
 
 	fun <T> Collection<T>.randomOrNull(random: RandomSource): T? {
-		val size = count()
-		val index = random.nextInt(size)
-		return elementAtOrNull(index)
+		if (isEmpty()) return null
+		return elementAt(random.nextInt(size))
 	}
 
 	fun AABB.randomX(random: RandomSource): Double = minX + (xsize * random.nextDouble())
