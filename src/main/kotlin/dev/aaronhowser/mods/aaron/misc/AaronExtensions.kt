@@ -52,6 +52,7 @@ import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
 import java.util.*
+import java.util.function.Predicate
 import java.util.function.Supplier
 import kotlin.math.pow
 
@@ -344,5 +345,6 @@ object AaronExtensions {
 
 	fun Player.allItems(): List<ItemStack> = inventory.compartments.flatten()
 	fun Player.allItemsSequence(): Sequence<ItemStack> = inventory.compartments.asSequence().flatten()
+	fun Player.getFirstStack(predicate: Predicate<ItemStack>): ItemStack? = allItemsSequence().firstOrNull(predicate::test)
 
 }

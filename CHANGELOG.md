@@ -15,6 +15,7 @@
 - AABB#randomPos
 - Player#allItems
 - Player#allItemsSequence
+- Player#getFirstStack
 
 # 1.14.0
 
