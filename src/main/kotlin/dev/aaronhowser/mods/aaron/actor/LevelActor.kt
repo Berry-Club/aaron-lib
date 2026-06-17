@@ -10,11 +10,21 @@ abstract class LevelActor(
 	var isRemoved: Boolean = false
 		private set
 
+	var age: Int = 0
+		protected set
+
 	fun markForRemoval() {
 		isRemoved = true
 	}
 
-	abstract fun tick()
+	private fun fullTick() {
+		if (age == 0) setup()
+		age++
+		tick()
+	}
+
+	protected open fun setup() {}
+	protected abstract fun tick()
 
 	companion object {
 		fun Level.getLevelActors(): MutableList<LevelActor> = (this as LevelActorHolder).`aaron$getLevelActors`()
@@ -29,7 +39,8 @@ abstract class LevelActor(
 			while (iterator.hasNext()) {
 				val actor = iterator.next()
 
-				actor.tick()
+				actor.fullTick()
+
 				if (actor.isRemoved) {
 					iterator.remove()
 				}
