@@ -11,6 +11,8 @@ import java.util.*
 
 object AaronRenderTypes {
 
+	private const val BUFFER_SIZE = 1536
+
 	private val ALWAYS_SUCCEED_DEPTH_TEST: DepthTestStateShard =
 		object : DepthTestStateShard("always", GL11.GL_ALWAYS) {
 			override fun setupRenderState() {
@@ -24,12 +26,12 @@ object AaronRenderTypes {
 		}
 
 	@Suppress("INFERRED_INVISIBLE_RETURN_TYPE_WARNING")
-	val LINES_THROUGH_WALL_RENDER_TYPE: RenderType.CompositeRenderType =
+	val LINES_THROUGH_WALLS: RenderType.CompositeRenderType =
 		RenderType.create(
-			"${AaronLib.MOD_ID}:line_through_wall",
+			"${AaronLib.MOD_ID}:lines_through_walls",
 			DefaultVertexFormat.POSITION_COLOR_NORMAL,
 			VertexFormat.Mode.LINES,
-			1536,
+			BUFFER_SIZE,
 			true,
 			false,
 			RenderType.CompositeState.builder()
@@ -45,12 +47,12 @@ object AaronRenderTypes {
 		)
 
 	@Suppress("INFERRED_INVISIBLE_RETURN_TYPE_WARNING")
-	val QUADS_THROUGH_WALL_RENDER_TYPE: RenderType.CompositeRenderType =
+	val QUADS_THROUGH_WALLS: RenderType.CompositeRenderType =
 		RenderType.create(
-			"${AaronLib.MOD_ID}:quads_through_wall",
+			"${AaronLib.MOD_ID}:quads_through_walls",
 			DefaultVertexFormat.POSITION_COLOR,
 			VertexFormat.Mode.QUADS,
-			1536,
+			BUFFER_SIZE,
 			false,
 			true,
 			RenderType.CompositeState.builder()
@@ -62,7 +64,7 @@ object AaronRenderTypes {
 				.createCompositeState(false)
 		)
 
-	fun linesThroughWalls(): RenderType = LINES_THROUGH_WALL_RENDER_TYPE
-	fun quadsThroughWalls(): RenderType = QUADS_THROUGH_WALL_RENDER_TYPE
+	fun linesThroughWalls(): RenderType = LINES_THROUGH_WALLS
+	fun quadsThroughWalls(): RenderType = QUADS_THROUGH_WALLS
 
 }
