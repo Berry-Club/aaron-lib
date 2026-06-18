@@ -11,7 +11,6 @@ import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.inventory.InventoryMenu
-import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions
 import net.neoforged.neoforge.fluids.FluidStack
@@ -19,6 +18,7 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.sqrt
 
+@Suppress("unused")
 object AaronRenderUtil {
 
 	private val HALF_SQRT_3: Float = (sqrt(3.0) / 2.0).toFloat()
@@ -296,172 +296,67 @@ object AaronRenderUtil {
 
 	fun renderCubeThroughWalls(
 		poseStack: PoseStack,
-		center: Vec3,
-		width: Float,
+		minX: Double,
+		minY: Double,
+		minZ: Double,
+		maxX: Double,
+		maxY: Double,
+		maxZ: Double,
 		color: Int
 	) {
-		renderCubeThroughWalls(
-			poseStack = poseStack,
-			center = center,
-			width = width,
-			height = width,
-			depth = width,
-			color = color
-		)
-	}
-
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		bufferSource: MultiBufferSource,
-		center: Vec3,
-		width: Float,
-		color: Int
-	) {
-		renderCubeThroughWalls(
-			poseStack = poseStack,
-			bufferSource = bufferSource,
-			center = center,
-			width = width,
-			height = width,
-			depth = width,
-			color = color
-		)
-	}
-
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		center: Vec3,
-		width: Float,
-		height: Float,
-		depth: Float,
-		color: Int
-	) {
-		renderCubeThroughWalls(
-			poseStack = poseStack,
-			posX = center.x - width / 2,
-			posY = center.y - height / 2,
-			posZ = center.z - depth / 2,
-			width = width,
-			length = depth,
-			height = height,
-			color = color
-		)
-	}
-
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		bufferSource: MultiBufferSource,
-		center: Vec3,
-		width: Float,
-		height: Float,
-		depth: Float,
-		color: Int
-	) {
-		renderCubeThroughWalls(
-			poseStack = poseStack,
-			bufferSource = bufferSource,
-			posX = center.x - width / 2,
-			posY = center.y - height / 2,
-			posZ = center.z - depth / 2,
-			width = width,
-			height = height,
-			depth = depth,
-			color = color
-		)
-	}
-
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		aabb: AABB,
-		color: Int
-	) {
-		renderCubeThroughWalls(
-			poseStack = poseStack,
-			posX = aabb.minX,
-			posY = aabb.minY,
-			posZ = aabb.minZ,
-			width = aabb.xsize.toFloat(),
-			length = aabb.zsize.toFloat(),
-			height = aabb.ysize.toFloat(),
-			color = color
-		)
-	}
-
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		bufferSource: MultiBufferSource,
-		aabb: AABB,
-		color: Int
-	) {
-		renderCubeThroughWalls(
-			poseStack = poseStack,
-			bufferSource = bufferSource,
-			posX = aabb.minX,
-			posY = aabb.minY,
-			posZ = aabb.minZ,
-			width = aabb.xsize.toFloat(),
-			height = aabb.ysize.toFloat(),
-			depth = aabb.zsize.toFloat(),
-			color = color
-		)
-	}
-
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		posX: Number,
-		posY: Number,
-		posZ: Number,
-		width: Float,
-		length: Float,
-		height: Float,
-		color: Int
-	) {
-		renderCubeThroughWalls(
-			poseStack = poseStack,
-			bufferSource = defaultBufferSource(),
-			posX = posX,
-			posY = posY,
-			posZ = posZ,
-			width = width,
-			height = height,
-			depth = length,
-			color = color
-		)
-	}
-
-	fun renderCubeThroughWalls(
-		poseStack: PoseStack,
-		bufferSource: MultiBufferSource,
-		posX: Number,
-		posY: Number,
-		posZ: Number,
-		width: Float,
-		height: Float,
-		depth: Float,
-		color: Int
-	) {
-		val vertexConsumer = bufferSource
+		val vertexConsumer = defaultBufferSource()
 			.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
-
-		poseStack.pushPose()
-		poseStack.translate(posX.toDouble(), posY.toDouble(), posZ.toDouble())
-
 		val pose = poseStack.last()
 
-		for (direction in Direction.entries) {
-			for (vertex in getVertices(direction, width, height, depth)) {
-				addColoredVertex(
-					pose,
-					vertexConsumer,
-					color,
-					vertex.x,
-					vertex.y,
-					vertex.z
-				)
-			}
-		}
+		val minXFloat = minX.toFloat()
+		val minYFloat = minY.toFloat()
+		val minZFloat = minZ.toFloat()
+		val maxXFloat = maxX.toFloat()
+		val maxYFloat = maxY.toFloat()
+		val maxZFloat = maxZ.toFloat()
 
-		poseStack.popPose()
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, maxYFloat, maxZFloat,
+			maxXFloat, maxYFloat, maxZFloat,
+			maxXFloat, maxYFloat, minZFloat,
+			minXFloat, maxYFloat, minZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, minYFloat, minZFloat,
+			maxXFloat, minYFloat, minZFloat,
+			maxXFloat, minYFloat, maxZFloat,
+			minXFloat, minYFloat, maxZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			maxXFloat, minYFloat, minZFloat,
+			minXFloat, minYFloat, minZFloat,
+			minXFloat, maxYFloat, minZFloat,
+			maxXFloat, maxYFloat, minZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, minYFloat, maxZFloat,
+			maxXFloat, minYFloat, maxZFloat,
+			maxXFloat, maxYFloat, maxZFloat,
+			minXFloat, maxYFloat, maxZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			maxXFloat, minYFloat, maxZFloat,
+			maxXFloat, minYFloat, minZFloat,
+			maxXFloat, maxYFloat, minZFloat,
+			maxXFloat, maxYFloat, maxZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, minYFloat, minZFloat,
+			minXFloat, minYFloat, maxZFloat,
+			minXFloat, maxYFloat, maxZFloat,
+			minXFloat, maxYFloat, minZFloat
+		)
 	}
 
 	fun renderTexturedCube(
@@ -587,6 +482,29 @@ object AaronRenderUtil {
 	) {
 		consumer.addVertex(pose.pose(), x, y, z)
 			.setColor(color)
+	}
+
+	private fun addQuad(
+		pose: PoseStack.Pose,
+		consumer: VertexConsumer,
+		color: Int,
+		x1: Float,
+		y1: Float,
+		z1: Float,
+		x2: Float,
+		y2: Float,
+		z2: Float,
+		x3: Float,
+		y3: Float,
+		z3: Float,
+		x4: Float,
+		y4: Float,
+		z4: Float
+	) {
+		addColoredVertex(pose, consumer, color, x1, y1, z1)
+		addColoredVertex(pose, consumer, color, x2, y2, z2)
+		addColoredVertex(pose, consumer, color, x3, y3, z3)
+		addColoredVertex(pose, consumer, color, x4, y4, z4)
 	}
 
 	private fun addLine(
