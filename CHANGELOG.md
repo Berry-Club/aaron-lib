@@ -1,3 +1,7 @@
+# 1.17.0
+
+- A LOT of backend renderer changes
+
 # 1.16.0
 
 - Fixed the through-walls renderers to work with Sodium
