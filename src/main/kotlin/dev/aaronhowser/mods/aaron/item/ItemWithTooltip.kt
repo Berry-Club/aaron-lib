@@ -11,6 +11,7 @@ class ItemWithTooltip(
 ) : Item(properties) {
 
 	constructor(properties: Properties, tooltips: List<Component>) : this(properties, { tooltips })
+	constructor(properties: Properties, tooltip: Component) : this(properties, { listOf(tooltip) })
 
 	override fun appendHoverText(
 		stack: ItemStack,
