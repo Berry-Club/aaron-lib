@@ -1,5 +1,6 @@
 # 1.17.0
 
+- ItemWithTooltip
 - A LOT of backend renderer changes
 
 # 1.16.0
