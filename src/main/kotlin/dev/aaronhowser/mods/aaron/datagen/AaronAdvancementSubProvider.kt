@@ -29,7 +29,7 @@ abstract class AaronAdvancementSubProvider(
 		InventoryChangeTrigger.TriggerInstance.hasItems(*items)
 
 	protected fun Advancement.Builder.has(item: ItemLike): Advancement.Builder {
-		val name = item.asItem().builtInRegistryHolder().registeredName
+		val name = item.asItem().builtInRegistryHolder().key().location().path
 		return addCriterion("has_$name", hasItems(item))
 	}
 
