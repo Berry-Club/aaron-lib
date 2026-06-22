@@ -3,7 +3,10 @@ package dev.aaronhowser.mods.aaron.datagen
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementType
 import net.minecraft.advancements.CriteriaTriggers
+import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.ImpossibleTrigger
+import net.minecraft.advancements.critereon.InventoryChangeTrigger
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.chat.Component
 import net.minecraft.world.level.ItemLike
@@ -15,6 +18,15 @@ abstract class AaronAdvancementSubProvider(
 ) : AdvancementProvider.AdvancementGenerator {
 
 	protected fun advancement(): Advancement.Builder = Advancement.Builder.advancement()
+
+	protected fun hasItems(vararg items: ItemLike): Criterion<InventoryChangeTrigger.TriggerInstance> =
+		InventoryChangeTrigger.TriggerInstance.hasItems(*items)
+
+	protected fun hasItems(vararg items: ItemPredicate): Criterion<InventoryChangeTrigger.TriggerInstance> =
+		InventoryChangeTrigger.TriggerInstance.hasItems(*items)
+
+	protected fun hasItems(vararg items: ItemPredicate.Builder): Criterion<InventoryChangeTrigger.TriggerInstance> =
+		InventoryChangeTrigger.TriggerInstance.hasItems(*items)
 
 	protected fun Advancement.Builder.addImpossibleCriterion(): Advancement.Builder {
 		return addCriterion(
