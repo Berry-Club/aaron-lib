@@ -2,6 +2,7 @@
 
 - ItemWithTooltip
 - A LOT of backend renderer changes
+- Advancement stuff
 
 # 1.16.0
 
