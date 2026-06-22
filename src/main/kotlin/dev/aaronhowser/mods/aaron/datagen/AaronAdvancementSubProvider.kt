@@ -13,6 +13,7 @@ import net.neoforged.neoforge.common.data.AdvancementProvider
 import java.util.concurrent.CompletableFuture
 
 abstract class AaronAdvancementSubProvider(
+	val modId: String,
 	val lookupProvider: CompletableFuture<HolderLookup.Provider>
 ) : AdvancementProvider.AdvancementGenerator {
 
@@ -163,5 +164,7 @@ abstract class AaronAdvancementSubProvider(
 			hidden
 		)
 	}
+
+	protected fun modLoc(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(modId, path)
 
 }
