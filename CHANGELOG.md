@@ -3,6 +3,7 @@
 - ItemWithTooltip
 - A LOT of backend renderer changes
 - Advancement stuff
+- MutableList#shuffle
 
 # 1.16.0
 

@@ -330,6 +330,15 @@ object AaronExtensions {
 		return elementAt(random.nextInt(size))
 	}
 
+	fun <T> MutableList<T>.shuffle(random: RandomSource) {
+		for (i in lastIndex downTo 1) {
+			val j = random.nextInt(i + 1)
+			val temp = this[i]
+			this[i] = this[j]
+			this[j] = temp
+		}
+	}
+
 	fun AABB.randomX(random: RandomSource): Double = minX + (xsize * random.nextDouble())
 	fun AABB.randomY(random: RandomSource): Double = minY + (ysize * random.nextDouble())
 	fun AABB.randomZ(random: RandomSource): Double = minZ + (zsize * random.nextDouble())
