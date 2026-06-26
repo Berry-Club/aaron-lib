@@ -7,19 +7,27 @@ import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
 import net.neoforged.neoforge.client.model.generators.ModelBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
 
+@DslMarker
+@Target(AnnotationTarget.TYPE)
+annotation class AaronDslMarker
+
 object AaronDsls {
 
 	inline fun ModConfigSpec.Builder.section(
 		name: String,
-		block: () -> Unit
+		block: @AaronDslMarker ModConfigSpec.Builder.() -> Unit
 	) {
 		push(name)
-		block()
-		pop()
+
+		try {
+			block()
+		} finally {
+			pop()
+		}
 	}
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.element(
-		block: ModelBuilder<T>.ElementBuilder.() -> Unit
+		block: @AaronDslMarker ModelBuilder<T>.ElementBuilder.() -> Unit
 	): T {
 		val elementBuilder = this.element()
 		elementBuilder.block()
@@ -28,7 +36,7 @@ object AaronDsls {
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.ElementBuilder.face(
 		direction: Direction,
-		block: ModelBuilder<T>.ElementBuilder.FaceBuilder.() -> Unit
+		block: @AaronDslMarker ModelBuilder<T>.ElementBuilder.FaceBuilder.() -> Unit
 	): ModelBuilder<T>.ElementBuilder {
 		val faceBuilder = this.face(direction)
 		faceBuilder.block()
@@ -36,14 +44,16 @@ object AaronDsls {
 	}
 
 	inline fun ItemModelBuilder.override(
-		block: ItemModelBuilder.OverrideBuilder.() -> Unit
+		block: @AaronDslMarker ItemModelBuilder.OverrideBuilder.() -> Unit
 	): ItemModelBuilder {
 		val overrideBuilder = this.override()
 		overrideBuilder.block()
 		return overrideBuilder.end()
 	}
 
-	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.transforms(block: ModelBuilder<T>.TransformsBuilder.() -> Unit): T {
+	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.transforms(
+		block: @AaronDslMarker ModelBuilder<T>.TransformsBuilder.() -> Unit
+	): T {
 		val transformsBuilder = this.transforms()
 		transformsBuilder.block()
 		return transformsBuilder.end()
@@ -51,7 +61,7 @@ object AaronDsls {
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.TransformsBuilder.transform(
 		type: ItemDisplayContext,
-		block: ModelBuilder<T>.TransformsBuilder.TransformVecBuilder.() -> Unit
+		block: @AaronDslMarker ModelBuilder<T>.TransformsBuilder.TransformVecBuilder.() -> Unit
 	): ModelBuilder<T>.TransformsBuilder {
 		val transformVecBuilder = this.transform(type)
 		transformVecBuilder.block()

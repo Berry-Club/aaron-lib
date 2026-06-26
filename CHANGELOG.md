@@ -5,6 +5,7 @@
 - Advancement stuff
 - MutableList#shuffle
 - AaronLootTableDsl
+- Made the other DSLs more DSLy
 
 # 1.16.0
 
