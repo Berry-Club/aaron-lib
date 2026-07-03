@@ -3,10 +3,10 @@ name: Java CI (26.1)
 on:
     push:
         branches:
-            - '26.1'
+            - '26.1-Neoforge'
     workflow_dispatch:
         branches:
-            - '26.1'
+            - '26.1Neoforge'
         inputs:
             release_type:
                 description: 'Release Type'
