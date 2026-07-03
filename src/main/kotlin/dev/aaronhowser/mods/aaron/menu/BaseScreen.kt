@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.menu
 
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
@@ -10,10 +10,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu
 abstract class BaseScreen<M : AbstractContainerMenu>(
 	menu: M,
 	playerInventory: Inventory,
-	title: Component
-) : AbstractContainerScreen<M>(menu, playerInventory, title) {
-
-	protected abstract val background: ScreenBackground
+	title: Component,
+	protected val background: ScreenBackground
+) : AbstractContainerScreen<M>(menu, playerInventory, title, background.width, background.height) {
 
 	override fun isPauseScreen(): Boolean = false
 	protected open val showTitleLabel = true
@@ -31,9 +30,6 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 	open val inventoryLabelOffsetY: Int = 0
 
 	final override fun init() {
-		imageWidth = background.width
-		imageHeight = background.height
-
 		leftPos = (width - imageWidth) / 2
 		topPos = (height - imageHeight) / 2
 
@@ -42,9 +38,9 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 
 	open fun baseInit() {}
 
-	override fun renderLabels(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+	override fun extractLabels(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
 		if (showTitleLabel) {
-			guiGraphics.drawString(
+			graphics.text(
 				font,
 				title,
 				titleLabelX + titleLabelOffsetX,
@@ -55,7 +51,7 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 		}
 
 		if (showInventoryLabel) {
-			guiGraphics.drawString(
+			graphics.text(
 				font,
 				playerInventoryTitle,
 				inventoryLabelX + inventoryLabelOffsetX,
@@ -66,14 +62,9 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 		}
 	}
 
-	override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-		super.render(guiGraphics, mouseX, mouseY, partialTick)
-		this.renderTooltip(guiGraphics, mouseX, mouseY)
-	}
-
-	override fun renderBg(guiGraphics: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {
+	override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
 		this.background.render(
-			guiGraphics = guiGraphics,
+			graphics = graphics,
 			leftPos = this.leftPos,
 			topPos = this.topPos
 		)

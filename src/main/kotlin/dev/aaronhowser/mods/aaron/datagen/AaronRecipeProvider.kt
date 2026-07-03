@@ -2,8 +2,8 @@ package dev.aaronhowser.mods.aaron.datagen
 
 import net.minecraft.advancements.Criterion
 import net.minecraft.core.HolderLookup
-import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.data.recipes.ShapelessRecipeBuilder
@@ -11,12 +11,11 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ItemLike
-import java.util.concurrent.CompletableFuture
 
 abstract class AaronRecipeProvider(
-	output: PackOutput,
-	registries: CompletableFuture<HolderLookup.Provider>
-) : RecipeProvider(output, registries) {
+	registries: HolderLookup.Provider,
+	output: RecipeOutput
+) : RecipeProvider(registries, output) {
 
 	protected fun shapelessRecipe(
 		output: ItemLike,
@@ -25,7 +24,7 @@ abstract class AaronRecipeProvider(
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
 	): ShapelessRecipeBuilder {
-		var temp = ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, count)
+		var temp = shapeless(RecipeCategory.MISC, output, count)
 
 		for (requirement in requirements) {
 			temp = temp.requires(requirement)
@@ -48,7 +47,7 @@ abstract class AaronRecipeProvider(
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
-		var temp = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
+		var temp = shaped(RecipeCategory.MISC, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(output))
 
 		for (pattern in patterns.split(",")) {
 			temp = temp.pattern(pattern)
@@ -69,7 +68,7 @@ abstract class AaronRecipeProvider(
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
-		var temp = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, count)
+		var temp = shaped(RecipeCategory.MISC, output, count)
 
 		for (pattern in patterns.split(",")) {
 			temp = temp.pattern(pattern)

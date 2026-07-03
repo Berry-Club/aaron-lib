@@ -56,15 +56,15 @@ abstract class AaronDataComponentRegistry {
 		return register(name, UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC)
 	}
 
-	protected fun <T> registryKey(name: String, registryKey: ResourceKey<out Registry<T>>): DeferredHolder<DataComponentType<*>, DataComponentType<ResourceKey<T>>> {
+	protected fun <T : Any> registryKey(name: String, registryKey: ResourceKey<out Registry<T>>): DeferredHolder<DataComponentType<*>, DataComponentType<ResourceKey<T>>> {
 		return register(name, ResourceKey.codec(registryKey), ResourceKey.streamCodec(registryKey))
 	}
 
-	protected fun <T> registryHolder(name: String, registry: Registry<T>): DeferredHolder<DataComponentType<*>, DataComponentType<Holder<T>>> {
+	protected fun <T : Any> registryHolder(name: String, registry: Registry<T>): DeferredHolder<DataComponentType<*>, DataComponentType<Holder<T>>> {
 		return register(name, registry.holderByNameCodec(), ByteBufCodecs.holderRegistry(registry.key()))
 	}
 
-	protected fun <T> register(
+	protected fun <T : Any> register(
 		name: String,
 		codec: Codec<T>,
 		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>

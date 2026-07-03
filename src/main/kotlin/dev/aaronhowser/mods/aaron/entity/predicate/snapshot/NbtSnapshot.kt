@@ -2,11 +2,13 @@ package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
 import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
-import net.minecraft.advancements.critereon.NbtPredicate
+import net.minecraft.advancements.criterion.NbtPredicate
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.util.ProblemReporter
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.storage.TagValueOutput
 
 class NbtSnapshot(
 	val tag: CompoundTag
@@ -21,8 +23,9 @@ class NbtSnapshot(
 		val STREAM_CODEC: StreamCodec<ByteBuf, NbtSnapshot> = ByteBufCodecs.COMPOUND_TAG.map(::NbtSnapshot, NbtSnapshot::tag)
 
 		fun fromEntity(entity: Entity, includeKeys: List<String>): NbtSnapshot {
-			val entityNbt = CompoundTag()
-			entity.save(entityNbt)
+			val output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, entity.registryAccess())
+			entity.save(output)
+			val entityNbt = output.buildResult()
 
 			val filteredNbt = CompoundTag()
 

@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.registry.actual.AaronLootPoolEntryTypes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.storage.loot.LootContext
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
@@ -23,7 +22,7 @@ class LootItemStack(
 		stackConsumer.accept(itemStack.copy())
 	}
 
-	override fun getType(): LootPoolEntryType {
+	override fun codec(): MapCodec<out LootPoolSingletonContainer> {
 		return AaronLootPoolEntryTypes.ITEM_STACK.get()
 	}
 

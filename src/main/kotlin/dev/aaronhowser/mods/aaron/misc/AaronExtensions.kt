@@ -3,16 +3,16 @@ package dev.aaronhowser.mods.aaron.misc
 import com.mojang.datafixers.util.Either
 import net.minecraft.ChatFormatting
 import net.minecraft.core.*
-import net.minecraft.core.component.DataComponentPredicate
 import net.minecraft.core.component.DataComponentType
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.tags.TagAppender
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.IntTag
 import net.minecraft.network.chat.*
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
+import net.minecraft.core.UUIDUtil
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Unit
 import net.minecraft.world.ContainerHelper
@@ -45,12 +45,16 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.client.model.generators.ModelBuilder
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient
 import net.neoforged.neoforge.energy.EnergyStorage
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
+import net.minecraft.util.ProblemReporter
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.level.storage.TagValueOutput
+import java.net.URI
 import java.util.*
 import java.util.function.Predicate
 import java.util.function.Supplier
@@ -64,10 +68,12 @@ object AaronExtensions {
 	val Entity.isClientSide: Boolean get() = this.level().isClientSide
 	val Entity.isServerSide: Boolean get() = this.level().isServerSide
 
-	fun Player.status(message: Component) = this.displayClientMessage(message, true)
+	fun Player.status(message: Component) = this.sendOverlayMessage(message)
 	fun Player.status(message: String) = this.status(Component.literal(message))
 
-	fun LivingEntity.tell(message: Component) = this.sendSystemMessage(message)
+	fun LivingEntity.tell(message: Component) {
+		if (this is Player) this.sendSystemMessage(message)
+	}
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
 	fun Boolean?.isTrue(): Boolean = this == true
@@ -80,10 +86,10 @@ object AaronExtensions {
 	fun ItemStack.isItem(item: Item): Boolean = this.`is`(item)
 	fun ItemStack.isItem(tag: TagKey<Item>): Boolean = this.`is`(tag)
 
-	fun <T> Holder<T>.isHolder(location: ResourceLocation): Boolean = this.`is`(location)
-	fun <T> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
-	fun <T> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
-	fun <T> Holder<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
+	fun <T : Any> Holder<T>.isHolder(location: Identifier): Boolean = this.`is`(location)
+	fun <T : Any> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
+	fun <T : Any> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
+	fun <T : Any> Holder<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
 
 	fun BlockBehaviour.BlockStateBase.isBlock(block: Block): Boolean = this.`is`(block)
 	fun BlockBehaviour.BlockStateBase.isBlock(blockHolder: Holder<Block>): Boolean = this.`is`(blockHolder)
@@ -101,32 +107,25 @@ object AaronExtensions {
 	fun DamageSource.isDamageSource(tagKey: TagKey<DamageType>): Boolean = this.`is`(tagKey)
 	fun DamageSource.isDamageSource(resourceKey: ResourceKey<DamageType>): Boolean = this.`is`(resourceKey)
 
-	fun EntityType<*>.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.`is`(tagKey)
-	fun Entity.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.type.`is`(tagKey)
+	fun EntityType<*>.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.builtInRegistryHolder().`is`(tagKey)
+	fun Entity.isEntity(tagKey: TagKey<EntityType<*>>): Boolean = this.type.builtInRegistryHolder().`is`(tagKey)
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
-	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(this)
+	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(this))
 	fun ItemStack.asIngredient(strict: Boolean = false): Ingredient {
 		return if (isComponentsPatchEmpty) {
-			Ingredient.of(this)
+			Ingredient.of(this.item)
 		} else {
 			DataComponentIngredient.of(strict, this)
 		}
 	}
 
-	fun ItemLike.asIngredient(
-		predicate: DataComponentPredicate,
-		strict: Boolean = false
-	): Ingredient {
-		return DataComponentIngredient.of(strict, predicate, this)
-	}
-
-	fun <T> ItemLike.asIngredient(
+	fun <T : Any> ItemLike.asIngredient(
 		componentType: DataComponentType<in T>,
 		component: T,
+		strict: Boolean = false
 	): Ingredient {
-		val predicate = DataComponentPredicate.builder().expect(componentType, component).build()
-		return asIngredient(predicate)
+		return DataComponentIngredient.of(strict, componentType, component, this)
 	}
 
 	fun Entity.isMovingHorizontally(): Boolean {
@@ -146,13 +145,13 @@ object AaronExtensions {
 
 	fun ItemLike.getDefaultInstance(): ItemStack = this.asItem().defaultInstance
 
-	fun <T> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+	fun <T : Any> ItemLike.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		val stack = this.asItem().defaultInstance
 		stack.set(componentType, component)
 		return stack
 	}
 
-	fun <T> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
+	fun <T : Any> ItemStack.withComponent(componentType: DataComponentType<T>, component: T): ItemStack {
 		this.set(componentType, component)
 		return this
 	}
@@ -183,11 +182,14 @@ object AaronExtensions {
 	}
 
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
-		return if (this.hasUUID(key)) this.getUUID(key) else null
+		return this.getIntArray(key)
+			.filter { it.size == 4 }
+			.map(UUIDUtil::uuidFromIntArray)
+			.orElse(null)
 	}
 
 	fun CompoundTag.putUuidIfNotNull(key: String, uuid: UUID?): CompoundTag {
-		if (uuid != null) this.putUUID(key, uuid)
+		if (uuid != null) this.putIntArray(key, UUIDUtil.uuidToIntArray(uuid))
 		return this
 	}
 
@@ -202,12 +204,12 @@ object AaronExtensions {
 	@Suppress("UNCHECKED_CAST")
 	fun <T> Any?.cast(): T = this as T
 
-	fun Style.withHoverText(component: Component): Style = withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, component))
+	fun Style.withHoverText(component: Component): Style = withHoverEvent(HoverEvent.ShowText(component))
 	fun Style.withHoverText(text: String): Style = withHoverText(Component.literal(text))
-	fun Style.withClickToRunCommand(command: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
-	fun Style.withClickToSuggestCommand(command: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command))
-	fun Style.withClickToOpenUrl(url: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, url))
-	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text))
+	fun Style.withClickToRunCommand(command: String): Style = withClickEvent(ClickEvent.RunCommand(command))
+	fun Style.withClickToSuggestCommand(command: String): Style = withClickEvent(ClickEvent.SuggestCommand(command))
+	fun Style.withClickToOpenUrl(url: String): Style = withClickEvent(ClickEvent.OpenUrl(URI.create(url)))
+	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent.CopyToClipboard(text))
 
 	fun DeferredBlock<*>.defaultBlockState(): BlockState = this.get().defaultBlockState()
 
@@ -215,8 +217,9 @@ object AaronExtensions {
 	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
 
 	fun Entity.getMinimalTag(stripUniqueness: Boolean = true): CompoundTag {
-		val nbt = CompoundTag()
-		this.save(nbt)
+		val output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, this.registryAccess())
+		this.save(output)
+		val nbt = output.buildResult()
 		AaronUtil.cleanEntityNbt(nbt, stripUniqueness)
 		return nbt
 	}
@@ -256,9 +259,9 @@ object AaronExtensions {
 	fun ItemStack.isNotFull(): Boolean = this.count < this.maxStackSize
 
 	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
-	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)
+	fun Long.toChunkPos(): ChunkPos = ChunkPos(this.toInt(), (this shr 32).toInt())
 
-	fun <T> IntrinsicHolderTagsProvider.IntrinsicTagAppender<T>.add(vararg holders: Holder<T>): IntrinsicHolderTagsProvider.IntrinsicTagAppender<T> {
+	fun <T : Any> TagAppender<T, T>.add(vararg holders: Holder<T>): TagAppender<T, T> {
 		for (holder in holders) this.add(holder.value())
 		return this
 	}
@@ -276,43 +279,36 @@ object AaronExtensions {
 
 	fun ItemStack.toggleUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = toggleUnit(dataComponent.get())
 
-	fun CompoundTag.saveItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
-		ContainerHelper.saveAllItems(this, items, registries)
+	fun ValueOutput.saveItems(items: NonNullList<ItemStack>) {
+		ContainerHelper.saveAllItems(this, items)
 	}
 
-	fun CompoundTag.saveItems(container: SimpleContainer, registries: HolderLookup.Provider) {
-		saveItems(container.items, registries)
+	fun ValueOutput.saveItems(container: SimpleContainer) {
+		saveItems(container.items)
 	}
 
-	fun CompoundTag.loadItems(items: NonNullList<ItemStack>, registries: HolderLookup.Provider) {
-		ContainerHelper.loadAllItems(this, items, registries)
+	fun ValueInput.loadItems(items: NonNullList<ItemStack>) {
+		ContainerHelper.loadAllItems(this, items)
 	}
 
-	fun CompoundTag.loadItems(container: SimpleContainer, registries: HolderLookup.Provider) {
-		loadItems(container.items, registries)
+	fun ValueInput.loadItems(container: SimpleContainer) {
+		loadItems(container.items)
 	}
 
-	fun CompoundTag.saveEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
-		this.put(name, energyStorage.serializeNBT(registries))
+	fun ValueOutput.saveEnergy(name: String, energyStorage: EnergyStorage) {
+		energyStorage.serialize(this.child(name))
 	}
 
-	fun CompoundTag.loadEnergy(name: String, energyStorage: EnergyStorage, registries: HolderLookup.Provider) {
-		val energyTag = this.get(name)
-		if (energyTag is IntTag) {
-			energyStorage.deserializeNBT(registries, energyTag)
-		}
+	fun ValueInput.loadEnergy(name: String, energyStorage: EnergyStorage) {
+		this.child(name).ifPresent(energyStorage::deserialize)
 	}
 
 	fun Int.toRgb(): RGB = RGB.fromInt(this)
 	fun Int.toArgb(): ARGB = ARGB.fromInt(this)
 	fun Int.toRgba(): RGBA = RGBA.fromInt(this)
 
-	fun <T : ModelBuilder<T>> ModelBuilder<T>.particle(location: ResourceLocation): T {
-		return texture("particle", location)
-	}
-
-	fun String.toComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args)
-	fun String.toGrayComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args).withStyle(ChatFormatting.GRAY)
+	fun String.toComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args.map { it ?: "null" }.toTypedArray())
+	fun String.toGrayComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args.map { it ?: "null" }.toTypedArray()).withStyle(ChatFormatting.GRAY)
 
 	fun BlockPos.furtherThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) > distance.toDouble().pow(2)
 	fun Vec3.furtherThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) > distance.toDouble().pow(2)
@@ -346,8 +342,8 @@ object AaronExtensions {
 		return Vec3(randomX(random), randomY(random), randomZ(random))
 	}
 
-	fun Player.allItemStacks(): List<ItemStack> = inventory.compartments.flatten()
-	fun Player.allItemStacksSequence(): Sequence<ItemStack> = inventory.compartments.asSequence().flatten()
+	fun Player.allItemStacks(): List<ItemStack> = inventory.nonEquipmentItems
+	fun Player.allItemStacksSequence(): Sequence<ItemStack> = inventory.nonEquipmentItems.asSequence()
 	fun Player.getFirstItemStack(predicate: Predicate<ItemStack>): ItemStack? = allItemStacksSequence().firstOrNull(predicate::test)
 
 }

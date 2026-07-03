@@ -18,10 +18,10 @@ abstract class AaronBlockEntityTypeRegistry {
 		vararg validBlocks: DeferredBlock<*>
 	): DeferredHolder<BlockEntityType<*>, BlockEntityType<T>> {
 		return getBlockEntityRegistry().register(name, Supplier {
-			BlockEntityType.Builder.of(
+			BlockEntityType(
 				builder,
 				*validBlocks.map(DeferredBlock<*>::get).toTypedArray()
-			).build(null)
+			)
 		})
 	}
 

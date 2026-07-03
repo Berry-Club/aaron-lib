@@ -1,14 +1,12 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
-import com.mojang.blaze3d.systems.RenderSystem
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.Mth
+import net.minecraft.resources.Identifier
 
 open class ImprovedSpriteButton(
 	x: Int = 0,
@@ -17,7 +15,7 @@ open class ImprovedSpriteButton(
 	height: Int,
 	private val spriteWidth: Int,
 	private val spriteHeight: Int,
-	private val sprite: ResourceLocation,
+	private val sprite: Identifier,
 	onPress: OnPress,
 	message: Component = Component.empty(),
 	private val font: Font
@@ -34,12 +32,13 @@ open class ImprovedSpriteButton(
 		font: Font
 	) : this(x, y, width, height, menuSprite.width, menuSprite.height, menuSprite.texture, onPress, message, font)
 
-	override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-		baseRenderWidget(guiGraphics, mouseX, mouseY, partialTick)
+	override fun extractContents(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+		extractDefaultSprite(graphics)
 
 		val i = this.x + this.getWidth() / 2 - this.spriteWidth / 2
 		val j = this.y + this.getHeight() / 2 - this.spriteHeight / 2
-		guiGraphics.blitSprite(
+		graphics.blitSprite(
+			RenderPipelines.GUI_TEXTURED,
 			sprite,
 			i,
 			j,
@@ -48,34 +47,19 @@ open class ImprovedSpriteButton(
 		)
 
 		if (isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
-			renderToolTip(guiGraphics, mouseX, mouseY)
+			renderToolTip(graphics, mouseX, mouseY)
 		}
 	}
 
-	private fun renderToolTip(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+	private fun renderToolTip(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
 		if (this.message == Component.empty()) return
 
-		guiGraphics.renderComponentTooltip(
+		graphics.setComponentTooltipForNextFrame(
 			font,
 			listOf(this.message),
 			mouseX,
 			mouseY
 		)
-	}
-
-	override fun renderString(guiGraphics: GuiGraphics, font: Font, color: Int) {
-		// Do nothing
-	}
-
-	private fun baseRenderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-		val minecraft = Minecraft.getInstance()
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
-		RenderSystem.enableBlend()
-		RenderSystem.enableDepthTest()
-		guiGraphics.blitSprite(SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight())
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
-		val i = fgColor
-		this.renderString(guiGraphics, minecraft.font, i or (Mth.ceil(this.alpha * 255.0f) shl 24))
 	}
 
 }

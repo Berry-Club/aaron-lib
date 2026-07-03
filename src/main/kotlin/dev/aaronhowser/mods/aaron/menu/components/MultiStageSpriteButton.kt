@@ -1,12 +1,12 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
-import com.mojang.blaze3d.systems.RenderSystem
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
 import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.function.Supplier
 
 open class MultiStageSpriteButton(
@@ -32,8 +32,8 @@ open class MultiStageSpriteButton(
 	private val currentStage
 		get() = stages[currentStageGetter.get()]
 
-	override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-		baseRenderWidget(guiGraphics)
+	override fun extractContents(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+		extractDefaultSprite(graphics)
 
 		val sprite = currentStage.sprite
 
@@ -44,7 +44,8 @@ open class MultiStageSpriteButton(
 			val spriteLeft = this.x + this.getWidth() / 2 - spriteWidth / 2
 			val spriteTop = this.y + this.getHeight() / 2 - spriteHeight / 2
 
-			guiGraphics.blitSprite(
+			graphics.blitSprite(
+				RenderPipelines.GUI_TEXTURED,
 				sprite,
 				spriteLeft,
 				spriteTop,
@@ -54,14 +55,14 @@ open class MultiStageSpriteButton(
 		}
 
 		if (isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
-			renderToolTip(guiGraphics, mouseX, mouseY)
+			renderToolTip(graphics, mouseX, mouseY)
 		}
 	}
 
-	private fun renderToolTip(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+	private fun renderToolTip(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
 		if (this.message == Component.empty()) return
 
-		guiGraphics.renderComponentTooltip(
+		graphics.setComponentTooltipForNextFrame(
 			font,
 			listOf(this.message),
 			mouseX,
@@ -71,14 +72,6 @@ open class MultiStageSpriteButton(
 
 	override fun getMessage(): Component {
 		return currentStage.message
-	}
-
-	private fun baseRenderWidget(guiGraphics: GuiGraphics) {
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
-		RenderSystem.enableBlend()
-		RenderSystem.enableDepthTest()
-		guiGraphics.blitSprite(SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight())
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
 	}
 
 	class Builder(private val font: Font) {
@@ -109,7 +102,7 @@ open class MultiStageSpriteButton(
 
 		fun addStage(
 			message: Component,
-			sprite: ResourceLocation?,
+			sprite: Identifier?,
 			spriteWidth: Int = 0,
 			spriteHeight: Int = 0
 		): Builder {
@@ -173,7 +166,7 @@ open class MultiStageSpriteButton(
 
 	class Stage(
 		val message: Component,
-		val sprite: ResourceLocation?,
+		val sprite: Identifier?,
 		val spriteWidth: Int,
 		val spriteHeight: Int
 	)

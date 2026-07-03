@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.serialization
 
 import com.mojang.serialization.Codec
-import net.minecraft.Util
+import net.minecraft.util.Util
 import org.joml.Vector2d
 
 object AaronExtraCodecs {

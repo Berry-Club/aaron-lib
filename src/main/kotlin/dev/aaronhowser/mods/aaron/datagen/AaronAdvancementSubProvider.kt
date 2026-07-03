@@ -1,21 +1,22 @@
 package dev.aaronhowser.mods.aaron.datagen
 
 import net.minecraft.advancements.*
-import net.minecraft.advancements.critereon.ImpossibleTrigger
-import net.minecraft.advancements.critereon.InventoryChangeTrigger
-import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.criterion.ImpossibleTrigger
+import net.minecraft.advancements.criterion.InventoryChangeTrigger
+import net.minecraft.advancements.criterion.ItemPredicate
 import net.minecraft.core.HolderLookup
+import net.minecraft.data.advancements.AdvancementSubProvider
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.level.ItemLike
-import net.neoforged.neoforge.common.data.AdvancementProvider
 import java.util.concurrent.CompletableFuture
 
 abstract class AaronAdvancementSubProvider(
 	val modId: String,
 	val lookupProvider: CompletableFuture<HolderLookup.Provider>
-) : AdvancementProvider.AdvancementGenerator {
+) : AdvancementSubProvider {
 
 	protected fun advancement(): Advancement.Builder = Advancement.Builder.advancement()
 
@@ -29,7 +30,7 @@ abstract class AaronAdvancementSubProvider(
 		InventoryChangeTrigger.TriggerInstance.hasItems(*items)
 
 	protected fun Advancement.Builder.has(item: ItemLike): Advancement.Builder {
-		val name = item.asItem().builtInRegistryHolder().key().location().path
+		val name = item.asItem().builtInRegistryHolder().key().identifier().path
 		return addCriterion("has_$name", hasItems(item))
 	}
 
@@ -89,7 +90,7 @@ abstract class AaronAdvancementSubProvider(
 		hidden: Boolean = false
 	): Advancement.Builder {
 		return display(
-			icon,
+			icon.asItem(),
 			title,
 			description,
 			null,
@@ -110,7 +111,7 @@ abstract class AaronAdvancementSubProvider(
 		hidden: Boolean = false
 	): Advancement.Builder {
 		return display(
-			icon,
+			ItemStackTemplate.fromNonEmptyStack(icon),
 			title,
 			description,
 			null,
@@ -125,7 +126,7 @@ abstract class AaronAdvancementSubProvider(
 		icon: ItemLike,
 		title: Component,
 		description: Component,
-		background: ResourceLocation,
+		background: Identifier,
 		type: AdvancementType = AdvancementType.TASK,
 		showToast: Boolean = true,
 		announceToChat: Boolean = true,
@@ -147,14 +148,14 @@ abstract class AaronAdvancementSubProvider(
 		icon: ItemStack,
 		title: Component,
 		description: Component,
-		background: ResourceLocation,
+		background: Identifier,
 		type: AdvancementType = AdvancementType.TASK,
 		showToast: Boolean = true,
 		announceToChat: Boolean = true,
 		hidden: Boolean = false
 	): Advancement.Builder {
 		return display(
-			icon,
+			ItemStackTemplate.fromNonEmptyStack(icon),
 			title,
 			description,
 			background,
@@ -165,6 +166,6 @@ abstract class AaronAdvancementSubProvider(
 		)
 	}
 
-	protected fun modLoc(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(modId, path)
+	protected fun modLoc(path: String): Identifier = Identifier.fromNamespaceAndPath(modId, path)
 
 }

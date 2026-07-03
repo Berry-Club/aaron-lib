@@ -3,8 +3,11 @@ package dev.aaronhowser.mods.aaron.misc
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemDisplayContext
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
-import net.neoforged.neoforge.client.model.generators.ModelBuilder
+import net.neoforged.neoforge.client.model.generators.template.ElementBuilder
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder
+import net.neoforged.neoforge.client.model.generators.template.FaceBuilder
+import net.neoforged.neoforge.client.model.generators.template.RootTransformsBuilder
+import net.neoforged.neoforge.client.model.generators.template.TransformVecBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
 
 @DslMarker
@@ -26,46 +29,24 @@ object AaronDsls {
 		}
 	}
 
-	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.element(
-		block: @AaronDslMarker ModelBuilder<T>.ElementBuilder.() -> Unit
-	): T {
-		val elementBuilder = this.element()
-		elementBuilder.block()
-		return elementBuilder.end()
+	inline fun ExtendedModelTemplateBuilder.element(
+		crossinline block: @AaronDslMarker ElementBuilder.() -> Unit
+	): ExtendedModelTemplateBuilder {
+		return element { it.block() }
 	}
 
-	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.ElementBuilder.face(
+	inline fun ElementBuilder.face(
 		direction: Direction,
-		block: @AaronDslMarker ModelBuilder<T>.ElementBuilder.FaceBuilder.() -> Unit
-	): ModelBuilder<T>.ElementBuilder {
-		val faceBuilder = this.face(direction)
-		faceBuilder.block()
-		return faceBuilder.end()
+		crossinline block: @AaronDslMarker FaceBuilder.() -> Unit
+	): ElementBuilder {
+		return face(direction) { it.block() }
 	}
 
-	inline fun ItemModelBuilder.override(
-		block: @AaronDslMarker ItemModelBuilder.OverrideBuilder.() -> Unit
-	): ItemModelBuilder {
-		val overrideBuilder = this.override()
-		overrideBuilder.block()
-		return overrideBuilder.end()
-	}
-
-	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.transforms(
-		block: @AaronDslMarker ModelBuilder<T>.TransformsBuilder.() -> Unit
-	): T {
-		val transformsBuilder = this.transforms()
-		transformsBuilder.block()
-		return transformsBuilder.end()
-	}
-
-	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.TransformsBuilder.transform(
+	inline fun ExtendedModelTemplateBuilder.transform(
 		type: ItemDisplayContext,
-		block: @AaronDslMarker ModelBuilder<T>.TransformsBuilder.TransformVecBuilder.() -> Unit
-	): ModelBuilder<T>.TransformsBuilder {
-		val transformVecBuilder = this.transform(type)
-		transformVecBuilder.block()
-		return transformVecBuilder.end()
+		crossinline block: @AaronDslMarker TransformVecBuilder.() -> Unit
+	): ExtendedModelTemplateBuilder {
+		return transform(type) { it.block() }
 	}
 
 	inline fun PoseStack.withPose(block: () -> Unit) {

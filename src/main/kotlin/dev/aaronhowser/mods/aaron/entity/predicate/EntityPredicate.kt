@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import io.netty.buffer.ByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.Entity

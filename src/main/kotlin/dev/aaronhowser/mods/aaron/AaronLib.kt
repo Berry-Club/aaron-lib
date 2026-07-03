@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron
 
 import dev.aaronhowser.mods.aaron.config.ServerConfig
 import dev.aaronhowser.mods.aaron.registry.actual.AaronLootPoolEntryTypes
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.config.ModConfig
@@ -30,8 +30,8 @@ class AaronLib(
 		const val MOD_ID = "aaron"
 		val LOGGER: Logger = LogManager.getLogger(MOD_ID)
 
-		fun modResource(path: String): ResourceLocation =
-			ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
+		fun modResource(path: String): Identifier =
+			Identifier.fromNamespaceAndPath(MOD_ID, path)
 	}
 
 }

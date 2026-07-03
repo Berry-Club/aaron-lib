@@ -6,7 +6,7 @@ import net.minecraft.core.Registry
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.util.ByIdMap
 import net.minecraft.world.item.ItemStack
@@ -47,8 +47,8 @@ object AaronExtraStreamCodecs {
 			}
 		}
 
-	fun <T> tagKeyStreamCodec(registry: ResourceKey<out Registry<T>>): StreamCodec<ByteBuf, TagKey<T>> {
-		return ResourceLocation.STREAM_CODEC.map(
+	fun <T : Any> tagKeyStreamCodec(registry: ResourceKey<out Registry<T>>): StreamCodec<ByteBuf, TagKey<T>> {
+		return Identifier.STREAM_CODEC.map(
 			{ TagKey.create(registry, it) },
 			{ it.location() }
 		)

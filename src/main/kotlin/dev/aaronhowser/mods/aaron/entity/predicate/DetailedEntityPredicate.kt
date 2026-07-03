@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.MovementSnapshot
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.NbtSnapshot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import io.netty.buffer.ByteBuf
-import net.minecraft.advancements.critereon.*
+import net.minecraft.advancements.criterion.*
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.codec.ByteBufCodecs
@@ -46,7 +46,7 @@ class DetailedEntityPredicate(
 	fun getPassingSnapshot(): EntitySnapshot {
 		var et: EntityType<*>? = null
 		if (entityType.isPresent) {
-			et = BuiltInRegistries.ENTITY_TYPE.first { entityType.get().matches(it) }
+			et = BuiltInRegistries.ENTITY_TYPE.first { entityType.get().matches(it.builtInRegistryHolder()) }
 		}
 
 		var movement: MovementSnapshot? = null
@@ -72,18 +72,18 @@ class DetailedEntityPredicate(
 				fun pick(bounds: MinMaxBounds.Ints): Int {
 					if (bounds.isAny) return 0
 
-					val hasMin = bounds.min.isPresent
-					val hasMax = bounds.max.isPresent
+					val hasMin = bounds.min().isPresent
+					val hasMax = bounds.max().isPresent
 
 					if (hasMin && hasMax) {
-						val min = bounds.min.get()
-						val max = bounds.max.get()
+						val min = bounds.min().get()
+						val max = bounds.max().get()
 
 						return ((min + max) / 2.0).toInt()
 					} else if (hasMin) {
-						return bounds.min.get() + 1
+						return bounds.min().get() + 1
 					} else if (hasMax) {
-						return bounds.max.get() - 1
+						return bounds.max().get() - 1
 					} else {
 						return 0
 					}
@@ -115,7 +115,7 @@ class DetailedEntityPredicate(
 	}
 
 	override fun test(entitySnapshot: EntitySnapshot): Boolean {
-		if (entityType.isPresent && entitySnapshot.entityType != null && !entityType.get().matches(entitySnapshot.entityType)) return false
+		if (entityType.isPresent && entitySnapshot.entityType != null && !entityType.get().matches(entitySnapshot.entityType.builtInRegistryHolder())) return false
 		if (movement.isPresent && !entitySnapshot.movementSnapshot?.test(movement.get()).isTrue()) return false
 
 		if (effects.isPresent && !effects.get().matches(entitySnapshot.activeEffects)) return false

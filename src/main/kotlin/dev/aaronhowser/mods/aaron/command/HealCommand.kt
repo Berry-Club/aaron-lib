@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
-import net.neoforged.neoforge.common.EffectCures
+import net.minecraft.server.permissions.Permissions
 
 object HealCommand : AaronCommandHelper {
 
@@ -16,7 +16,7 @@ object HealCommand : AaronCommandHelper {
 	fun register(): ArgumentBuilder<CommandSourceStack, *> {
 		return literal("heal") {
 
-			requires { it.hasPermission(2) }
+			requires { it.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER) }
 
 			executes {
 				val source = it.source
@@ -50,7 +50,7 @@ object HealCommand : AaronCommandHelper {
 		)
 
 		target.heal(target.maxHealth)
-		target.removeEffectsCuredBy(EffectCures.MILK)
+		target.removeAllEffects()
 
 		if (target is Player) {
 			target.foodData.eat(100, 100f)

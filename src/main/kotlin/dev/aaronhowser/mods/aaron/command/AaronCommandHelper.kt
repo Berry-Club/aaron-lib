@@ -22,7 +22,7 @@ interface AaronCommandHelper {
 		return builder
 	}
 
-	fun <T> argument(
+	fun <T : Any> argument(
 		name: String,
 		type: ArgumentType<T>,
 		block: RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit = {}
@@ -48,7 +48,7 @@ interface AaronCommandHelper {
 		}
 	}
 
-	fun <T : ArgumentBuilder<CommandSourceStack, T>, A> T.thenArgument(
+	fun <T : ArgumentBuilder<CommandSourceStack, T>, A : Any> T.thenArgument(
 		name: String,
 		type: ArgumentType<A>,
 		block: RequiredArgumentBuilder<CommandSourceStack, A>.() -> Unit = {}

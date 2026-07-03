@@ -3,10 +3,8 @@ package dev.aaronhowser.mods.aaron.registry
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.level.block.Block
-import net.neoforged.neoforge.common.DeferredSpawnEggItem
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -60,8 +58,8 @@ abstract class AaronItemRegistry {
 		id: String,
 		block: DeferredBlock<out Block>,
 		properties: Item.Properties = Item.Properties()
-	): DeferredItem<ItemNameBlockItem> {
-		return getItemRegistry().registerItem(id) { ItemNameBlockItem(block.get(), properties) }
+	): DeferredItem<Item> {
+		return getItemRegistry().registerItem(id) { Item(properties.useItemDescriptionPrefix()) }
 	}
 
 	protected fun registerSpawnEgg(
@@ -75,12 +73,7 @@ abstract class AaronItemRegistry {
 			.registerItem(
 				name
 			) {
-				DeferredSpawnEggItem(
-					entityType,
-					backgroundColor,
-					highlightColor,
-					properties()
-				)
+				SpawnEggItem(properties().spawnEgg(entityType()))
 			}
 	}
 
