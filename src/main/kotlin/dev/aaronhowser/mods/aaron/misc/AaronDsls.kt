@@ -6,7 +6,6 @@ import net.minecraft.world.item.ItemDisplayContext
 import net.neoforged.neoforge.client.model.generators.template.ElementBuilder
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder
 import net.neoforged.neoforge.client.model.generators.template.FaceBuilder
-import net.neoforged.neoforge.client.model.generators.template.RootTransformsBuilder
 import net.neoforged.neoforge.client.model.generators.template.TransformVecBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
 

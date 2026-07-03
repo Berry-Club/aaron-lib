@@ -5,8 +5,8 @@ import net.minecraft.core.NonNullList
 import net.minecraft.core.Registry
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.Identifier
+import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
 import net.minecraft.util.ByIdMap
 import net.minecraft.world.item.ItemStack

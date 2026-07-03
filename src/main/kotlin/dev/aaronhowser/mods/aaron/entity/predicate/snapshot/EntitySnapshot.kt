@@ -62,10 +62,10 @@ data class EntitySnapshot(
 				),
 				EntitySnapshot::activeEffects,
 			) { entityType,
-				nbt,
-				flags,
-				movement,
-				effects ->
+			    nbt,
+			    flags,
+			    movement,
+			    effects ->
 				EntitySnapshot(
 					entityType.orElse(null),
 					nbt.orElse(null),

@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.aaron.misc
 import com.mojang.datafixers.util.Either
 import net.minecraft.ChatFormatting
 import net.minecraft.core.*
-import net.minecraft.core.UUIDUtil
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.tags.TagAppender

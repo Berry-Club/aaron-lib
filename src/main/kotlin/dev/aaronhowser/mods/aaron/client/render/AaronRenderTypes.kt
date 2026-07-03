@@ -4,9 +4,9 @@ import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.platform.CompareOp
 import dev.aaronhowser.mods.aaron.AaronLib
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.rendertype.LayeringTransform
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
-import net.minecraft.client.renderer.rendertype.LayeringTransform
 
 object AaronRenderTypes {
 

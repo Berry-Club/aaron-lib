@@ -4,10 +4,10 @@ import com.mojang.brigadier.builder.ArgumentBuilder
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.network.chat.Component
+import net.minecraft.server.permissions.Permissions
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.server.permissions.Permissions
 
 object HealCommand : AaronCommandHelper {
 
