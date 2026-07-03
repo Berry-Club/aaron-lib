@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.aaron.registry.actual
 
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.AaronLib
-import dev.aaronhowser.mods.aaron.datagen.LootItemStack
+import dev.aaronhowser.mods.aaron.datagen.loot.LootItemStack
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer
 import net.neoforged.neoforge.registries.DeferredHolder

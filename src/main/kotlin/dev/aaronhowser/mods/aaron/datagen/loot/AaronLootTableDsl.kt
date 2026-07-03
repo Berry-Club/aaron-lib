@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.datagen
+package dev.aaronhowser.mods.aaron.datagen.loot
 
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack

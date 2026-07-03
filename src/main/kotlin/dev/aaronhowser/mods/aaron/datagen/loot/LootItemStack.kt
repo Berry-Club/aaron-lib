@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.datagen
+package dev.aaronhowser.mods.aaron.datagen.loot
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
