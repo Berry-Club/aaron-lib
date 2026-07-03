@@ -38,14 +38,14 @@ abstract class AaronRecipeProvider(
 
 	protected fun shapedRecipe(
 		output: ItemStack,
-		patterns: String,
+		patterns: List<String>,
 		definitions: Map<Char, Ingredient>,
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
 		var temp = shaped(RecipeCategory.MISC, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(output))
 
-		for (pattern in patterns.split(",")) {
+		for (pattern in patterns) {
 			temp = temp.pattern(pattern)
 		}
 
@@ -59,14 +59,14 @@ abstract class AaronRecipeProvider(
 	protected fun shapedRecipe(
 		output: ItemLike,
 		count: Int,
-		patterns: String,
+		patterns: List<String>,
 		definitions: Map<Char, Ingredient>,
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
 		var temp = shaped(RecipeCategory.MISC, output, count)
 
-		for (pattern in patterns.split(",")) {
+		for (pattern in patterns) {
 			temp = temp.pattern(pattern)
 		}
 
@@ -79,7 +79,7 @@ abstract class AaronRecipeProvider(
 
 	protected fun shapedRecipe(
 		output: ItemLike,
-		patterns: String,
+		patterns: List<String>,
 		definitions: Map<Char, Ingredient>,
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
