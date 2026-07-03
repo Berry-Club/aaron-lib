@@ -6,7 +6,7 @@ import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.EntitySnapshot
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.FlagsSnapshot
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.MovementSnapshot
 import dev.aaronhowser.mods.aaron.entity.predicate.snapshot.NbtSnapshot
-import dev.aaronhowser.mods.aaron.misc.BooleanExtensions.isTrue
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import io.netty.buffer.ByteBuf
 import net.minecraft.advancements.criterion.*
 import net.minecraft.core.Holder
