@@ -46,7 +46,6 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient
-import net.neoforged.neoforge.energy.EnergyStorage
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.joml.Vector3f
@@ -54,6 +53,7 @@ import net.minecraft.util.ProblemReporter
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.level.storage.TagValueOutput
+import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler
 import java.net.URI
 import java.util.*
 import java.util.function.Predicate
@@ -295,11 +295,11 @@ object AaronExtensions {
 		loadItems(container.items)
 	}
 
-	fun ValueOutput.saveEnergy(name: String, energyStorage: EnergyStorage) {
+	fun ValueOutput.saveEnergy(name: String, energyStorage: SimpleEnergyHandler) {
 		energyStorage.serialize(this.child(name))
 	}
 
-	fun ValueInput.loadEnergy(name: String, energyStorage: EnergyStorage) {
+	fun ValueInput.loadEnergy(name: String, energyStorage: SimpleEnergyHandler) {
 		this.child(name).ifPresent(energyStorage::deserialize)
 	}
 
