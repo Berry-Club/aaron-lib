@@ -1,6 +1,7 @@
 # 1.17.0
 
 - ItemWithTooltip
+- ExtractOnlyInvWrapper has been replaced with ExtractOnlyResourceHandler for NeoForge's transfer API
 - A LOT of backend renderer changes
 - Advancement stuff
 - MutableList#shuffle
@@ -91,7 +92,7 @@
 - ModConfigSpec$Builder#section
 - ModelBuilder<T>#element
 - ModelBuilder<T>$ElementBuilder#face
-- ExtractOnlyInvWrapper
+- ExtractOnlyResourceHandler
 - ItemModelBuilder#override
 - CompoundTag#saveItems
 - CompoundTag#loadItems
