@@ -75,8 +75,8 @@ object AaronExtensions {
 
 	// Text and chat
 
-	fun String.toComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args.map { it ?: "null" }.toTypedArray())
-	fun String.toGrayComponent(vararg args: Any?): MutableComponent = Component.translatable(this, *args.map { it ?: "null" }.toTypedArray()).withStyle(ChatFormatting.GRAY)
+	fun String.toComponent(vararg args: Any): MutableComponent = Component.translatable(this, *args)
+	fun String.toGrayComponent(vararg args: Any): MutableComponent = Component.translatable(this, *args).withStyle(ChatFormatting.GRAY)
 
 	fun Style.withClickToCopyToClipboard(text: String): Style = withClickEvent(ClickEvent.CopyToClipboard(text))
 	fun Style.withClickToOpenUrl(url: String): Style = withClickEvent(ClickEvent.OpenUrl(URI.create(url)))
