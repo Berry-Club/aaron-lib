@@ -11,17 +11,17 @@ open class ScreenBackground(
 	private val canvasSize: Int = 256
 ) {
 	fun render(graphics: GuiGraphicsExtractor, leftPos: Int, topPos: Int) {
-		graphics.blitSprite(
+		graphics.blit(
 			RenderPipelines.GUI_TEXTURED,
 			this.texture,
-			this.canvasSize,
-			this.canvasSize,
-			0,
-			0,
 			leftPos,
 			topPos,
+			0f,
+			0f,
 			this.width,
-			this.height
+			this.height,
+			this.canvasSize,
+			this.canvasSize
 		)
 	}
 }
