@@ -249,6 +249,7 @@ object AaronExtensions {
 
 	fun Player.allItemStacks(): List<ItemStack> = allItemStacksSequence().toList()
 	fun Player.getFirstItemStack(predicate: Predicate<ItemStack>): ItemStack? = allItemStacksSequence().firstOrNull(predicate::test)
+	fun Player.hasItem(predicate: Predicate<ItemStack>): Boolean = allItemStacksSequence().any(predicate::test)
 
 	fun Player.getPovResult(range: Number = this.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)): BlockHitResult {
 		val asEntity = this as Entity

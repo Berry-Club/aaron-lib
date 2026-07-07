@@ -1,5 +1,6 @@
 # 26.1-1.17.0
 
+- Player#hasItem
 - Improve allItemStacksSequence
 - ItemWithTooltip
 - ExtractOnlyInvWrapper has been replaced with ExtractOnlyResourceHandler for NeoForge's transfer API
