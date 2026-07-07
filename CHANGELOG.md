@@ -1,9 +1,6 @@
 # 26.1-1.17.0
 
 - Improve allItemStacksSequence
-
-# 1.17.0
-
 - ItemWithTooltip
 - ExtractOnlyInvWrapper has been replaced with ExtractOnlyResourceHandler for NeoForge's transfer API
 - A LOT of backend renderer changes
