@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
+import java.util.function.Function
 import java.util.function.Supplier
 
 abstract class AaronItemRegistry {
@@ -23,11 +24,11 @@ abstract class AaronItemRegistry {
 	}
 
 	protected fun basic(id: String, properties: () -> Item.Properties): DeferredItem<Item> {
-		return getItemRegistry().registerItem(id) { Item(properties()) }
+		return register(id, ::Item, properties)
 	}
 
 	protected fun basic(id: String, properties: Supplier<Item.Properties>): DeferredItem<Item> {
-		return getItemRegistry().registerItem(id) { Item(properties.get()) }
+		return basic(id) { properties.get() }
 	}
 
 	protected fun <I : Item> register(
@@ -35,7 +36,11 @@ abstract class AaronItemRegistry {
 		builder: (Item.Properties) -> I,
 		properties: () -> Item.Properties = { Item.Properties() }
 	): DeferredItem<I> {
-		return getItemRegistry().registerItem(id) { builder(properties()) }
+		return getItemRegistry().registerItem(
+			id,
+			Function { itemProperties -> builder(itemProperties) },
+			Supplier { properties() }
+		)
 	}
 
 	protected fun <I : Item> register(
@@ -43,7 +48,7 @@ abstract class AaronItemRegistry {
 		builder: (Item.Properties) -> I,
 		properties: Item.Properties
 	): DeferredItem<I> {
-		return getItemRegistry().registerItem(id) { builder(properties) }
+		return register(id, builder) { properties }
 	}
 
 	protected fun <I : Item> register(
@@ -51,7 +56,7 @@ abstract class AaronItemRegistry {
 		builder: (Item.Properties) -> I,
 		properties: Supplier<Item.Properties>
 	): DeferredItem<I> {
-		return getItemRegistry().registerItem(id) { builder(properties.get()) }
+		return register(id, builder) { properties.get() }
 	}
 
 	protected fun registerItemNameBlockItem(
@@ -59,7 +64,7 @@ abstract class AaronItemRegistry {
 		block: DeferredBlock<out Block>,
 		properties: Item.Properties = Item.Properties()
 	): DeferredItem<Item> {
-		return getItemRegistry().registerItem(id) { Item(properties.useItemDescriptionPrefix()) }
+		return register(id, ::Item) { properties.useItemDescriptionPrefix() }
 	}
 
 	protected fun registerSpawnEgg(
@@ -69,12 +74,7 @@ abstract class AaronItemRegistry {
 		highlightColor: Int,
 		properties: () -> Item.Properties = { Item.Properties() }
 	): DeferredItem<SpawnEggItem> {
-		return getItemRegistry()
-			.registerItem(
-				name
-			) {
-				SpawnEggItem(properties().spawnEgg(entityType()))
-			}
+		return register(name, { itemProperties -> SpawnEggItem(itemProperties.spawnEgg(entityType())) }, properties)
 	}
 
 	companion object {
