@@ -244,8 +244,7 @@ object AaronExtensions {
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
 	fun Player.allItemStacksSequence(): Sequence<ItemStack> {
-		val nonEquipment = inventory.nonEquipmentItems
-		return nonEquipment.asSequence() + inventory.equipment.items.values.asSequence()
+		return inventory.nonEquipmentItems.asSequence() + inventory.equipment.items.values.asSequence()
 	}
 
 	fun Player.allItemStacks(): List<ItemStack> = allItemStacksSequence().toList()
