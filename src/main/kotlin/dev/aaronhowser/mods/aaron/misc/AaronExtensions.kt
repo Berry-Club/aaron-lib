@@ -243,8 +243,12 @@ object AaronExtensions {
 
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
-	fun Player.allItemStacks(): List<ItemStack> = inventory.nonEquipmentItems
-	fun Player.allItemStacksSequence(): Sequence<ItemStack> = inventory.nonEquipmentItems.asSequence()
+	fun Player.allItemStacksSequence(): Sequence<ItemStack> {
+		val nonEquipment = inventory.nonEquipmentItems
+		return nonEquipment.asSequence() + inventory.equipment.items.values.asSequence()
+	}
+
+	fun Player.allItemStacks(): List<ItemStack> = allItemStacksSequence().toList()
 	fun Player.getFirstItemStack(predicate: Predicate<ItemStack>): ItemStack? = allItemStacksSequence().firstOrNull(predicate::test)
 
 	fun Player.getPovResult(range: Number = this.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)): BlockHitResult {

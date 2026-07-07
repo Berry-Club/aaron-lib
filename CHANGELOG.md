@@ -1,3 +1,7 @@
+# 21.6-1.18.0
+
+- Improve allItemStacksSequence
+
 # 1.17.0
 
 - ItemWithTooltip
