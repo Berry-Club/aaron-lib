@@ -1,4 +1,4 @@
-# 21.6-1.18.0
+# 26.1-1.17.0
 
 - Improve allItemStacksSequence
 
