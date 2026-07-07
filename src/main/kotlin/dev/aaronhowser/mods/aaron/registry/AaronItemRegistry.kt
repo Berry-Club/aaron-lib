@@ -70,11 +70,14 @@ abstract class AaronItemRegistry {
 	protected fun registerSpawnEgg(
 		name: String,
 		entityType: () -> EntityType<out Mob>,
-		backgroundColor: Int,
-		highlightColor: Int,
 		properties: () -> Item.Properties = { Item.Properties() }
 	): DeferredItem<SpawnEggItem> {
-		return register(name, { itemProperties -> SpawnEggItem(itemProperties.spawnEgg(entityType())) }, properties)
+		return register(
+			name, { itemProperties ->
+				SpawnEggItem(itemProperties.spawnEgg(entityType()))
+			},
+			properties
+		)
 	}
 
 	companion object {
