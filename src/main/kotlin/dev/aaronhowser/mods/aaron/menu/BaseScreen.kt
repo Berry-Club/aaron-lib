@@ -45,7 +45,7 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 				title,
 				titleLabelX + titleLabelOffsetX,
 				titleLabelY + titleLabelOffsetY,
-				4210752,
+				0xFF404040.toInt(),
 				false
 			)
 		}
@@ -56,13 +56,15 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 				playerInventoryTitle,
 				inventoryLabelX + inventoryLabelOffsetX,
 				inventoryLabelY + inventoryLabelOffsetY,
-				4210752,
+				0xFF404040.toInt(),
 				false
 			)
 		}
 	}
 
 	override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+		super.extractBackground(graphics, mouseX, mouseY, partialTick)
+
 		this.background.render(
 			graphics = graphics,
 			leftPos = this.leftPos,
