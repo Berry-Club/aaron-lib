@@ -36,7 +36,17 @@ abstract class MenuWithInventory(
 		}
 	}
 
-	open fun addSlots() {}
+	protected fun addSlots(playerInventoryY: Int) {
+		require(slots.isEmpty()) {
+			"MenuWithInventory#addSlots must be called before adding any slots"
+		}
+
+		addPlayerInventorySlots(playerInventoryY)
+		addContainerSlots()
+		requirePlayerInventorySlotsFirst()
+	}
+
+	protected open fun addContainerSlots() {}
 
 	override fun quickMoveStack(player: Player, clickedSlotIndex: Int): ItemStack {
 		val clickedSlot = slots.getOrNull(clickedSlotIndex)
@@ -68,6 +78,18 @@ abstract class MenuWithInventory(
 
 		clickedSlot.onTake(player, clickedStack)
 		return originalStack
+	}
+
+	private fun requirePlayerInventorySlotsFirst() {
+		require(slots.size >= PLAYER_INVENTORY_SLOT_COUNT) {
+			"MenuWithInventory requires the first $PLAYER_INVENTORY_SLOT_COUNT slots to be the player inventory, but only ${slots.size} slots were added"
+		}
+
+		for (slotIndex in 0 until PLAYER_INVENTORY_SLOT_COUNT) {
+			require(slots[slotIndex].container === playerInventory) {
+				"MenuWithInventory requires player inventory slots to be added before machine slots; slot $slotIndex belongs to ${slots[slotIndex].container}"
+			}
+		}
 	}
 
 	private companion object {
