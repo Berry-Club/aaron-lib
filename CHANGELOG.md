@@ -1,3 +1,7 @@
+# 1.17.1
+
+- Fixed AaronUtil#getGridSpiralPos
+
 # 1.17.0
 
 - ItemWithTooltip
