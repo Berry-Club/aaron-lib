@@ -36,7 +36,10 @@ abstract class MenuWithInventory(
 		}
 	}
 
-	protected fun addSlots(playerInventoryY: Int) {
+	/**
+	 * Adds the player inventory slots first, then calls [addContainerSlots].
+	 */
+	protected open fun addSlots(playerInventoryY: Int) {
 		require(slots.isEmpty()) {
 			"MenuWithInventory#addSlots must be called before adding any slots"
 		}
@@ -55,14 +58,10 @@ abstract class MenuWithInventory(
 		val clickedStack = clickedSlot.item
 		val originalStack = clickedStack.copy()
 
-		val wasItemMoved = when {
-			clickedSlotIndex < PLAYER_INVENTORY_SLOT_COUNT -> {
-				moveItemStackTo(clickedStack, MACHINE_SLOT_START_INDEX, slots.size, false)
-					|| clickedSlotIndex < HOTBAR_START_INDEX && moveItemStackTo(clickedStack, HOTBAR_START_INDEX, PLAYER_INVENTORY_SLOT_COUNT, false)
-					|| clickedSlotIndex >= HOTBAR_START_INDEX && moveItemStackTo(clickedStack, 0, HOTBAR_START_INDEX, false)
-			}
-
-			else -> moveItemStackTo(clickedStack, 0, PLAYER_INVENTORY_SLOT_COUNT, true)
+		val wasItemMoved = if (clickedSlotIndex < PLAYER_INVENTORY_SLOT_COUNT) {
+			moveFromPlayerInventory(clickedStack, clickedSlotIndex)
+		} else {
+			moveItemStackTo(clickedStack, 0, PLAYER_INVENTORY_SLOT_COUNT, true)
 		}
 
 		if (!wasItemMoved) return ItemStack.EMPTY
@@ -78,6 +77,16 @@ abstract class MenuWithInventory(
 
 		clickedSlot.onTake(player, clickedStack)
 		return originalStack
+	}
+
+	private fun moveFromPlayerInventory(stack: ItemStack, clickedSlotIndex: Int): Boolean {
+		if (moveItemStackTo(stack, MACHINE_SLOT_START_INDEX, slots.size, false)) return true
+
+		return if (clickedSlotIndex < HOTBAR_START_INDEX) {
+			moveItemStackTo(stack, HOTBAR_START_INDEX, PLAYER_INVENTORY_SLOT_COUNT, false)
+		} else {
+			moveItemStackTo(stack, 0, HOTBAR_START_INDEX, false)
+		}
 	}
 
 	private fun requirePlayerInventorySlotsFirst() {
