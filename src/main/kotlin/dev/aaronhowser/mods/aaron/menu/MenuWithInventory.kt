@@ -39,7 +39,7 @@ abstract class MenuWithInventory(
 	/**
 	 * Adds the player inventory slots first, then calls [addContainerSlots].
 	 */
-	protected open fun addSlots(playerInventoryY: Int) {
+	protected fun addSlots(playerInventoryY: Int) {
 		require(slots.isEmpty()) {
 			"MenuWithInventory#addSlots must be called before adding any slots"
 		}
