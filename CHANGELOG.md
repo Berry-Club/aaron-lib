@@ -2,6 +2,7 @@
 
 - Fixed AaronUtil#getGridSpiralPos
 - Fixed MenuWithInventory#quickMoveStack when machine slots are added after player inventory slots
+- Fixed menu labels moving when you open/close jei etc
 
 # 26.1-1.17.0
 

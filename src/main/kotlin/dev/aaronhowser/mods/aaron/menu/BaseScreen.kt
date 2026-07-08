@@ -30,8 +30,12 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 	open val inventoryLabelOffsetY: Int = 0
 
 	final override fun init() {
-		leftPos = (width - imageWidth) / 2
-		topPos = (height - imageHeight) / 2
+		super.init()
+
+		titleLabelX = 8
+		titleLabelY = 6
+		inventoryLabelX = 8
+		inventoryLabelY = imageHeight - 94
 
 		baseInit()
 	}
