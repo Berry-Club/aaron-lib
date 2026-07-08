@@ -34,8 +34,12 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 		imageWidth = background.width
 		imageHeight = background.height
 
-		leftPos = (width - imageWidth) / 2
-		topPos = (height - imageHeight) / 2
+		super.init()
+
+		titleLabelX = 8
+		titleLabelY = 6
+		inventoryLabelX = 8
+		inventoryLabelY = imageHeight - 94
 
 		baseInit()
 	}
