@@ -58,7 +58,7 @@ abstract class MenuWithInventory(
 		val clickedStack = clickedSlot.item
 		val originalStack = clickedStack.copy()
 
-		val wasItemMoved = if (clickedSlotIndex < PLAYER_INVENTORY_SLOT_COUNT) {
+		val wasItemMoved = if (isPlayerInventorySlot(clickedSlotIndex)) {
 			moveFromPlayerInventory(clickedStack, clickedSlotIndex)
 		} else {
 			moveItemStackTo(clickedStack, 0, PLAYER_INVENTORY_SLOT_COUNT, true)
@@ -77,6 +77,10 @@ abstract class MenuWithInventory(
 
 		clickedSlot.onTake(player, clickedStack)
 		return originalStack
+	}
+
+	protected fun isPlayerInventorySlot(slotIndex: Int): Boolean {
+		return slotIndex in 0 until PLAYER_INVENTORY_SLOT_COUNT
 	}
 
 	private fun moveFromPlayerInventory(stack: ItemStack, clickedSlotIndex: Int): Boolean {
@@ -101,10 +105,10 @@ abstract class MenuWithInventory(
 		}
 	}
 
-	private companion object {
-		private const val PLAYER_INVENTORY_SLOT_COUNT = 36
-		private const val HOTBAR_START_INDEX = 27
-		private const val MACHINE_SLOT_START_INDEX = PLAYER_INVENTORY_SLOT_COUNT
+	companion object {
+		protected const val PLAYER_INVENTORY_SLOT_COUNT = 36
+		protected const val HOTBAR_START_INDEX = 27
+		protected const val MACHINE_SLOT_START_INDEX = PLAYER_INVENTORY_SLOT_COUNT
 	}
 
 }

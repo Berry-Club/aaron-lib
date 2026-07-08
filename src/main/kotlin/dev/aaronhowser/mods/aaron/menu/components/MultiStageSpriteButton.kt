@@ -59,7 +59,7 @@ open class MultiStageSpriteButton(
 	}
 
 	private fun renderToolTip(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
-		if (this.message == Component.empty()) return
+		if (this.message === Component.empty()) return
 
 		guiGraphics.renderComponentTooltip(
 			font,
