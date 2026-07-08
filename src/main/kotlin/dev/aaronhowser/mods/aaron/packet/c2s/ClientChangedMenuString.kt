@@ -19,6 +19,8 @@ class ClientChangedMenuString(
 		val player = context.player() as? ServerPlayer ?: return
 		val playerMenu = player.containerMenu
 
+		if (!playerMenu.stillValid(player)) return
+
 		if (playerMenu is MenuWithStrings) {
 			playerMenu.receiveString(stringId, newString)
 		}
