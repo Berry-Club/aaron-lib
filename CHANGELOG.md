@@ -1,6 +1,7 @@
 # 26.1-1.17.1
 
 - Fixed AaronUtil#getGridSpiralPos
+- Fixed MenuWithInventory#quickMoveStack when machine slots are added after player inventory slots
 
 # 26.1-1.17.0
 
