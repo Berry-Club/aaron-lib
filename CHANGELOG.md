@@ -1,3 +1,7 @@
+# 26.1-1.17.1
+
+- Fixed AaronUtil#getGridSpiralPos
+
 # 26.1-1.17.0
 
 - Player#hasItem

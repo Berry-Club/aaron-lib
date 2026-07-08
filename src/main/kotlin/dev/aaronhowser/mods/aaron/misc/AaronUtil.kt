@@ -74,6 +74,7 @@ object AaronUtil {
 	}
 
 	fun getGridSpiralPos(index: Int): Pair<Int, Int> {
+		require(index >= 0) { "index must be non-negative" }
 		if (index == 0) return 0 to 0
 
 		// The ring's distance from the center
@@ -85,7 +86,7 @@ object AaronUtil {
 		val sideLength = 2 * ring
 		val posInRing = index - ringStart                        // How far into this ring the index is
 		val side = posInRing / sideLength                        // Which of the 4 sides of the ring the index is on
-		val offset = posInRing % sideLength - ring                // How far along the side the index is
+		val offset = posInRing % sideLength                      // How far along the side the index is
 
 		return when (side) {
 			0 -> ring - posInRing to -ring
