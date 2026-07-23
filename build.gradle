@@ -211,10 +211,14 @@ publishMods {
 	file = jar.archiveFile
 	displayName = "Aaron ${project.minecraft_version} ${project.version}"
 	changelog = "https://github.com/Berry-Club/aaron-lib/blob/master/CHANGELOG.md#" + project.mod_version.toString().replace(".", "")
-	type = STABLE
 	modLoaders.add("neoforge")
 
+	type = ENV.RELEASE_TYPE == "beta"
+			? BETA
+			: ENV.RELEASE_TYPE == "alpha" ? ALPHA : STABLE
+
 	if (ENV.CURSEFORGE_KEY) {
+		//noinspection GroovyAssignabilityCheck
 		curseforge {
 			accessToken = providers.environmentVariable("CURSEFORGE_KEY")
 			projectId = project.curseforge_id
@@ -226,6 +230,7 @@ publishMods {
 	}
 
 	if (ENV.MODRINTH_TOKEN) {
+		//noinspection GroovyAssignabilityCheck
 		modrinth {
 			accessToken = providers.environmentVariable("MODRINTH_TOKEN")
 			projectId = project.modrinth_id
