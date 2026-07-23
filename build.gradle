@@ -227,6 +227,7 @@ unifiedPublishing {
 			curseforge {
 				token = ENV.CURSEFORGE_KEY
 				id = project.curseforge_id
+				gameVersions.addAll("Client", "Server")
 			}
 		}
 
