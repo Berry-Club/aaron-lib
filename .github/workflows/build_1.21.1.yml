@@ -57,33 +57,24 @@ jobs:
               with:
                   arguments: publish --stacktrace
 
-            - name: Read release properties
-              id: release-properties
+            - name: Release to CurseForge
+              uses: gradle/gradle-build-action@v3
               if: ${{ github.event_name == 'workflow_dispatch' && inputs.release_type != 'none' }}
-              shell: bash
-              run: |
-                  mod_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
-                  echo "mod-version=$mod_version" >> "$GITHUB_OUTPUT"
-                  echo "changelog-anchor=${mod_version//./}" >> "$GITHUB_OUTPUT"
-                  sed -n \
-                    -e 's/^minecraft_version=/minecraft-version=/p' \
-                    -e 's/^curseforge_id=/curseforge-id=/p' \
-                    -e 's/^modrinth_id=/modrinth-id=/p' \
-                    gradle.properties >> "$GITHUB_OUTPUT"
-
-            - name: Release to CurseForge and Modrinth
-              uses: Kira-NT/mc-publish@v3
-              if: ${{ github.event_name == 'workflow_dispatch' && inputs.release_type != 'none' }}
+              env:
+                  GIT_COMMIT: ${{ github.event.after }}
+                  GIT_PREVIOUS_COMMIT: ${{ github.event.before }}
+                  CURSEFORGE_KEY: ${{ secrets.CURSEFORGE_KEY }}
+                  RELEASE_TYPE: ${{ inputs.release_type }}
               with:
-                  curseforge-id: ${{ steps.release-properties.outputs.curseforge-id }}
-                  curseforge-token: ${{ secrets.CURSEFORGE_KEY }}
-                  modrinth-id: ${{ steps.release-properties.outputs.modrinth-id }}
-                  modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-                  files: build/libs/!(*-@(dev|sources|javadoc)).jar
-                  name: Aaron ${{ steps.release-properties.outputs.minecraft-version }} ${{ steps.release-properties.outputs.mod-version }}-build.${{ github.run_number }}
-                  version: ${{ steps.release-properties.outputs.mod-version }}-build.${{ github.run_number }}
-                  version-type: ${{ inputs.release_type }}
-                  changelog: https://github.com/Berry-Club/aaron-lib/blob/master/CHANGELOG.md#${{ steps.release-properties.outputs.changelog-anchor }}
-                  loaders: neoforge
-                  game-versions: ${{ steps.release-properties.outputs.minecraft-version }}
-                  dependencies: kotlin-for-forge(required)
+                  arguments: publishUnified --stacktrace
+
+            - name: Release to Modrinth
+              uses: gradle/gradle-build-action@v3
+              if: ${{ github.event_name == 'workflow_dispatch' && inputs.release_type != 'none' }}
+              env:
+                  GIT_COMMIT: ${{ github.event.after }}
+                  GIT_PREVIOUS_COMMIT: ${{ github.event.before }}
+                  MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+                  RELEASE_TYPE: ${{ inputs.release_type }}
+              with:
+                  arguments: publishUnified --stacktrace
