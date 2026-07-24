@@ -1,3 +1,7 @@
+# 1.17.2
+
+- Added useful contracts
+
 # 1.17.1
 
 - Fixed AaronUtil#getGridSpiralPos

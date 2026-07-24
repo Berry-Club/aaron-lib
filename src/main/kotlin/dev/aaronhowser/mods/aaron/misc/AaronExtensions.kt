@@ -54,6 +54,8 @@ import org.joml.Vector3f
 import java.util.*
 import java.util.function.Predicate
 import java.util.function.Supplier
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.math.pow
 
 @Suppress("unused")
@@ -70,8 +72,23 @@ object AaronExtensions {
 	fun LivingEntity.tell(message: Component) = this.sendSystemMessage(message)
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
-	fun Boolean?.isTrue(): Boolean = this == true
-	fun Boolean?.isNotTrue(): Boolean = this != true
+	@OptIn(ExperimentalContracts::class)
+	fun Boolean?.isTrue(): Boolean {
+		contract {
+			returns(true) implies (this@isTrue != null)
+		}
+
+		return this == true
+	}
+
+	@OptIn(ExperimentalContracts::class)
+	fun Boolean?.isNotTrue(): Boolean {
+		contract {
+			returns(false) implies (this@isNotTrue != null)
+		}
+
+		return this != true
+	}
 
 	fun DyeColor.getDyeName(): String = this.getName()
 	fun Direction.getDirectionName(): String = this.getName()
