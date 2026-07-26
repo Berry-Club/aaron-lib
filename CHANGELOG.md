@@ -1,3 +1,9 @@
+# 1.18.0
+
+- Some useful stuff for held-item container menus
+  - HeldItemMenu
+  - UnmodifiableSlot
+
 # 1.17.2
 
 - Added useful contracts
