@@ -2,6 +2,7 @@
 
 - Some useful stuff for held-item container menus
   - HeldItemMenu
+  - HeldItemMenuWithoutInventory
   - UnmodifiableSlot
 
 # 1.17.2

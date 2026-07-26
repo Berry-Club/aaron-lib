@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.aaron.menu
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.inventory.Slot
@@ -12,9 +11,9 @@ import net.minecraft.world.item.ItemStack
 abstract class HeldItemMenu(
 	menuType: MenuType<*>?,
 	containerId: Int,
-	protected val playerInventory: Inventory,
+	playerInventory: Inventory,
 	protected val usedHand: InteractionHand,
-) : AbstractContainerMenu(menuType, containerId) {
+) : MenuWithInventory(menuType, containerId, playerInventory) {
 
 	private val lockedInventorySlot = when (usedHand) {
 		InteractionHand.MAIN_HAND -> playerInventory.selected
@@ -23,7 +22,7 @@ abstract class HeldItemMenu(
 
 	private var lockedMenuSlot = NO_SLOT
 
-	protected fun addPlayerSlot(inventorySlot: Int, x: Int, y: Int) {
+	final override fun addPlayerSlot(inventorySlot: Int, x: Int, y: Int) {
 		val slot = if (inventorySlot == lockedInventorySlot) {
 			UnmodifiableSlot(playerInventory, inventorySlot, x, y)
 		} else {
@@ -46,10 +45,8 @@ abstract class HeldItemMenu(
 	override fun quickMoveStack(player: Player, slotIndex: Int): ItemStack {
 		if (slotIndex == lockedMenuSlot) return ItemStack.EMPTY
 
-		return quickMoveStackFromUnlockedSlot(player, slotIndex)
+		return super.quickMoveStack(player, slotIndex)
 	}
-
-	protected abstract fun quickMoveStackFromUnlockedSlot(player: Player, slotIndex: Int): ItemStack
 
 	final override fun stillValid(player: Player): Boolean {
 		return isValidHeldItem(player.getItemInHand(usedHand))
