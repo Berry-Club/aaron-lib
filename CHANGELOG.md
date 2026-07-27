@@ -1,10 +1,10 @@
-# 1.18.1
-
-- Fixed a missing class that didn't get committed
-
 # 1.19.0
 
 - InteractionHand.getEquipmentSlot(): EquipmentSlot
+
+# 1.18.1
+
+- Fixed a missing class that didn't get committed
 
 # 1.18.0
 
