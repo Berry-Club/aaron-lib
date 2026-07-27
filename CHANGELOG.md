@@ -1,3 +1,7 @@
+# 1.18.1
+
+- Fixed a missing class that didn't get committed
+
 # 1.18.0
 
 - Some useful stuff for held-item container menus
