@@ -2,6 +2,10 @@
 
 - Fixed a missing class that didn't get committed
 
+# 1.19.0
+
+- InteractionHand.getEquipmentSlot(): EquipmentSlot
+
 # 1.18.0
 
 - Some useful stuff for held-item container menus
