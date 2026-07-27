@@ -16,13 +16,11 @@ import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Unit
 import net.minecraft.world.ContainerHelper
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.item.ItemEntity
@@ -368,14 +366,5 @@ object AaronExtensions {
 	fun Player.allItemStacks(): List<ItemStack> = inventory.compartments.flatten()
 	fun Player.allItemStacksSequence(): Sequence<ItemStack> = inventory.compartments.asSequence().flatten()
 	fun Player.getFirstItemStack(predicate: Predicate<ItemStack>): ItemStack? = allItemStacksSequence().firstOrNull(predicate::test)
-
-	fun InteractionHand.getEquipmentSlot(): EquipmentSlot {
-		@Suppress("REDUNDANT_ELSE_IN_WHEN")
-		return when (this) {
-			InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
-			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
-			else -> error("Bro has three hands")
-		}
-	}
 
 }
