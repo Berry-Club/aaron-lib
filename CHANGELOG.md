@@ -1,5 +1,6 @@
 # 1.19.0
 
+- Update KFF to 5.12.0 and Kotlin to 2.4.0 (from 2.1.21)
 - InteractionHand.getEquipmentSlot(): EquipmentSlot
 
 # 1.18.1
