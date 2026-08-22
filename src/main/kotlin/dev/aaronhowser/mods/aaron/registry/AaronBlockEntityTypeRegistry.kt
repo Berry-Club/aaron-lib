@@ -11,7 +11,6 @@ abstract class AaronBlockEntityTypeRegistry {
 
 	abstract fun getBlockEntityRegistry(): DeferredRegister<BlockEntityType<*>>
 
-	@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 	protected fun <T : BlockEntity> register(
 		name: String,
 		builder: BlockEntityType.BlockEntitySupplier<out T>,

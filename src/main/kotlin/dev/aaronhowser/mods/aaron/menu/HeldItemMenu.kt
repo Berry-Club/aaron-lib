@@ -42,10 +42,10 @@ abstract class HeldItemMenu(
 		super.clicked(slotId, button, clickType, player)
 	}
 
-	override fun quickMoveStack(player: Player, slotIndex: Int): ItemStack {
-		if (slotIndex == lockedMenuSlot) return ItemStack.EMPTY
+	override fun quickMoveStack(player: Player, clickedSlotIndex: Int): ItemStack {
+		if (clickedSlotIndex == lockedMenuSlot) return ItemStack.EMPTY
 
-		return super.quickMoveStack(player, slotIndex)
+		return super.quickMoveStack(player, clickedSlotIndex)
 	}
 
 	final override fun stillValid(player: Player): Boolean {

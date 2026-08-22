@@ -140,7 +140,7 @@ object AaronExtensions {
 		return DataComponentIngredient.of(strict, predicate, this)
 	}
 
-	fun <T> ItemLike.asIngredient(
+	fun <T : Any> ItemLike.asIngredient(
 		componentType: DataComponentType<in T>,
 		component: T,
 	): Ingredient {
