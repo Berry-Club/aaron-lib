@@ -9,15 +9,17 @@ import net.neoforged.neoforge.client.model.generators.ModelBuilder
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
 
-@DslMarker
-@Target(AnnotationTarget.TYPE)
-annotation class AaronDslMarker
-
 object AaronDsls {
+
+	@DslMarker
+	@Target(AnnotationTarget.TYPE)
+	annotation class AaronDslMarker
+
+	typealias AaronDslBlock<T> = @AaronDslMarker T.() -> Unit
 
 	inline fun ModConfigSpec.Builder.section(
 		name: String,
-		block: @AaronDslMarker ModConfigSpec.Builder.() -> Unit
+		block: AaronDslBlock<ModConfigSpec.Builder>
 	) {
 		push(name)
 
@@ -29,7 +31,7 @@ object AaronDsls {
 	}
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.element(
-		block: @AaronDslMarker ModelBuilder<T>.ElementBuilder.() -> Unit
+		block: AaronDslBlock<ModelBuilder<T>.ElementBuilder>
 	): T {
 		val elementBuilder = this.element()
 		elementBuilder.block()
@@ -38,7 +40,7 @@ object AaronDsls {
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.ElementBuilder.face(
 		direction: Direction,
-		block: @AaronDslMarker ModelBuilder<T>.ElementBuilder.FaceBuilder.() -> Unit
+		block: AaronDslBlock<ModelBuilder<T>.ElementBuilder.FaceBuilder>
 	): ModelBuilder<T>.ElementBuilder {
 		val faceBuilder = this.face(direction)
 		faceBuilder.block()
@@ -46,7 +48,7 @@ object AaronDsls {
 	}
 
 	inline fun ItemModelBuilder.override(
-		block: @AaronDslMarker ItemModelBuilder.OverrideBuilder.() -> Unit
+		block: AaronDslBlock<ItemModelBuilder.OverrideBuilder>
 	): ItemModelBuilder {
 		val overrideBuilder = this.override()
 		overrideBuilder.block()
@@ -54,7 +56,9 @@ object AaronDsls {
 	}
 
 	inline fun MultiPartBlockStateBuilder.part(
-		block: @AaronDslMarker ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder>.() -> Unit
+		block: AaronDslBlock<
+				ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder>
+				>
 	): MultiPartBlockStateBuilder.PartBuilder {
 		val partBuilder = this.part()
 		partBuilder.block()
@@ -62,7 +66,7 @@ object AaronDsls {
 	}
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.transforms(
-		block: @AaronDslMarker ModelBuilder<T>.TransformsBuilder.() -> Unit
+		block: AaronDslBlock<ModelBuilder<T>.TransformsBuilder>
 	): T {
 		val transformsBuilder = this.transforms()
 		transformsBuilder.block()
@@ -71,7 +75,7 @@ object AaronDsls {
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.TransformsBuilder.transform(
 		type: ItemDisplayContext,
-		block: @AaronDslMarker ModelBuilder<T>.TransformsBuilder.TransformVecBuilder.() -> Unit
+		block: AaronDslBlock<ModelBuilder<T>.TransformsBuilder.TransformVecBuilder>
 	): ModelBuilder<T>.TransformsBuilder {
 		val transformVecBuilder = this.transform(type)
 		transformVecBuilder.block()
