@@ -3,8 +3,10 @@ package dev.aaronhowser.mods.aaron.misc
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemDisplayContext
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
 import net.neoforged.neoforge.client.model.generators.ModelBuilder
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
 
 @DslMarker
@@ -49,6 +51,14 @@ object AaronDsls {
 		val overrideBuilder = this.override()
 		overrideBuilder.block()
 		return overrideBuilder.end()
+	}
+
+	inline fun MultiPartBlockStateBuilder.part(
+		block: @AaronDslMarker ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder>.() -> Unit
+	): MultiPartBlockStateBuilder.PartBuilder {
+		val partBuilder = this.part()
+		partBuilder.block()
+		return partBuilder.addModel()
 	}
 
 	inline fun <T : ModelBuilder<T>> ModelBuilder<T>.transforms(
