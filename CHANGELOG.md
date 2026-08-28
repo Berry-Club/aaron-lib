@@ -1,3 +1,9 @@
+# 1.20.0
+
+- BlockBrokenTrigger
+- PlayerActionTrigger
+- More advancement helper stuff
+
 # 1.19.0
 
 - Update KFF to 5.12.0 and Kotlin to 2.4.0 (from 2.1.21)

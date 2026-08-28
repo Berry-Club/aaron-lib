@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron
 
 import dev.aaronhowser.mods.aaron.config.ServerConfig
+import dev.aaronhowser.mods.aaron.registry.actual.AaronCriterionTriggers
 import dev.aaronhowser.mods.aaron.registry.actual.AaronLootPoolEntryTypes
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.ModContainer
@@ -22,6 +23,7 @@ class AaronLib(
 		LOGGER.log(Level.INFO, "On the scene.")
 
 		AaronLootPoolEntryTypes.LOOT_POOL_ENTRY_TYPE_REGISTRY.register(MOD_BUS)
+		AaronCriterionTriggers.TRIGGER_REGISTRY.register(MOD_BUS)
 
 		modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG_SPEC)
 	}
