@@ -95,6 +95,8 @@ object AaronExtensions {
 	fun DyeColor.getDyeName(): String = this.getName()
 	fun Direction.getDirectionName(): String = this.getName()
 
+	fun DyeColor.getNameComponent(): MutableComponent = Component.translatable("color.minecraft.${this.getName()}")
+
 	fun ItemStack.isItem(item: Holder<Item>): Boolean = this.`is`(item)
 	fun ItemStack.isItem(item: Item): Boolean = this.`is`(item)
 	fun ItemStack.isItem(tag: TagKey<Item>): Boolean = this.`is`(tag)
