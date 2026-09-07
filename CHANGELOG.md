@@ -3,6 +3,8 @@
 - BlockBrokenTrigger
 - PlayerActionTrigger
 - More advancement helper stuff
+- BaseScreen#buttonClicked
+- ClientClickedMenuButton#isShiftDown
 
 # 1.19.0
 
