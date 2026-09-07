@@ -3,8 +3,6 @@
 - BlockBrokenTrigger
 - PlayerActionTrigger
 - More advancement helper stuff
-- ScreenWithButtons
-- 
 
 # 1.19.0
 
