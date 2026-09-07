@@ -358,6 +358,18 @@ object AaronExtensions {
 		}
 	}
 
+	inline fun <reified T : Enum<T>> T.nextEnum(): T {
+		val values = enumValues<T>()
+		val nextIndex = (ordinal + 1) % values.size
+		return values[nextIndex]
+	}
+
+	inline fun <reified T : Enum<T>> T.prevEnum(): T {
+		val values = enumValues<T>()
+		val prevIndex = (ordinal - 1 + values.size) % values.size
+		return values[prevIndex]
+	}
+
 	fun AABB.randomX(random: RandomSource): Double = minX + (xsize * random.nextDouble())
 	fun AABB.randomY(random: RandomSource): Double = minY + (ysize * random.nextDouble())
 	fun AABB.randomZ(random: RandomSource): Double = minZ + (zsize * random.nextDouble())

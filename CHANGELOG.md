@@ -5,6 +5,8 @@
 - More advancement helper stuff
 - BaseScreen#buttonClicked
 - ClientClickedMenuButton#isShiftDown
+- <T : Enum<T>>.nextEnum()
+- <T : Enum<T>>.prevEnum()
 
 # 1.19.0
 
