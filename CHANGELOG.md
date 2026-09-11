@@ -9,6 +9,7 @@
 
 - Reworked networking around Forge 1.20.1 `SimpleChannel` messages and `FriendlyByteBuf`
 - Reworked registries around Forge `DeferredRegister` and `RegistryObject`
+- Replaced Unified Publishing with Mod Publish Plugin for CurseForge and Modrinth releases
 - Reworked item, entity, block entity, rendering, and data-generation code for the 1.20.1 Minecraft API
 - Targets Java 17, Forge 47.4, and Kotlin for Forge 4.12
 
