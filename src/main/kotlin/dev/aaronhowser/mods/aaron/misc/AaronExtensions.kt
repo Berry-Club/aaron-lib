@@ -16,12 +16,14 @@ import net.minecraft.util.ProblemReporter
 import net.minecraft.util.RandomSource
 import net.minecraft.util.Unit
 import net.minecraft.world.ContainerHelper
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
@@ -57,6 +59,8 @@ import java.net.URI
 import java.util.*
 import java.util.function.Predicate
 import java.util.function.Supplier
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.math.pow
 
 @Suppress("unused")
@@ -67,8 +71,23 @@ object AaronExtensions {
 	@Suppress("UNCHECKED_CAST")
 	fun <T> Any?.cast(): T = this as T
 
-	fun Boolean?.isNotTrue(): Boolean = this != true
-	fun Boolean?.isTrue(): Boolean = this == true
+	@OptIn(ExperimentalContracts::class)
+	fun Boolean?.isNotTrue(): Boolean {
+		contract {
+			returns(false) implies (this@isNotTrue != null)
+		}
+
+		return this != true
+	}
+
+	@OptIn(ExperimentalContracts::class)
+	fun Boolean?.isTrue(): Boolean {
+		contract {
+			returns(true) implies (this@isTrue != null)
+		}
+
+		return this == true
+	}
 
 	fun Either<*, *>.isLeft(): Boolean = this.left().isPresent
 	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
@@ -188,6 +207,7 @@ object AaronExtensions {
 
 	fun Direction.getDirectionName(): String = this.getName()
 	fun DyeColor.getDyeName(): String = this.getName()
+	fun DyeColor.getNameComponent(): MutableComponent = Component.translatable("color.minecraft.${this.getName()}")
 
 	fun <T : Any> Holder<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
 	fun <T : Any> Holder<T>.isHolder(location: Identifier): Boolean = this.`is`(location)
@@ -303,6 +323,25 @@ object AaronExtensions {
 
 	fun Number.toDegrees(): Double = Math.toDegrees(this.toDouble())
 	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
+
+	inline fun <reified T : Enum<T>> T.nextEnum(): T {
+		val values = enumValues<T>()
+		val nextIndex = (ordinal + 1) % values.size
+		return values[nextIndex]
+	}
+
+	inline fun <reified T : Enum<T>> T.prevEnum(): T {
+		val values = enumValues<T>()
+		val previousIndex = (ordinal - 1 + values.size) % values.size
+		return values[previousIndex]
+	}
+
+	fun InteractionHand.getEquipmentSlot(): EquipmentSlot {
+		return when (this) {
+			InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
+			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
+		}
+	}
 
 	// Colors
 

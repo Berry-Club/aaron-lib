@@ -1,3 +1,20 @@
+# 26.1-1.20.0
+
+- BlockBrokenTrigger
+- PlayerActionTrigger
+- More advancement helper stuff
+- BaseScreen#buttonClicked
+- ClientClickedMenuButton#isShiftDown
+- <T : Enum<T>>#nextEnum()
+- <T : Enum<T>>#prevEnum()
+- DyeColor#getNameComponent()
+- Update KFF to 6.3.0 and Kotlin to 2.4.0
+- InteractionHand#getEquipmentSlot()
+- HeldItemMenu
+- HeldItemMenuWithoutInventory
+- UnmodifiableSlot
+- Added useful contracts
+
 # 26.1-1.17.1
 
 - Fixed AaronUtil#getGridSpiralPos

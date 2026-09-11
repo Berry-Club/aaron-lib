@@ -11,7 +11,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
 class ClientClickedMenuButton(
-	private val buttonId: Int
+	private val buttonId: Int,
+	private val isShiftDown: Boolean = false
 ) : AaronPacket() {
 
 	override fun handleOnServer(context: IPayloadContext) {
@@ -21,7 +22,7 @@ class ClientClickedMenuButton(
 		if (!playerMenu.stillValid(player)) return
 
 		if (playerMenu is MenuWithButtons) {
-			playerMenu.handleButtonPressed(buttonId)
+			playerMenu.handleButtonPressed(buttonId, isShiftDown)
 		}
 	}
 
@@ -36,6 +37,7 @@ class ClientClickedMenuButton(
 		val STREAM_CODEC: StreamCodec<ByteBuf, ClientClickedMenuButton> =
 			StreamCodec.composite(
 				ByteBufCodecs.VAR_INT, ClientClickedMenuButton::buttonId,
+				ByteBufCodecs.BOOL, ClientClickedMenuButton::isShiftDown,
 				::ClientClickedMenuButton
 			)
 	}

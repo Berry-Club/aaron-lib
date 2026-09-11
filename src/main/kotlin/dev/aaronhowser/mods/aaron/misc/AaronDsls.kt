@@ -9,15 +9,17 @@ import net.neoforged.neoforge.client.model.generators.template.FaceBuilder
 import net.neoforged.neoforge.client.model.generators.template.TransformVecBuilder
 import net.neoforged.neoforge.common.ModConfigSpec
 
-@DslMarker
-@Target(AnnotationTarget.TYPE)
-annotation class AaronDslMarker
-
 object AaronDsls {
+
+	@DslMarker
+	@Target(AnnotationTarget.TYPE)
+	annotation class AaronDslMarker
+
+	typealias AaronDslBlock<T> = @AaronDslMarker T.() -> Unit
 
 	inline fun ModConfigSpec.Builder.section(
 		name: String,
-		block: @AaronDslMarker ModConfigSpec.Builder.() -> Unit
+		block: AaronDslBlock<ModConfigSpec.Builder>
 	) {
 		push(name)
 
@@ -29,21 +31,21 @@ object AaronDsls {
 	}
 
 	inline fun ExtendedModelTemplateBuilder.element(
-		crossinline block: @AaronDslMarker ElementBuilder.() -> Unit
+		crossinline block: AaronDslBlock<ElementBuilder>
 	): ExtendedModelTemplateBuilder {
 		return element { it.block() }
 	}
 
 	inline fun ElementBuilder.face(
 		direction: Direction,
-		crossinline block: @AaronDslMarker FaceBuilder.() -> Unit
+		crossinline block: AaronDslBlock<FaceBuilder>
 	): ElementBuilder {
 		return face(direction) { it.block() }
 	}
 
 	inline fun ExtendedModelTemplateBuilder.transform(
 		type: ItemDisplayContext,
-		crossinline block: @AaronDslMarker TransformVecBuilder.() -> Unit
+		crossinline block: AaronDslBlock<TransformVecBuilder>
 	): ExtendedModelTemplateBuilder {
 		return transform(type) { it.block() }
 	}

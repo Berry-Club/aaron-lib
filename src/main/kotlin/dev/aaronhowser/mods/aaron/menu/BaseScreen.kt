@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.menu
 
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
+import dev.aaronhowser.mods.aaron.packet.c2s.ClientClickedMenuButton
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
@@ -41,6 +42,13 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 	}
 
 	open fun baseInit() {}
+
+	fun buttonClicked(buttonId: Int) {
+		ClientClickedMenuButton(
+			buttonId = buttonId,
+			isShiftDown = minecraft.options.keyShift.isDown
+		).messageServer()
+	}
 
 	override fun extractLabels(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
 		if (showTitleLabel) {

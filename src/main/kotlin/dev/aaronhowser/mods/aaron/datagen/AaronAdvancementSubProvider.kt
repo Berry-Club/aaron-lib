@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.aaron.datagen
 
+import dev.aaronhowser.mods.aaron.advancement.PlayerActionTrigger
 import net.minecraft.advancements.*
 import net.minecraft.advancements.criterion.ImpossibleTrigger
 import net.minecraft.advancements.criterion.InventoryChangeTrigger
@@ -28,6 +29,9 @@ abstract class AaronAdvancementSubProvider(
 
 	protected fun hasItems(vararg items: ItemPredicate.Builder): Criterion<InventoryChangeTrigger.TriggerInstance> =
 		InventoryChangeTrigger.TriggerInstance.hasItems(*items)
+
+	protected fun playerAction(action: Identifier): Criterion<PlayerActionTrigger.TriggerInstance> =
+		PlayerActionTrigger.TriggerInstance.action(action)
 
 	protected fun Advancement.Builder.has(item: ItemLike): Advancement.Builder {
 		val name = item.asItem().builtInRegistryHolder().key().identifier().path
