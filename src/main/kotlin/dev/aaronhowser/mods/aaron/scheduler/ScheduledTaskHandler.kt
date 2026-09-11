@@ -14,7 +14,7 @@ class ScheduledTaskHandler(
 	fun run(delay: Int, task: RepeatingTask) {
 		val st = ScheduledTask(this, task, levelTime.asLong + delay)
 
-		if (delay > 0 && !st.tick()) {
+		if (delay > 0 || !st.tick()) {
 			newTasks.add(st)
 		}
 	}

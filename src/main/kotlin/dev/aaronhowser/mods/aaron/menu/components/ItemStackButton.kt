@@ -7,7 +7,7 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
-class ItemStackButton(
+open class ItemStackButton(
 	x: Int = 0,
 	y: Int = 0,
 	width: Int,
@@ -27,7 +27,7 @@ class ItemStackButton(
 	}
 
 	private fun renderToolTip(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
-		if (this.message == Component.empty()) return
+		if (this.message === Component.empty()) return
 
 		guiGraphics.renderComponentTooltip(
 			font,

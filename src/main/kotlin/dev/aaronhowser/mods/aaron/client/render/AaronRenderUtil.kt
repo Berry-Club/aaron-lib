@@ -18,9 +18,17 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.sqrt
 
-object RenderUtil {
+@Suppress("unused")
+object AaronRenderUtil {
 
 	private val HALF_SQRT_3: Float = (sqrt(3.0) / 2.0).toFloat()
+	private const val FULL_BRIGHT: Int = 0xF000F0
+
+	private fun defaultBufferSource(): MultiBufferSource.BufferSource {
+		return Minecraft.getInstance()
+			.renderBuffers()
+			.bufferSource()
+	}
 
 	fun renderRaysDoubleLayer(
 		poseStack: PoseStack,
@@ -120,6 +128,7 @@ object RenderUtil {
 
 		for (rayIndex in 0 until amountRays) {
 			quaternionf
+				.identity()
 				.rotateXYZ(
 					randomSource.nextFloat() * (Math.PI * 2).toFloat(),
 					randomSource.nextFloat() * (Math.PI * 2).toFloat(),
@@ -161,16 +170,27 @@ object RenderUtil {
 		end: Vec3,
 		color: Int
 	) {
-		val vertexConsumer = Minecraft.getInstance()
-			.renderBuffers()
-			.bufferSource()
-			.getBuffer(AaronRenderTypes.linesThroughWalls())
+		renderLineThroughWalls(
+			poseStack = poseStack,
+			bufferSource = defaultBufferSource(),
+			start = start,
+			end = end,
+			color = color
+		)
+	}
+
+	fun renderLineThroughWalls(
+		poseStack: PoseStack,
+		bufferSource: MultiBufferSource,
+		start: Vec3,
+		end: Vec3,
+		color: Int
+	) {
+		val vertexConsumer = bufferSource
+			.getBuffer(AaronRenderTypes.LINES_THROUGH_WALLS)
 
 		val pose = poseStack.last()
-
 		val normalVec = start.vectorTo(end).normalize()
-
-		poseStack.pushPose()
 
 		addVertex(
 			pose,
@@ -193,62 +213,150 @@ object RenderUtil {
 			normalY = normalVec.y.toFloat(),
 			normalZ = normalVec.z.toFloat()
 		)
-
-		poseStack.popPose()
 	}
 
-	fun renderCubeThroughWalls(
+	fun renderCubeWireframe(
 		poseStack: PoseStack,
-		center: Vec3,
-		width: Float,
+		minX: Double,
+		minY: Double,
+		minZ: Double,
+		maxX: Double,
+		maxY: Double,
+		maxZ: Double,
 		color: Int
 	) {
-		renderCubeThroughWalls(
-			poseStack,
-			center.x - width / 2,
-			center.y - width / 2,
-			center.z - width / 2,
-			width,
-			width,
-			width,
-			color
+		renderCubeWireframe(
+			poseStack = poseStack,
+			minX = minX.toFloat(),
+			minY = minY.toFloat(),
+			minZ = minZ.toFloat(),
+			maxX = maxX.toFloat(),
+			maxY = maxY.toFloat(),
+			maxZ = maxZ.toFloat(),
+			color = color,
+			renderType = RenderType.lines()
 		)
 	}
 
-	fun renderCubeThroughWalls(
+	fun renderCubeWireframeThroughWalls(
 		poseStack: PoseStack,
-		posX: Number,
-		posY: Number,
-		posZ: Number,
-		width: Float,
-		length: Float,
-		height: Float,
+		minX: Double,
+		minY: Double,
+		minZ: Double,
+		maxX: Double,
+		maxY: Double,
+		maxZ: Double,
 		color: Int
 	) {
-		val vertexConsumer = Minecraft.getInstance()
-			.renderBuffers()
-			.bufferSource()
-			.getBuffer(AaronRenderTypes.quadsThroughWalls())
+		renderCubeWireframe(
+			poseStack = poseStack,
+			minX = minX.toFloat(),
+			minY = minY.toFloat(),
+			minZ = minZ.toFloat(),
+			maxX = maxX.toFloat(),
+			maxY = maxY.toFloat(),
+			maxZ = maxZ.toFloat(),
+			color = color,
+			renderType = AaronRenderTypes.LINES_THROUGH_WALLS
+		)
+	}
 
-		poseStack.pushPose()
-		poseStack.translate(posX.toDouble(), posY.toDouble(), posZ.toDouble())
+	private fun renderCubeWireframe(
+		poseStack: PoseStack,
+		minX: Float,
+		minY: Float,
+		minZ: Float,
+		maxX: Float,
+		maxY: Float,
+		maxZ: Float,
+		color: Int,
+		renderType: RenderType
+	) {
+		val vertexConsumer = defaultBufferSource().getBuffer(renderType)
+		val pose = poseStack.last()
 
-		for (direction in Direction.entries) {
-			val pose = poseStack.last()
-			val vertices = getVertices(direction, width, if (direction.axis.isVertical) length else height)
+		// X-axis edges
+		addLine(pose, vertexConsumer, color, minX, minY, minZ, maxX, minY, minZ)
+		addLine(pose, vertexConsumer, color, minX, minY, maxZ, maxX, minY, maxZ)
+		addLine(pose, vertexConsumer, color, minX, maxY, minZ, maxX, maxY, minZ)
+		addLine(pose, vertexConsumer, color, minX, maxY, maxZ, maxX, maxY, maxZ)
 
-			for (vertex in vertices) {
-				addVertex(
-					pose,
-					vertexConsumer,
-					color,
-					vertex.x, vertex.y, vertex.z,
-					0f, 0f
-				)
-			}
-		}
+		// Z-axis edges
+		addLine(pose, vertexConsumer, color, minX, minY, minZ, minX, minY, maxZ)
+		addLine(pose, vertexConsumer, color, maxX, minY, minZ, maxX, minY, maxZ)
+		addLine(pose, vertexConsumer, color, minX, maxY, minZ, minX, maxY, maxZ)
+		addLine(pose, vertexConsumer, color, maxX, maxY, minZ, maxX, maxY, maxZ)
 
-		poseStack.popPose()
+		// Y-axis edges
+		addLine(pose, vertexConsumer, color, minX, minY, minZ, minX, maxY, minZ)
+		addLine(pose, vertexConsumer, color, maxX, minY, minZ, maxX, maxY, minZ)
+		addLine(pose, vertexConsumer, color, minX, minY, maxZ, minX, maxY, maxZ)
+		addLine(pose, vertexConsumer, color, maxX, minY, maxZ, maxX, maxY, maxZ)
+	}
+
+	fun renderCubeThroughWalls(
+		poseStack: PoseStack,
+		minX: Double,
+		minY: Double,
+		minZ: Double,
+		maxX: Double,
+		maxY: Double,
+		maxZ: Double,
+		color: Int
+	) {
+		val vertexConsumer = defaultBufferSource()
+			.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
+		val pose = poseStack.last()
+
+		val minXFloat = minX.toFloat()
+		val minYFloat = minY.toFloat()
+		val minZFloat = minZ.toFloat()
+		val maxXFloat = maxX.toFloat()
+		val maxYFloat = maxY.toFloat()
+		val maxZFloat = maxZ.toFloat()
+
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, maxYFloat, maxZFloat,
+			maxXFloat, maxYFloat, maxZFloat,
+			maxXFloat, maxYFloat, minZFloat,
+			minXFloat, maxYFloat, minZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, minYFloat, minZFloat,
+			maxXFloat, minYFloat, minZFloat,
+			maxXFloat, minYFloat, maxZFloat,
+			minXFloat, minYFloat, maxZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			maxXFloat, minYFloat, minZFloat,
+			minXFloat, minYFloat, minZFloat,
+			minXFloat, maxYFloat, minZFloat,
+			maxXFloat, maxYFloat, minZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, minYFloat, maxZFloat,
+			maxXFloat, minYFloat, maxZFloat,
+			maxXFloat, maxYFloat, maxZFloat,
+			minXFloat, maxYFloat, maxZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			maxXFloat, minYFloat, maxZFloat,
+			maxXFloat, minYFloat, minZFloat,
+			maxXFloat, maxYFloat, minZFloat,
+			maxXFloat, maxYFloat, maxZFloat
+		)
+		addQuad(
+			pose, vertexConsumer, color,
+			minXFloat, minYFloat, minZFloat,
+			minXFloat, minYFloat, maxZFloat,
+			minXFloat, maxYFloat, maxZFloat,
+			minXFloat, maxYFloat, minZFloat
+		)
 	}
 
 	fun renderTexturedCube(
@@ -260,7 +368,35 @@ object RenderUtil {
 		southTextureLocation: ResourceLocation,
 		eastTextureLocation: ResourceLocation,
 		westTextureLocation: ResourceLocation,
-		light: Int = 0xF000F0,
+		light: Int = FULL_BRIGHT,
+		overlay: Int = OverlayTexture.NO_OVERLAY
+	) {
+		renderTexturedCube(
+			poseStack = poseStack,
+			bufferSource = defaultBufferSource(),
+			renderType = renderType,
+			topTextureLocation = topTextureLocation,
+			bottomTextureLocation = bottomTextureLocation,
+			northTextureLocation = northTextureLocation,
+			southTextureLocation = southTextureLocation,
+			eastTextureLocation = eastTextureLocation,
+			westTextureLocation = westTextureLocation,
+			light = light,
+			overlay = overlay
+		)
+	}
+
+	fun renderTexturedCube(
+		poseStack: PoseStack,
+		bufferSource: MultiBufferSource,
+		renderType: RenderType,
+		topTextureLocation: ResourceLocation,
+		bottomTextureLocation: ResourceLocation,
+		northTextureLocation: ResourceLocation,
+		southTextureLocation: ResourceLocation,
+		eastTextureLocation: ResourceLocation,
+		westTextureLocation: ResourceLocation,
+		light: Int = FULL_BRIGHT,
 		overlay: Int = OverlayTexture.NO_OVERLAY
 	) {
 		val textureAtlas = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
@@ -281,17 +417,13 @@ object RenderUtil {
 			Direction.SOUTH to southSprite,
 		)
 
-		val vertexConsumer = Minecraft.getInstance()
-			.renderBuffers()
-			.bufferSource()
-			.getBuffer(renderType)
+		val vertexConsumer = bufferSource.getBuffer(renderType)
 
 		val pose = poseStack.last()
 
 		for ((direction, sprite) in map) {
-			if (direction == Direction.DOWN) continue
-
-			val vertices = getVertices(direction, 1f, 1f)
+			val vertices = getVertices(direction, 1f, 1f, 1f)
+			val normal = direction.normal
 
 			for ((index, vector) in vertices.withIndex()) {
 				val u = if (index == 0 || index == 3) sprite.u0 else sprite.u1
@@ -303,6 +435,9 @@ object RenderUtil {
 					0xFFFFFFFF.toInt(),
 					vector.x, vector.y, vector.z,
 					u, v,
+					normalX = normal.x.toFloat(),
+					normalY = normal.y.toFloat(),
+					normalZ = normal.z.toFloat(),
 					light = light,
 					overlay = overlay
 				)
@@ -311,17 +446,21 @@ object RenderUtil {
 
 	}
 
-	/** @param length is used as height for UP and DOWN faces */
+	@Deprecated("Use getVertices(direction, width, height, depth) instead")
 	fun getVertices(direction: Direction, width: Float, length: Float): List<Vector3f> {
+		return getVertices(direction, width, length, width)
+	}
+
+	fun getVertices(direction: Direction, width: Float, height: Float, depth: Float): List<Vector3f> {
 		val bottomNorthWest = Vector3f(0f, 0f, 0f)
 		val bottomNorthEast = Vector3f(width, 0f, 0f)
-		val bottomSouthWest = Vector3f(0f, 0f, width)
-		val bottomSouthEast = Vector3f(width, 0f, width)
+		val bottomSouthWest = Vector3f(0f, 0f, depth)
+		val bottomSouthEast = Vector3f(width, 0f, depth)
 
-		val topNorthWest = Vector3f(0f, length, 0f)
-		val topNorthEast = Vector3f(width, length, 0f)
-		val topSouthWest = Vector3f(0f, length, width)
-		val topSouthEast = Vector3f(width, length, width)
+		val topNorthWest = Vector3f(0f, height, 0f)
+		val topNorthEast = Vector3f(width, height, 0f)
+		val topSouthWest = Vector3f(0f, height, depth)
+		val topSouthEast = Vector3f(width, height, depth)
 
 		return when (direction) {
 			Direction.UP -> listOf(topSouthWest, topSouthEast, topNorthEast, topNorthWest)
@@ -331,6 +470,78 @@ object RenderUtil {
 			Direction.EAST -> listOf(bottomSouthEast, bottomNorthEast, topNorthEast, topSouthEast)
 			Direction.WEST -> listOf(bottomNorthWest, bottomSouthWest, topSouthWest, topNorthWest)
 		}
+	}
+
+	fun addColoredVertex(
+		pose: PoseStack.Pose,
+		consumer: VertexConsumer,
+		color: Int,
+		x: Float,
+		y: Float,
+		z: Float,
+	) {
+		consumer.vertex(pose.pose(), x, y, z)
+			.color(color)
+	}
+
+	private fun addQuad(
+		pose: PoseStack.Pose,
+		consumer: VertexConsumer,
+		color: Int,
+		x1: Float,
+		y1: Float,
+		z1: Float,
+		x2: Float,
+		y2: Float,
+		z2: Float,
+		x3: Float,
+		y3: Float,
+		z3: Float,
+		x4: Float,
+		y4: Float,
+		z4: Float
+	) {
+		addColoredVertex(pose, consumer, color, x1, y1, z1)
+		addColoredVertex(pose, consumer, color, x2, y2, z2)
+		addColoredVertex(pose, consumer, color, x3, y3, z3)
+		addColoredVertex(pose, consumer, color, x4, y4, z4)
+	}
+
+	private fun addLine(
+		pose: PoseStack.Pose,
+		consumer: VertexConsumer,
+		color: Int,
+		x1: Float,
+		y1: Float,
+		z1: Float,
+		x2: Float,
+		y2: Float,
+		z2: Float
+	) {
+		val normalX = x2 - x1
+		val normalY = y2 - y1
+		val normalZ = z2 - z1
+		val length = sqrt(normalX * normalX + normalY * normalY + normalZ * normalZ)
+		if (length == 0f) return
+
+		addLineVertex(pose, consumer, color, x1, y1, z1, normalX / length, normalY / length, normalZ / length)
+		addLineVertex(pose, consumer, color, x2, y2, z2, normalX / length, normalY / length, normalZ / length)
+	}
+
+	private fun addLineVertex(
+		pose: PoseStack.Pose,
+		consumer: VertexConsumer,
+		color: Int,
+		x: Float,
+		y: Float,
+		z: Float,
+		normalX: Float,
+		normalY: Float,
+		normalZ: Float
+	) {
+		consumer.vertex(pose.pose(), x, y, z)
+			.color(color)
+			.normal(pose.normal(), normalX, normalY, normalZ)
 	}
 
 	fun addVertex(

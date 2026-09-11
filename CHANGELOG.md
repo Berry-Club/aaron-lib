@@ -1,33 +1,185 @@
+# 1.20.0 - Forge 1.20.1 Port
+
+## Added
+
+- Backported the Aaron Lib feature set required by Genetics Resequenced from NeoForge 1.21.1 to Forge 1.20.1
+- Added the newer level actor, block walker, container, held-item menu, rendering, command, configuration, and utility APIs
+
+## Changed
+
+- Reworked networking around Forge 1.20.1 `SimpleChannel` messages and `FriendlyByteBuf`
+- Reworked registries around Forge `DeferredRegister` and `RegistryObject`
+- Reworked item, entity, block entity, rendering, and data-generation code for the 1.20.1 Minecraft API
+- Targets Java 17, Forge 47.4, and Kotlin for Forge 4.12
+
+## Removed
+
+- Removed `PseudoDataComponent` and `AaronExampleDataComponent`
+- Removed the data-component registry and all data-component extension functions because Minecraft 1.20.1 predates the item data-component system
+- Removed `StreamCodec`-based public APIs; equivalent 1.20.1 functionality uses `FriendlyByteBuf` encoders and decoders
+- Entity predicates, custom advancement triggers, custom loot entries, and armor-material helpers are temporarily unavailable while their 1.20.1-native replacements are implemented
+
+# 1.20.0
+
+- BlockBrokenTrigger
+- PlayerActionTrigger
+- More advancement helper stuff
+- BaseScreen#buttonClicked
+- ClientClickedMenuButton#isShiftDown
+- <T : Enum<T>>#nextEnum()
+- <T : Enum<T>>#prevEnum()
+- DyeColor#getNameComponent()
+
+# 1.19.0
+
+- Update KFF to 5.12.0 and Kotlin to 2.4.0 (from 2.1.21)
+- InteractionHand.getEquipmentSlot(): EquipmentSlot
+
+# 1.18.1
+
+- Fixed a missing class that didn't get committed
+
+# 1.18.0
+
+- Some useful stuff for held-item container menus
+  - HeldItemMenu
+  - HeldItemMenuWithoutInventory
+  - UnmodifiableSlot
+
+# 1.17.2
+
+- Added useful contracts
+
+# 1.17.1
+
+- Fixed AaronUtil#getGridSpiralPos
+- Fixed MenuWithInventory#quickMoveStack when machine slots are added after player inventory slots
+- Fixed menu labels moving when you open/close jei etc
+
+# 1.17.0
+
+- ItemWithTooltip
+- A LOT of backend renderer changes
+- Advancement stuff
+- MutableList#shuffle
+- AaronLootTableDsl
+- Made the other DSLs more DSLy
+
+# 1.16.0
+
+- Fixed the through-walls renderers to work with Sodium
+
+# 1.15.0
+
+- RandomSource#roll
+- RandomSource#rollDie
+- LevelActor
+- BlockPos#furtherThan
+- Vec3#furtherThan
+- BlockPos#closerThan
+- Vec3#closerThan
+- Collection#random(RandomSource)
+- Collection#randomOrNull(RandomSource)
+- AABB#randomX
+- AABB#randomY
+- AABB#randomZ
+- AABB#randomPos
+- Player#allItems
+- Player#allItemsSequence
+- Player#getFirstStack
+
+# 1.14.0
+
+- Added a default MenuWithInventory#quickMoveStack
+- AaronClientUtil#getFluidColor and AaronClientUtil#computeFluidColor
+	- Uses the tintIndex or the texture, resets on asset reload
+- String#toComponent
+- String#toGrayComponent
+
+# 1.13.0
+
+- Added a server config
+- What NBT keys are removed by `AaronUtil#cleanEntityNbt` can now be configured
+- Fix AaronPacket#makeType, and add a second one
+
+# 1.12.0
+
+- ItemStack#toggleUnit
+- Improved heal command
+- AaronCommandHelper
+- AaronPacket#makeType
+
+# 1.11.0
+
+- ItemCatcher
+
+# 1.10.0
+
+- getGridSpiralPos
+
+# 1.9.0
+
+- ContainerContainer
+- SimpleContainerBlock
+
+# 1.8.0
+
+- ItemStack#asIngredient with predicate
+- AaronExtraStreamCodecs#enumStreamCodec
+
 # 1.7.0
 
-- ItemStack#hasEnchantment
+- Fixed ScheduledTaskHandler not handling tasks scheduled with 0 or lower delay
 - FluidState#isFluid
+- AaronRecipeProvider#shapelessRecipe
 - CompoundTag#putUuidIfNotNull
+- ObservableMutableSet
+- FluidStack#isFluid
+- AaronUtil#dropStackAt
 - Vector3f#toVec3
+- AaronDataComponentRegistry#uuid
 - Long#toBlockPos
 - Long#toChunkPos
-- Update the recipe provider
-- Moved some classes around
-- IntrinsicHolderTagsProvider$IntrinsicTagAppender#add(vararg values: Holder)
-- Block Walker stuff
+- ItemStack#asIngredient
+- IntrinsicHolderTagsProvider$IntrinsicTagAppender<T>#add(vararg values: Holder<T>)
+- Block walker stuff
+- ItemStack#setUnit
+- AaronDataComponentRegistry#registryKey
+- AaronDataComponentRegistry#registryHolder
+- ModConfigSpec$Builder#section
+- ModelBuilder<T>#element
+- ModelBuilder<T>$ElementBuilder#face
+- ExtractOnlyInvWrapper
+- ItemModelBuilder#override
+- CompoundTag#saveItems
+- CompoundTag#loadItems
+- CompoundTag#saveEnergy
+- CompoundTag#loadEnergy
+- ItemStack#isFull
+- AaronItemRegistry.PROPERTIES_SINGLE_STACK
+- ModelBuilder<T>#transforms
+- ModelBuilder<T>$TransformsBuilder#transform
+- ItemLike#withCount
+- AaronMobEffectsRegistry#registerSimple
+- AaronMobEffectsRegistry#registerSimpleInstantaneous
+- Heal command now also feeds
+- ItemLike#withoutComponent
+- ItemStack#withoutComponent
+- IntegerColors
+- Int#toRgb
+- Int#toArgb
+- Int#toRgba
+- ModelBuilder<T>#particle
+- PoseStack#withPose
+- SyncingBlockEntity
+- Label offsets in BaseScreen
+- AaronClientUtil#getBiomeDisplay
 
-# 1.5.3
+# 1.6.0
 
-### Fixed
-
-- Obfuscate the jar so it works outside of dev
-
-# 1.5.2
-
-### Fixed
-
-- ACTUALLY fix it this time
-
-# 1.5.1
-
-### Fixed
-
-- Fixed the mixins not loading outside of dev
+- ItemStack#hasEnchantment
+- ImprovedEntityPredicate
+- Moved many classes
 
 # 1.5.0
 
@@ -45,20 +197,10 @@
 - Entity#getPovResult
 - Holder<Potion>#getAsStack()
 - AaronExtraCodecs.UINT_CODEC
+- AaronExtraCodecs.UINT_STREAM_CODEC
 - AaronDataComponentRegistry#uint
 - AaronMobEffectsRegistry
 - AaronAdvancementSubProvider
-- Holder<*>#getLocationOrNull
-- RegistryObject<out Item>#getDefaultInstance()
-- AaronExtraCodecs.COMPONENT_CODEC
-- ItemLike#withComponent
-- ItemStack#withComponent
-- ItemStack#removeComponent
-- AttributeInstance#hasModifier
-- AaronExtraCodecs.ATTRIBUTE_MODIFIER_CODEC
-- Entity#registryAccess
-- ItemStack#partialNbtIngredient
-- ItemStack#strictNbtIngredient
 
 # 1.4.0
 

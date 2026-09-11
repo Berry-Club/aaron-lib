@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.misc
+package dev.aaronhowser.mods.aaron.container
 
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.level.block.entity.BlockEntity

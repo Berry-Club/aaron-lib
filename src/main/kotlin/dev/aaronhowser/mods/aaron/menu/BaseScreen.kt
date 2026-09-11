@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.aaron.menu
 
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
+import dev.aaronhowser.mods.aaron.packet.c2s.ClientClickedMenuButton
+import dev.aaronhowser.mods.aaron.packet.AaronLibPacketRegistrar
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
@@ -20,29 +22,57 @@ abstract class BaseScreen<M : AbstractContainerMenu>(
 	protected open val showInventoryLabel = true
 
 	protected val rightPos: Int
-		get() = this.leftPos + this.imageWidth
+		get() = leftPos + imageWidth
 	protected val bottomPos: Int
-		get() = this.topPos + this.imageHeight
+		get() = topPos + imageHeight
+
+	open val titleLabelOffsetX: Int = 0
+	open val titleLabelOffsetY: Int = 0
+
+	open val inventoryLabelOffsetX: Int = 0
+	open val inventoryLabelOffsetY: Int = 0
 
 	final override fun init() {
-		this.imageWidth = background.width
-		this.imageHeight = background.height
+		imageWidth = background.width
+		imageHeight = background.height
 
-		this.leftPos = (this.width - this.imageWidth) / 2
-		this.topPos = (this.height - this.imageHeight) / 2
+		super.init()
+
+		titleLabelX = 8
+		titleLabelY = 6
+		inventoryLabelX = 8
+		inventoryLabelY = imageHeight - 94
 
 		baseInit()
 	}
 
 	open fun baseInit() {}
 
+	fun buttonClicked(buttonId: Int) {
+		AaronLibPacketRegistrar.messageServer(ClientClickedMenuButton(buttonId, hasShiftDown()))
+	}
+
 	override fun renderLabels(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
 		if (showTitleLabel) {
-			guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false)
+			guiGraphics.drawString(
+				font,
+				title,
+				titleLabelX + titleLabelOffsetX,
+				titleLabelY + titleLabelOffsetY,
+				4210752,
+				false
+			)
 		}
 
 		if (showInventoryLabel) {
-			guiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false)
+			guiGraphics.drawString(
+				font,
+				playerInventoryTitle,
+				inventoryLabelX + inventoryLabelOffsetX,
+				inventoryLabelY + inventoryLabelOffsetY,
+				4210752,
+				false
+			)
 		}
 	}
 

@@ -18,6 +18,7 @@ base.archivesName = archiveName
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 compileKotlin {
 	kotlinOptions.jvmTarget = "17"
+	kotlinOptions.freeCompilerArgs += ['-Xnested-type-aliases']
 }
 
 println("Building version: ${version}")
@@ -56,7 +57,7 @@ legacyForge {
 				programArguments.addAll(ENV.MC_CLIENT_ARGS.split(' '))
 			}
 
-			gameDirectory = file 'runs/client'
+			gameDirectory = file 'runs/1-20-1/client'
 		}
 
 		"Client-Two" {
@@ -64,7 +65,7 @@ legacyForge {
 			ideName = "Client Two"
 			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
 
-			gameDirectory = file 'runs/client'
+			gameDirectory = file 'runs/1-20-1/client'
 
 			if (ENV.MC_CLIENT_2_ARGS) {
 				programArguments.addAll(ENV.MC_CLIENT_2_ARGS.split(' '))
@@ -77,13 +78,13 @@ legacyForge {
 			programArgument '--nogui'
 			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
 
-			gameDirectory = file 'runs/server'
+			gameDirectory = file 'runs/1-20-1/server'
 		}
 
 		data {
 			data()
 
-			gameDirectory = file 'runs/client'
+			gameDirectory = file 'runs/1-20-1/client'
 
 			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
 		}
@@ -98,7 +99,9 @@ legacyForge {
 
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main {
+	resources { srcDir 'src/generated/resources' }
+}
 
 mixin {
 	add sourceSets.main, "mixins.aaron.refmap.json"

@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.RenderType
 import java.util.*
 
 object AaronRenderTypes {
+	val LINES_THROUGH_WALLS: RenderType.CompositeRenderType get() = LINES_THROUGH_WALL_RENDER_TYPE
+	val QUADS_THROUGH_WALLS: RenderType.CompositeRenderType get() = QUADS_THROUGH_WALL_RENDER_TYPE
 
 	@Suppress("INFERRED_INVISIBLE_RETURN_TYPE_WARNING")
 	val LINES_THROUGH_WALL_RENDER_TYPE: RenderType.CompositeRenderType =

@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
 import java.util.function.Supplier
 
-class ChangingTextButton(
+open class ChangingTextButton(
 	x: Int,
 	y: Int,
 	width: Int,

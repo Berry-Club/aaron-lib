@@ -6,11 +6,13 @@ import net.minecraft.network.FriendlyByteBuf
 import net.minecraftforge.network.NetworkEvent
 
 class ClientClickedMenuButton(
-	private val buttonId: Int
+	private val buttonId: Int,
+	private val isShiftDown: Boolean
 ) : AaronPacket() {
 
 	override fun encode(buffer: FriendlyByteBuf) {
 		buffer.writeVarInt(buttonId)
+		buffer.writeBoolean(isShiftDown)
 	}
 
 	override fun handleOnServer(context: NetworkEvent.Context) {
@@ -20,14 +22,15 @@ class ClientClickedMenuButton(
 		if (!playerMenu.stillValid(player)) return
 
 		if (playerMenu is MenuWithButtons) {
-			playerMenu.handleButtonPressed(buttonId)
+			playerMenu.handleButtonPressed(buttonId, isShiftDown)
 		}
 	}
 
 	companion object {
 		fun decode(buffer: FriendlyByteBuf): ClientClickedMenuButton {
 			val buttonId = buffer.readVarInt()
-			return ClientClickedMenuButton(buttonId)
+			val isShiftDown = buffer.readBoolean()
+			return ClientClickedMenuButton(buttonId, isShiftDown)
 		}
 	}
 

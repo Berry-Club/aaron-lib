@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 
-class ImprovedSpriteButton(
+open class ImprovedSpriteButton(
 	x: Int = 0,
 	y: Int = 0,
 	width: Int,
@@ -56,7 +56,7 @@ class ImprovedSpriteButton(
 	}
 
 	private fun renderToolTip(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
-		if (this.message == Component.empty()) return
+		if (this.message === Component.empty()) return
 
 		guiGraphics.renderComponentTooltip(
 			font,

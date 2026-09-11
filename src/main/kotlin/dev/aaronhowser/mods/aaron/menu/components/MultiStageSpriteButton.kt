@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import java.util.function.Supplier
 
-class MultiStageSpriteButton(
+open class MultiStageSpriteButton(
 	x: Int = 0,
 	y: Int = 0,
 	width: Int,
@@ -61,7 +61,7 @@ class MultiStageSpriteButton(
 	}
 
 	private fun renderToolTip(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
-		if (this.message == Component.empty()) return
+		if (this.message === Component.empty()) return
 
 		guiGraphics.renderComponentTooltip(
 			font,

@@ -1,0 +1,88 @@
+package dev.aaronhowser.mods.aaron.misc
+
+import dev.aaronhowser.mods.aaron.AaronLib
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraftforge.eventbus.api.EventPriority
+import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber
+import net.minecraftforge.event.entity.EntityJoinLevelEvent
+
+@EventBusSubscriber(
+	modid = AaronLib.MOD_ID
+)
+object ItemCatcher {
+
+	private var isCatchingDrops: Boolean = false
+	private val caughtItemEntities: MutableList<ItemEntity> = mutableListOf()
+
+	@JvmStatic
+	fun startCatchingItems() {
+		isCatchingDrops = true
+	}
+
+	@JvmStatic
+	fun stopCatchingItems() {
+		isCatchingDrops = false
+		caughtItemEntities.clear()
+	}
+
+	@JvmStatic
+	fun isCatchingItems(): Boolean = isCatchingDrops
+
+	@JvmStatic
+	fun getCaughtItemEntities(): List<ItemEntity> {
+		val entities = caughtItemEntities.toList()
+		stopCatchingItems()
+		return entities
+	}
+
+	@JvmStatic
+	fun getCaughtItemStacks(discardEntities: Boolean = true): List<ItemStack> {
+		val entities = getCaughtItemEntities()
+		val stacks = entities.map(ItemEntity::getItem)
+
+		if (discardEntities) {
+			for (entity in entities) {
+				entity.discard()
+			}
+		}
+
+		return stacks
+	}
+
+	@JvmStatic
+	fun catchEntitiesDuring(block: Runnable): List<ItemEntity> {
+		startCatchingItems()
+
+		try {
+			block.run()
+		} finally {
+			isCatchingDrops = false
+		}
+
+		return getCaughtItemEntities()
+	}
+
+	@JvmStatic
+	fun catchStacksDuring(block: Runnable): List<ItemStack> {
+		startCatchingItems()
+
+		try {
+			block.run()
+		} finally {
+			isCatchingDrops = false
+		}
+
+		return getCaughtItemStacks()
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	fun onEntityJoinLevel(event: EntityJoinLevelEvent) {
+		if (!this.isCatchingDrops || event.isCanceled) return
+
+		val entity = event.entity as? ItemEntity ?: return
+		caughtItemEntities.add(entity)
+	}
+
+}

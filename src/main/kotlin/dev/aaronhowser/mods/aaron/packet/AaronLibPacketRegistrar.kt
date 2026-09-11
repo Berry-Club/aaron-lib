@@ -31,7 +31,7 @@ object AaronLibPacketRegistrar : AaronPacketRegistrar() {
 			ClientChangedMenuString::class.java,
 			{ packet, buffer -> packet.encode(buffer) },
 			{ buffer -> ClientChangedMenuString.decode(buffer) },
-			{ packet, context -> packet.receiveOnClient(context) }
+			{ packet, context -> packet.receiveOnServer(context) }
 		)
 
 		CHANNEL.registerMessage(
@@ -39,7 +39,7 @@ object AaronLibPacketRegistrar : AaronPacketRegistrar() {
 			ClientClickedMenuButton::class.java,
 			{ packet, buffer -> packet.encode(buffer) },
 			{ buffer -> ClientClickedMenuButton.decode(buffer) },
-			{ packet, context -> packet.receiveOnClient(context) }
+			{ packet, context -> packet.receiveOnServer(context) }
 		)
 
 		CHANNEL.registerMessage(
