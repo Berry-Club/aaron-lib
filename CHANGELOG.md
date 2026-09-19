@@ -1,3 +1,7 @@
+# 1.21.0
+
+- TexturedLabel
+
 # 1.20.0
 
 - BlockBrokenTrigger
