@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector2d
+import java.util.HashMap
 
 object AaronExtraStreamCodecs {
 
@@ -51,6 +52,17 @@ object AaronExtraStreamCodecs {
 		return ResourceLocation.STREAM_CODEC.map(
 			{ TagKey.create(registry, it) },
 			{ it.location() }
+		)
+	}
+
+	fun <B : ByteBuf, K, V> map(
+		keyCodec: StreamCodec<in B, K>,
+		valueCodec: StreamCodec<in B, V>
+	): StreamCodec<B, Map<K, V>> {
+		return ByteBufCodecs.map(
+			::HashMap,
+			keyCodec,
+			valueCodec
 		)
 	}
 

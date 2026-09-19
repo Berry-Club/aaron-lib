@@ -1,6 +1,7 @@
 # 1.21.0
 
 - TexturedLabel
+- AaronExtraStreamCodecs#map
 
 # 1.20.0
 

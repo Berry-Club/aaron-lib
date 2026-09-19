@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.entity.predicate.snapshot
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -13,7 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import java.util.*
+import java.util.Optional
 
 data class EntitySnapshot(
 	val entityType: EntityType<*>? = null,
@@ -55,8 +56,7 @@ data class EntitySnapshot(
 				ByteBufCodecs.optional(NbtSnapshot.STREAM_CODEC), { Optional.ofNullable(it.nbtSnapshot) },
 				ByteBufCodecs.optional(FlagsSnapshot.STREAM_CODEC), { Optional.ofNullable(it.flagsSnapshot) },
 				ByteBufCodecs.optional(MovementSnapshot.STREAM_CODEC), { Optional.ofNullable(it.movementSnapshot) },
-				ByteBufCodecs.map(
-					::HashMap,
+				AaronExtraStreamCodecs.map(
 					ByteBufCodecs.holderRegistry(Registries.MOB_EFFECT),
 					MobEffectInstance.STREAM_CODEC
 				),
