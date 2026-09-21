@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.aaron.entity
+package dev.aaronhowser.mods.aaron.fake_player
 
 import com.mojang.authlib.GameProfile
 import net.minecraft.server.level.ServerLevel
