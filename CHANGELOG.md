@@ -9,6 +9,7 @@
 - EntityType#registryHolder
 - BlockEntityType#registryHolder
 - Improved FilteredSlot
+- ContainerSlot
 
 # 26.1-1.20.0
 
