@@ -12,6 +12,8 @@ open class FilteredSlot(
 	val insertPredicate: (ItemStack) -> Boolean = { true }
 ) : Slot(container, slotIndex, x, y) {
 
-	override fun mayPlace(stack: ItemStack): Boolean = insertPredicate(stack)
+	override fun mayPlace(stack: ItemStack): Boolean {
+		return super.mayPlace(stack) && insertPredicate(stack)
+	}
 
 }

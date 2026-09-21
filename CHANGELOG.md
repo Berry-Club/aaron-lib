@@ -8,6 +8,7 @@
 - Fluid#registryHolder
 - EntityType#registryHolder
 - BlockEntityType#registryHolder
+- Improved FilteredSlot
 
 # 1.20.0
 
