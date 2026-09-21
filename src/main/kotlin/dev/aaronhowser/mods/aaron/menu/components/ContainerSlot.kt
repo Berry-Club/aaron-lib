@@ -4,7 +4,7 @@ import net.minecraft.world.Container
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 
-class ContainerSlot(
+open class ContainerSlot(
 	container: Container,
 	private val slotIndex: Int,
 	x: Int,
