@@ -5,6 +5,7 @@ import net.minecraft.ChatFormatting
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentPredicate
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.IntTag
@@ -40,6 +41,7 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluid
@@ -105,6 +107,16 @@ object AaronExtensions {
 	fun <T> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
 	fun <T> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
 	fun <T> Holder<T>.isHolder(holder: Holder<T>): Boolean = this.`is`(holder)
+
+	fun <T> T.registryHolder(registry: Registry<T>): Holder.Reference<T> {
+		return registry.getHolder(registry.getId(this)).orElseThrow()
+	}
+
+	fun Item.registryHolder(): Holder.Reference<Item> = registryHolder(BuiltInRegistries.ITEM)
+	fun Block.registryHolder(): Holder.Reference<Block> = registryHolder(BuiltInRegistries.BLOCK)
+	fun Fluid.registryHolder(): Holder.Reference<Fluid> = registryHolder(BuiltInRegistries.FLUID)
+	fun EntityType<*>.registryHolder(): Holder.Reference<EntityType<*>> = registryHolder(BuiltInRegistries.ENTITY_TYPE)
+	fun BlockEntityType<*>.registryHolder(): Holder.Reference<BlockEntityType<*>> = registryHolder(BuiltInRegistries.BLOCK_ENTITY_TYPE)
 
 	fun BlockBehaviour.BlockStateBase.isBlock(block: Block): Boolean = this.`is`(block)
 	fun BlockBehaviour.BlockStateBase.isBlock(blockHolder: Holder<Block>): Boolean = this.`is`(blockHolder)

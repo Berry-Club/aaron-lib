@@ -2,6 +2,12 @@
 
 - TexturedLabel
 - AaronExtraStreamCodecs#map
+- T#registryHolder(Registry<T>)
+- Item#registryHolder
+- Block#registryHolder
+- Fluid#registryHolder
+- EntityType#registryHolder
+- BlockEntityType#registryHolder
 
 # 1.20.0
 
