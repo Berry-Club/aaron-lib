@@ -15,7 +15,8 @@ open class AttributeFakePlayer(
 	gameProfile: GameProfile
 ) : FakePlayer(level, gameProfile) {
 
-	private val previousEquipment: MutableMap<EquipmentSlot, ItemStack> = EnumMap(EquipmentSlot::class.java)
+	@Suppress("RedundantNullableReturnType") // It's null during compilation I guess
+	private val previousEquipment: MutableMap<EquipmentSlot, ItemStack>? = EnumMap(EquipmentSlot::class.java)
 	private var isUpdatingAttributes = false
 
 	override fun getAttribute(attribute: Holder<Attribute>): AttributeInstance? {
@@ -30,6 +31,7 @@ open class AttributeFakePlayer(
 
 	fun updateEquipmentAttributes() {
 		if (isUpdatingAttributes) return
+		if (previousEquipment == null) return
 
 		isUpdatingAttributes = true
 		try {
@@ -42,6 +44,7 @@ open class AttributeFakePlayer(
 	}
 
 	private fun updateEquipmentSlotAttributes(equipmentSlot: EquipmentSlot) {
+		val previousEquipment = previousEquipment ?: return
 		val previousStack = previousEquipment[equipmentSlot] ?: ItemStack.EMPTY
 		val currentStack = getItemBySlot(equipmentSlot)
 		if (ItemStack.matches(previousStack, currentStack)) return
