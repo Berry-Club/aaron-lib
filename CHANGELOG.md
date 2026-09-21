@@ -10,6 +10,7 @@
 - BlockEntityType#registryHolder
 - Improved FilteredSlot
 - ContainerSlot
+- AttributeFakePlayer
 
 # 1.20.0
 
