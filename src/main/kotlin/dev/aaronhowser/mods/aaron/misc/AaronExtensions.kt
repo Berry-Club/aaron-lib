@@ -40,6 +40,7 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluid
@@ -204,6 +205,16 @@ object AaronExtensions {
 	fun FluidState.isFluid(tagKey: TagKey<Fluid>): Boolean = this.`is`(tagKey)
 
 	// Registries, tags, and resource holders
+
+	fun <T : Any> T.registryHolder(registry: Registry<T>): Holder.Reference<T> {
+		return registry.getHolder(registry.getId(this)).orElseThrow()
+	}
+
+	fun Item.registryHolder(): Holder.Reference<Item> = registryHolder(BuiltInRegistries.ITEM)
+	fun Block.registryHolder(): Holder.Reference<Block> = registryHolder(BuiltInRegistries.BLOCK)
+	fun Fluid.registryHolder(): Holder.Reference<Fluid> = registryHolder(BuiltInRegistries.FLUID)
+	fun EntityType<*>.registryHolder(): Holder.Reference<EntityType<*>> = registryHolder(BuiltInRegistries.ENTITY_TYPE)
+	fun BlockEntityType<*>.registryHolder(): Holder.Reference<BlockEntityType<*>> = registryHolder(BuiltInRegistries.BLOCK_ENTITY_TYPE)
 
 	fun Direction.getDirectionName(): String = this.getName()
 	fun DyeColor.getDyeName(): String = this.getName()
