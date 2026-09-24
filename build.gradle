@@ -136,6 +136,12 @@ obfuscation {
 	createRemappingConfiguration(configurations.localRuntime)
 }
 
+jar {
+	manifest {
+		attributes 'MixinConfigs': 'aaron.mixins.json'
+	}
+}
+
 jar.finalizedBy('reobfJar')
 
 dependencies {
