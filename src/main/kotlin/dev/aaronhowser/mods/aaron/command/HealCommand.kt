@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
-import net.neoforged.neoforge.common.EffectCures
 
 object HealCommand : AaronCommandHelper {
 
@@ -50,7 +49,7 @@ object HealCommand : AaronCommandHelper {
 		)
 
 		target.heal(target.maxHealth)
-		target.removeEffectsCuredBy(EffectCures.MILK)
+		target.removeAllEffects()
 
 		if (target is Player) {
 			target.foodData.eat(100, 100f)

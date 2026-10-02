@@ -1,11 +1,12 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
-import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
+import net.minecraft.util.ARGB
 
 open class ItemStackButton(
 	x: Int = 0,
@@ -48,11 +49,7 @@ open class ItemStackButton(
 	}
 
 	private fun baseRenderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
-		RenderSystem.enableBlend()
-		RenderSystem.enableDepthTest()
-		guiGraphics.blitSprite(SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight())
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
+		guiGraphics.blitSprite(RenderType::guiTextured, SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight(), ARGB.white(this.alpha))
 	}
 
 }

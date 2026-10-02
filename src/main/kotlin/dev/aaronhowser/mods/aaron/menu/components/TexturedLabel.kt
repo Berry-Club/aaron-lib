@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.aaron.menu.components
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.gui.narration.NarratedElementType
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.network.chat.Component
@@ -37,6 +38,7 @@ open class TexturedLabel(
 		updateDimensions(currentMessage)
 
 		guiGraphics.blitSprite(
+			RenderType::guiTextured,
 			backgroundSprite,
 			x,
 			y,

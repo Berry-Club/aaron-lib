@@ -1,12 +1,13 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
-import com.mojang.blaze3d.systems.RenderSystem
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.ARGB
 import java.util.function.Supplier
 
 open class MultiStageSpriteButton(
@@ -45,6 +46,7 @@ open class MultiStageSpriteButton(
 			val spriteTop = this.y + this.getHeight() / 2 - spriteHeight / 2
 
 			guiGraphics.blitSprite(
+				RenderType::guiTextured,
 				sprite,
 				spriteLeft,
 				spriteTop,
@@ -74,11 +76,7 @@ open class MultiStageSpriteButton(
 	}
 
 	private fun baseRenderWidget(guiGraphics: GuiGraphics) {
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
-		RenderSystem.enableBlend()
-		RenderSystem.enableDepthTest()
-		guiGraphics.blitSprite(SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight())
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
+		guiGraphics.blitSprite(RenderType::guiTextured, SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight(), ARGB.white(this.alpha))
 	}
 
 	class Builder(private val font: Font) {

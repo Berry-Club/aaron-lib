@@ -2,11 +2,12 @@ package dev.aaronhowser.mods.aaron.client
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.language.I18n
+import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.inventory.InventoryMenu
+import net.minecraft.util.ARGB
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.material.Fluid
@@ -60,7 +61,7 @@ object AaronClientUtil {
 
 		val textureLocation = ext.stillTexture
 		val atlasTexture = Minecraft.getInstance()
-			.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+			.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
 			.apply(textureLocation)
 
 		if (atlasTexture == null) {
@@ -75,11 +76,10 @@ object AaronClientUtil {
 
 			for (x in 0 until width) {
 				for (y in 0 until height) {
-					// Apparently getPixelRGBA actually returns ABGR??
-					val abgr = nativeImage.getPixelRGBA(x, y)
-					val alpha = abgr ushr 24 and 0xFF
+					val argb = nativeImage.getPixel(x, y)
+					val alpha = ARGB.alpha(argb)
 					if (alpha > 10) {
-						add(abgr)
+						add(argb)
 					}
 				}
 			}
@@ -93,10 +93,10 @@ object AaronClientUtil {
 		var totalGreen = 0L
 		var totalBlue = 0L
 
-		for (abgr in pixels) {
-			val blue = abgr ushr 16 and 0xFF
-			val green = abgr ushr 8 and 0xFF
-			val red = abgr and 0xFF
+		for (argb in pixels) {
+			val red = ARGB.red(argb)
+			val green = ARGB.green(argb)
+			val blue = ARGB.blue(argb)
 
 			totalRed += red
 			totalGreen += green
@@ -108,8 +108,7 @@ object AaronClientUtil {
 		val averageGreen = (totalGreen / count).toInt()
 		val averageBlue = (totalBlue / count).toInt()
 
-		val argb = (0xFF shl 24) or (averageRed shl 16) or (averageGreen shl 8) or averageBlue
-		return argb
+		return ARGB.color(averageRed, averageGreen, averageBlue)
 	}
 
 }

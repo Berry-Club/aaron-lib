@@ -16,7 +16,7 @@ abstract class HeldItemMenu(
 ) : MenuWithInventory(menuType, containerId, playerInventory) {
 
 	private val lockedInventorySlot = when (usedHand) {
-		InteractionHand.MAIN_HAND -> playerInventory.selected
+		InteractionHand.MAIN_HAND -> playerInventory.selectedSlot
 		InteractionHand.OFF_HAND -> Inventory.SLOT_OFFHAND
 	}
 

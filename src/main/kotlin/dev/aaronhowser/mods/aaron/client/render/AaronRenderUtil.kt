@@ -6,11 +6,12 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.ARGB
 import net.minecraft.util.RandomSource
-import net.minecraft.world.inventory.InventoryMenu
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions
 import net.neoforged.neoforge.fluids.FluidStack
@@ -399,7 +400,7 @@ object AaronRenderUtil {
 		light: Int = FULL_BRIGHT,
 		overlay: Int = OverlayTexture.NO_OVERLAY
 	) {
-		val textureAtlas = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+		val textureAtlas = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
 
 		val topSprite = textureAtlas.apply(topTextureLocation)
 		val bottomSprite = textureAtlas.apply(bottomTextureLocation)
@@ -423,7 +424,7 @@ object AaronRenderUtil {
 
 		for ((direction, sprite) in map) {
 			val vertices = getVertices(direction, 1f, 1f, 1f)
-			val normal = direction.normal
+			val normal = direction.unitVec3i
 
 			for ((index, vector) in vertices.withIndex()) {
 				val u = if (index == 0 || index == 3) sprite.u0 else sprite.u1
@@ -591,7 +592,7 @@ object AaronRenderUtil {
 		if (tintColor != -1) return tintColor
 
 		val sprite = Minecraft.getInstance()
-			.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+			.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
 			.apply(clientExt.getStillTexture(fluidStack))
 
 		return getSpriteAverageColor(sprite)
@@ -612,21 +613,15 @@ object AaronRenderUtil {
 		var totalBlue = 0
 		var totalPixels = 0
 
-		// There's some bullfuckery going on here, and I blame Mojang
-		// Putting `lava_still.png` into https://matkl.github.io/average-color/ returns `rgb(212, 90, 18)`
-		// However, putting that image through `getPixelRGBA` and then averaging it all out returns `rgb(255, 18, 90)`
-		// I have no god damn idea why it's doing that, but the simplest fix for me is to just accept that r is super wrong and then flip b and g
-		// So instead of an rgba like it should be giving, i'm treating it as an rbga
-
 		for (x in 0 until width) for (y in 0 until height) {
-			val color = nativeImage.getPixelRGBA(x, y)
+			val color = nativeImage.getPixel(x, y)
 
-			val a = color and 0xFF
+			val a = ARGB.alpha(color)
 			if (a <= 0) continue
 
-			val r = (color shr 24) and 0xFF
-			val b = (color shr 16) and 0xFF
-			val g = (color shr 8) and 0xFF
+			val r = ARGB.red(color)
+			val g = ARGB.green(color)
+			val b = ARGB.blue(color)
 
 			totalRed += r
 			totalGreen += g
@@ -640,7 +635,7 @@ object AaronRenderUtil {
 		val averageGreen = totalGreen / totalPixels
 		val averageBlue = totalBlue / totalPixels
 
-		val averageColor = (0xFF shl 24) or (averageRed shl 16) or (averageGreen shl 8) or averageBlue
+		val averageColor = ARGB.color(averageRed, averageGreen, averageBlue)
 		SPRITE_AVERAGE_COLOR_CACHE[sprite] = averageColor
 		return averageColor
 	}

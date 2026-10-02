@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.aaron.menu.textures
 
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.ResourceLocation
 
 open class ScreenBackground(
@@ -11,6 +12,7 @@ open class ScreenBackground(
 ) {
 	fun render(guiGraphics: GuiGraphics, leftPos: Int, topPos: Int) {
 		guiGraphics.blit(
+			RenderType::guiTextured,
 			this.texture,
 			leftPos,
 			topPos,

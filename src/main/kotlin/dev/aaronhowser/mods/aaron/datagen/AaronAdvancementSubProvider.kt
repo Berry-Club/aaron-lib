@@ -10,13 +10,13 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
-import net.neoforged.neoforge.common.data.AdvancementProvider
+import net.minecraft.data.advancements.AdvancementSubProvider
 import java.util.concurrent.CompletableFuture
 
 abstract class AaronAdvancementSubProvider(
 	val modId: String,
 	val lookupProvider: CompletableFuture<HolderLookup.Provider>
-) : AdvancementProvider.AdvancementGenerator {
+) : AdvancementSubProvider {
 
 	protected fun advancement(): Advancement.Builder = Advancement.Builder.advancement()
 

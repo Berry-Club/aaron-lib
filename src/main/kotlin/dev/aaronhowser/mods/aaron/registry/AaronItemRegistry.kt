@@ -3,13 +3,13 @@ package dev.aaronhowser.mods.aaron.registry
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.level.block.Block
-import net.neoforged.neoforge.common.DeferredSpawnEggItem
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
+import java.util.function.Function
 import java.util.function.Supplier
 
 abstract class AaronItemRegistry {
@@ -25,11 +25,11 @@ abstract class AaronItemRegistry {
 	}
 
 	protected fun basic(id: String, properties: () -> Item.Properties): DeferredItem<Item> {
-		return getItemRegistry().registerItem(id) { Item(properties()) }
+		return getItemRegistry().registerItem(id, Function(::Item), properties())
 	}
 
 	protected fun basic(id: String, properties: Supplier<Item.Properties>): DeferredItem<Item> {
-		return getItemRegistry().registerItem(id) { Item(properties.get()) }
+		return basic(id) { properties.get() }
 	}
 
 	protected fun <I : Item> register(
@@ -37,7 +37,7 @@ abstract class AaronItemRegistry {
 		builder: (Item.Properties) -> I,
 		properties: () -> Item.Properties = { Item.Properties() }
 	): DeferredItem<I> {
-		return getItemRegistry().registerItem(id) { builder(properties()) }
+		return getItemRegistry().registerItem(id, Function(builder), properties())
 	}
 
 	protected fun <I : Item> register(
@@ -45,7 +45,7 @@ abstract class AaronItemRegistry {
 		builder: (Item.Properties) -> I,
 		properties: Item.Properties
 	): DeferredItem<I> {
-		return getItemRegistry().registerItem(id) { builder(properties) }
+		return register(id, builder) { properties }
 	}
 
 	protected fun <I : Item> register(
@@ -53,35 +53,32 @@ abstract class AaronItemRegistry {
 		builder: (Item.Properties) -> I,
 		properties: Supplier<Item.Properties>
 	): DeferredItem<I> {
-		return getItemRegistry().registerItem(id) { builder(properties.get()) }
+		return register(id, builder) { properties.get() }
 	}
 
 	protected fun registerItemNameBlockItem(
 		id: String,
 		block: DeferredBlock<out Block>,
 		properties: Item.Properties = Item.Properties()
-	): DeferredItem<ItemNameBlockItem> {
-		return getItemRegistry().registerItem(id) { ItemNameBlockItem(block.get(), properties) }
+	): DeferredItem<BlockItem> {
+		return getItemRegistry().registerItem(
+			id,
+			Function { itemProperties -> BlockItem(block.get(), itemProperties) },
+			properties
+		)
 	}
 
+	@Suppress("UNUSED_PARAMETER")
 	protected fun registerSpawnEgg(
 		name: String,
 		entityType: () -> EntityType<out Mob>,
-		backgroundColor: Int,
-		highlightColor: Int,
 		properties: () -> Item.Properties = { Item.Properties() }
 	): DeferredItem<SpawnEggItem> {
-		return getItemRegistry()
-			.registerItem(
-				name
-			) {
-				DeferredSpawnEggItem(
-					entityType,
-					backgroundColor,
-					highlightColor,
-					properties()
-				)
-			}
+		return register(
+			name,
+			{ itemProperties -> SpawnEggItem(entityType(), itemProperties) },
+			properties
+		)
 	}
 
 	companion object {

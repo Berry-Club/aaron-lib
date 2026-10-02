@@ -4,6 +4,8 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.TooltipDisplay
+import java.util.function.Consumer
 
 class ItemWithTooltip(
 	properties: Properties,
@@ -16,10 +18,13 @@ class ItemWithTooltip(
 	override fun appendHoverText(
 		stack: ItemStack,
 		context: TooltipContext,
-		tooltipComponents: MutableList<Component>,
+		tooltipDisplay: TooltipDisplay,
+		tooltipAdder: Consumer<Component>,
 		tooltipFlag: TooltipFlag
 	) {
-		tooltipComponents.addAll(tooltipProvider.invoke(stack))
+		for (tooltip in tooltipProvider.invoke(stack)) {
+			tooltipAdder.accept(tooltip)
+		}
 	}
 
 }

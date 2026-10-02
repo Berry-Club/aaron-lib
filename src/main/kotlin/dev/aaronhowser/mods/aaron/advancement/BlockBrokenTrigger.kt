@@ -11,6 +11,7 @@ import net.minecraft.advancements.critereon.SimpleCriterionTrigger
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderSet
+import net.minecraft.advancements.critereon.DataComponentMatchers
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.Block
@@ -55,7 +56,8 @@ class BlockBrokenTrigger : SimpleCriterionTrigger<BlockBrokenTrigger.TriggerInst
 				val predicate = BlockPredicate(
 					Optional.of(HolderSet.direct(block.builtInRegistryHolder())),
 					Optional.empty(),
-					Optional.empty()
+					Optional.empty(),
+					DataComponentMatchers.ANY
 				)
 
 				return block(predicate)
@@ -71,7 +73,8 @@ class BlockBrokenTrigger : SimpleCriterionTrigger<BlockBrokenTrigger.TriggerInst
 				val predicate = BlockPredicate(
 					Optional.of(HolderSet.direct(state.block.builtInRegistryHolder())),
 					properties.build(),
-					Optional.empty()
+					Optional.empty(),
+					DataComponentMatchers.ANY
 				)
 
 				return block(predicate)

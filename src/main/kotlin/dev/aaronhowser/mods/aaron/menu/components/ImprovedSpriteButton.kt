@@ -1,14 +1,15 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
-import com.mojang.blaze3d.systems.RenderSystem
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
+import net.minecraft.util.ARGB
 
 open class ImprovedSpriteButton(
 	x: Int = 0,
@@ -40,6 +41,7 @@ open class ImprovedSpriteButton(
 		val i = this.x + this.getWidth() / 2 - this.spriteWidth / 2
 		val j = this.y + this.getHeight() / 2 - this.spriteHeight / 2
 		guiGraphics.blitSprite(
+			RenderType::guiTextured,
 			sprite,
 			i,
 			j,
@@ -69,11 +71,7 @@ open class ImprovedSpriteButton(
 
 	private fun baseRenderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
 		val minecraft = Minecraft.getInstance()
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
-		RenderSystem.enableBlend()
-		RenderSystem.enableDepthTest()
-		guiGraphics.blitSprite(SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight())
-		guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
+		guiGraphics.blitSprite(RenderType::guiTextured, SPRITES[this.active, this.isHovered], this.x, this.y, this.getWidth(), this.getHeight(), ARGB.white(this.alpha))
 		val i = fgColor
 		this.renderString(guiGraphics, minecraft.font, i or (Mth.ceil(this.alpha * 255.0f) shl 24))
 	}
