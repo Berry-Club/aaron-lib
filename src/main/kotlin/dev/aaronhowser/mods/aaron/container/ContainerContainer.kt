@@ -1,11 +1,12 @@
 package dev.aaronhowser.mods.aaron.container
 
 import net.minecraft.core.BlockPos
+import net.minecraft.world.Clearable
 import net.minecraft.world.Container
 import net.minecraft.world.Containers
 import net.minecraft.world.level.Level
 
-interface ContainerContainer {
+interface ContainerContainer: Clearable {
 
 	fun getContainers(): List<Container>
 
@@ -14,5 +15,11 @@ interface ContainerContainer {
 			Containers.dropContents(level, pos, container)
 		}
 
+	}
+
+	override fun clearContent() {
+		for (container in getContainers()) {
+			container.clearContent()
+		}
 	}
 }
