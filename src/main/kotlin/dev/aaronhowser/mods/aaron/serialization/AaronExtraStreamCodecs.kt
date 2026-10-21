@@ -55,11 +55,11 @@ object AaronExtraStreamCodecs {
 		)
 	}
 
-	fun <B : ByteBuf, K, V> map(
+	fun <B : ByteBuf, K : Any, V : Any> map(
 		keyCodec: StreamCodec<in B, K>,
 		valueCodec: StreamCodec<in B, V>
 	): StreamCodec<B, Map<K, V>> {
-		return ByteBufCodecs.map(
+		return ByteBufCodecs.map<B, K, V, Map<K, V>>(
 			::HashMap,
 			keyCodec,
 			valueCodec

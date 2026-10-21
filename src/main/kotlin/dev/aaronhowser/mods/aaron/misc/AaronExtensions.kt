@@ -207,7 +207,10 @@ object AaronExtensions {
 	// Registries, tags, and resource holders
 
 	fun <T : Any> T.registryHolder(registry: Registry<T>): Holder.Reference<T> {
-		return registry.getHolder(registry.getId(this)).orElseThrow()
+		val identifier = registry.getKey(this)
+		if (identifier == null) throw NoSuchElementException()
+
+		return registry.get(identifier).orElseThrow()
 	}
 
 	fun Item.registryHolder(): Holder.Reference<Item> = registryHolder(BuiltInRegistries.ITEM)

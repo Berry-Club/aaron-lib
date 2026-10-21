@@ -1,12 +1,13 @@
 package dev.aaronhowser.mods.aaron.menu.components
 
 import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarratedElementType
 import net.minecraft.client.gui.narration.NarrationElementOutput
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.function.Supplier
 
 open class TexturedLabel(
@@ -14,7 +15,7 @@ open class TexturedLabel(
 	y: Int,
 	private val font: Font,
 	private val messageGetter: Supplier<Component>,
-	private val backgroundSprite: ResourceLocation,
+	private val backgroundSprite: Identifier,
 	private val horizontalPadding: Int = 6,
 	private val verticalPadding: Int = 4,
 	private val textColor: Int = 0xFFFFFF,
@@ -32,11 +33,12 @@ open class TexturedLabel(
 		return messageGetter.get()
 	}
 
-	override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+	override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
 		val currentMessage = getMessage()
 		updateDimensions(currentMessage)
 
-		guiGraphics.blitSprite(
+		graphics.blitSprite(
+			RenderPipelines.GUI_TEXTURED,
 			backgroundSprite,
 			x,
 			y,
@@ -47,7 +49,7 @@ open class TexturedLabel(
 		val textX = x + (width - font.width(currentMessage)) / 2
 		val textY = y + (height - font.lineHeight) / 2
 
-		guiGraphics.drawString(
+		graphics.text(
 			font,
 			currentMessage,
 			textX,
