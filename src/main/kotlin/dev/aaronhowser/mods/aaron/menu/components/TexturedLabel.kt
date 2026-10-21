@@ -8,6 +8,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
+import net.minecraft.util.ARGB
 import java.util.function.Supplier
 
 open class TexturedLabel(
@@ -54,7 +55,7 @@ open class TexturedLabel(
 			currentMessage,
 			textX,
 			textY,
-			textColor,
+			getRenderableTextColor(),
 			drawShadow
 		)
 	}
@@ -66,6 +67,12 @@ open class TexturedLabel(
 	private fun updateDimensions(currentMessage: Component) {
 		width = maxOf(font.width(currentMessage) + horizontalPadding * 2, minimumWidth)
 		height = maxOf(font.lineHeight + verticalPadding * 2, minimumHeight)
+	}
+
+	private fun getRenderableTextColor(): Int {
+		if (textColor and 0xFC000000.toInt() == 0) return ARGB.opaque(textColor)
+
+		return textColor
 	}
 
 }
