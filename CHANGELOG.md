@@ -1,3 +1,7 @@
+# 1.21.1
+
+- Removed "Owner" and "Age" from default cleanEntityNbtKeysStripUniqueness
+
 # 1.21.0
 
 - TexturedLabel
