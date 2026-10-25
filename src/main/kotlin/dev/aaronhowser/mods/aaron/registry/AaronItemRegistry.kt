@@ -8,6 +8,7 @@ import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.level.block.Block
 import net.neoforged.neoforge.common.DeferredSpawnEggItem
 import net.neoforged.neoforge.registries.DeferredBlock
+import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
 import java.util.function.Supplier
@@ -66,22 +67,39 @@ abstract class AaronItemRegistry {
 
 	protected fun registerSpawnEgg(
 		name: String,
+		entityType: DeferredHolder<EntityType<*>, out EntityType<out Mob>>,
+		backgroundColor: Int,
+		highlightColor: Int,
+		properties: () -> Item.Properties = { Item.Properties() }
+	): DeferredItem<SpawnEggItem> {
+		return registerSpawnEgg(
+			name,
+			entityType::get,
+			backgroundColor,
+			highlightColor,
+			properties
+		)
+	}
+
+	protected fun registerSpawnEgg(
+		name: String,
 		entityType: () -> EntityType<out Mob>,
 		backgroundColor: Int,
 		highlightColor: Int,
 		properties: () -> Item.Properties = { Item.Properties() }
 	): DeferredItem<SpawnEggItem> {
-		return getItemRegistry()
-			.registerItem(
-				name
-			) {
+		return register(
+			name,
+			{ itemProperties ->
 				DeferredSpawnEggItem(
 					entityType,
 					backgroundColor,
 					highlightColor,
-					properties()
+					itemProperties
 				)
-			}
+			},
+			properties
+		)
 	}
 
 	companion object {
