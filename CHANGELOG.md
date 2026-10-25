@@ -1,4 +1,10 @@
-# 1.20.0 - Forge 1.20.1 Port
+# 1.20.1 - mc1.20.1
+
+### Fixed
+
+- Crash from broken mixin that only happens outside of dev apparently
+
+# 1.20.0 - mc1.20.1
 
 ## Added
 
