@@ -262,7 +262,9 @@ object AaronExtensions {
 		return total
 	}
 
-	fun Player.getPovResult(range: Number = this.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)): BlockHitResult {
+	fun Player.getPovResult(
+		range: Number = this.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
+	): BlockHitResult {
 		val asEntity = this as Entity
 		return asEntity.getPovResult(range)
 	}
