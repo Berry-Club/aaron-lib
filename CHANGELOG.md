@@ -1,4 +1,4 @@
-# 1.21.1
+# 1.22.0
 
 - Removed "Owner" and "Age" from default cleanEntityNbtKeysStripUniqueness
 - Improved AaronItemRegistry#registerSpawnEgg
