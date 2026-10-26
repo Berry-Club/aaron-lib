@@ -1,5 +1,6 @@
 # 1.22.0
 
+- ItemStack#isSameItemSameComponents
 - Removed "Owner" and "Age" from default cleanEntityNbtKeysStripUniqueness
 - Improved AaronItemRegistry#registerSpawnEgg
 

@@ -287,6 +287,7 @@ object AaronExtensions {
 	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
 	fun ItemStack.isFull(): Boolean = this.count >= this.maxStackSize
 	fun ItemStack.isNotFull(): Boolean = this.count < this.maxStackSize
+	fun ItemStack.isSameItemSameComponents(other: ItemStack): Boolean = ItemStack.isSameItemSameComponents(this, other)
 
 	fun Long.toBlockPos(): BlockPos = BlockPos.of(this)
 	fun Long.toChunkPos(): ChunkPos = ChunkPos(this)
