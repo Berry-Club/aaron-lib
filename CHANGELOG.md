@@ -1,3 +1,7 @@
+# 1.23.0
+
+- ContainerContainer now implements Clearable
+
 # 1.22.0
 
 - ItemStack#isSameItemSameComponents
