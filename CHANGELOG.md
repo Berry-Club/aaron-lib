@@ -1,3 +1,7 @@
+# 1.24.0
+
+- Removed entity predicate stuff because it sucks
+
 # 1.23.0
 
 - ContainerContainer now implements Clearable
