@@ -9,7 +9,7 @@ import net.minecraft.advancements.critereon.EntityPredicate
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import java.util.Optional
+import java.util.*
 
 class PlayerActionTrigger : SimpleCriterionTrigger<PlayerActionTrigger.TriggerInstance>() {
 

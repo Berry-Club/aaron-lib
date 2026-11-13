@@ -4,11 +4,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.registry.actual.AaronCriterionTriggers
 import net.minecraft.advancements.Criterion
-import net.minecraft.advancements.critereon.BlockPredicate
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.advancements.critereon.EntityPredicate
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger
-import net.minecraft.advancements.critereon.StatePropertiesPredicate
+import net.minecraft.advancements.critereon.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderSet
 import net.minecraft.server.level.ServerLevel
@@ -16,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.Property
-import java.util.Optional
+import java.util.*
 
 class BlockBrokenTrigger : SimpleCriterionTrigger<BlockBrokenTrigger.TriggerInstance>() {
 

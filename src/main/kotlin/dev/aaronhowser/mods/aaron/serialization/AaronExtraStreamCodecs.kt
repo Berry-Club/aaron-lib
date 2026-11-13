@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector2d
-import java.util.HashMap
 
 object AaronExtraStreamCodecs {
 
