@@ -1,3 +1,17 @@
+# 26.1-1.24.0
+
+- Removed entity predicate stuff because it sucks
+
+# 26.1-1.23.0
+
+- ContainerContainer now implements Clearable
+
+# 26.1-1.22.0
+
+- ItemStack#isSameItemSameComponents
+- Removed "Owner" and "Age" from default cleanEntityNbtKeysStripUniqueness
+- Improved AaronItemRegistry#registerSpawnEgg
+
 # 26.1-1.21.0
 
 - TexturedLabel

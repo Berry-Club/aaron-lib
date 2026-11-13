@@ -151,6 +151,7 @@ object AaronExtensions {
 	fun ItemStack.isItem(tag: TagKey<Item>): Boolean = this.`is`(tag)
 	fun ItemStack.isNotEmpty(): Boolean = !this.isEmpty
 	fun ItemStack.isNotFull(): Boolean = this.count < this.maxStackSize
+	fun ItemStack.isSameItemSameComponents(other: ItemStack): Boolean = ItemStack.isSameItemSameComponents(this, other)
 
 	fun ItemStack.setUnit(dataComponent: DataComponentType<Unit>) = this.set(dataComponent, Unit.INSTANCE)
 	fun ItemStack.setUnit(dataComponent: Supplier<out DataComponentType<Unit>>) = setUnit(dataComponent.get())

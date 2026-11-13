@@ -44,9 +44,7 @@ class ServerConfig(
 				"cleanEntityNbtKeysStripUniqueness",
 				listOf(
 					"id",
-					"UUID",
-					"Owner",
-					"Age"
+					"UUID"
 				),
 				{ it is String }
 			)
