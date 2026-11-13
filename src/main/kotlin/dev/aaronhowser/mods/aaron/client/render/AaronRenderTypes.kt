@@ -13,13 +13,13 @@ object AaronRenderTypes {
 
 	val LINES_THROUGH_WALLS_PIPELINE: RenderPipeline =
 		RenderPipelines.LINES.toBuilder()
-			.withLocation("${AaronLib.MOD_ID}:pipeline/lines_through_walls")
+			.withLocation(AaronLib.modResource("pipeline/lines_through_walls"))
 			.withDepthStencilState(DepthStencilState(CompareOp.ALWAYS_PASS, false))
 			.build()
 
 	val QUADS_THROUGH_WALLS_PIPELINE: RenderPipeline =
 		RenderPipelines.DEBUG_QUADS.toBuilder()
-			.withLocation("${AaronLib.MOD_ID}:pipeline/quads_through_walls")
+			.withLocation(AaronLib.modResource("pipeline/quads_through_walls"))
 			.withDepthStencilState(DepthStencilState(CompareOp.ALWAYS_PASS, false))
 			.withCull(false)
 			.build()
