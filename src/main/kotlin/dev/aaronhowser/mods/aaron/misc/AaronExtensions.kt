@@ -229,8 +229,8 @@ object AaronExtensions {
 	fun <T : Any> Holder<T>.isHolder(resourceKey: ResourceKey<T>): Boolean = this.`is`(resourceKey)
 	fun <T : Any> Holder<T>.isHolder(tagKey: TagKey<T>): Boolean = this.`is`(tagKey)
 
-	fun <T : Any> TagAppender<T, T>.add(vararg holders: Holder<T>): TagAppender<T, T> {
-		for (holder in holders) this.add(holder.value())
+	fun <T : Any> TagAppender<T>.add(vararg holders: Holder<T>): TagAppender<T> {
+		for (holder in holders) this.add(holder.unwrapKey().orElseThrow())
 		return this
 	}
 

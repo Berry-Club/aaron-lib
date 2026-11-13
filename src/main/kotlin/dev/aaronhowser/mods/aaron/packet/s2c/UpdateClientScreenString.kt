@@ -16,7 +16,7 @@ class UpdateClientScreenString(
 ) : AaronPacket() {
 
 	override fun handleOnClient(context: IPayloadContext) {
-		val screen = Minecraft.getInstance().screen ?: return
+		val screen = Minecraft.getInstance().gui.screen() ?: return
 
 		if (screen is ScreenWithStrings) {
 			screen.receivedString(stringId, newString)

@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.aaron.registry
 
-import net.minecraft.world.effect.InstantenousMobEffect
+import net.minecraft.world.effect.InstantaneousMobEffect
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import net.neoforged.neoforge.registries.DeferredHolder
@@ -27,9 +27,9 @@ abstract class AaronMobEffectsRegistry {
 		id: String,
 		category: MobEffectCategory,
 		color: Int
-	): DeferredHolder<MobEffect, InstantenousMobEffect> {
+	): DeferredHolder<MobEffect, InstantaneousMobEffect> {
 		return register(id) {
-			object : InstantenousMobEffect(category, color) {}
+			object : InstantaneousMobEffect(category, color) {}
 		}
 	}
 

@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.aaron.client
 
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.language.I18n
+import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
@@ -24,7 +24,7 @@ object AaronClientUtil {
 
 	fun getBiomeDisplay(biomeKey: ResourceKey<Biome>): MutableComponent {
 		val probableTranslationKey = "biome.${biomeKey.identifier().namespace}.${biomeKey.identifier().path}"
-		val hasTranslation = I18n.exists(probableTranslationKey)
+		val hasTranslation = Language.getInstance().has(probableTranslationKey)
 
 		return if (hasTranslation) {
 			Component.translatable(probableTranslationKey)

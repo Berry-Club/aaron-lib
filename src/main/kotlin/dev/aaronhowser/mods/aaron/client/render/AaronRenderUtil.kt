@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.aaron.client.render
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -24,16 +24,10 @@ object AaronRenderUtil {
 	private val HALF_SQRT_3: Float = (sqrt(3.0) / 2.0).toFloat()
 	private const val FULL_BRIGHT: Int = 0xF000F0
 
-	private fun defaultBufferSource(): MultiBufferSource.BufferSource {
-		return Minecraft.getInstance()
-			.renderBuffers()
-			.bufferSource()
-	}
-
 	fun renderRaysDoubleLayer(
 		poseStack: PoseStack,
 		time: Float,
-		bufferSource: MultiBufferSource,
+		submitNodeCollector: SubmitNodeCollector,
 		centerColor: Int = 0xFF000000.toInt(),
 		outerColor: Int = 0x002C6A70,
 		amountRays: Int = 15,
@@ -43,7 +37,7 @@ object AaronRenderUtil {
 		renderDragonRays(
 			poseStack = poseStack,
 			time = time,
-			bufferSource = bufferSource,
+			submitNodeCollector = submitNodeCollector,
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -54,7 +48,7 @@ object AaronRenderUtil {
 		renderDragonRaysDepth(
 			poseStack = poseStack,
 			time = time,
-			bufferSource = bufferSource,
+			submitNodeCollector = submitNodeCollector,
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -66,45 +60,37 @@ object AaronRenderUtil {
 	fun renderDragonRays(
 		poseStack: PoseStack,
 		time: Float,
-		bufferSource: MultiBufferSource,
+		submitNodeCollector: SubmitNodeCollector,
 		centerColor: Int = 0xFF000000.toInt(),
 		outerColor: Int = 0x002C6A70,
 		amountRays: Int = 15,
 		rayLength: Float = 0.325f,
 		rayWidth: Float = 0.15f
 	) {
-		renderRays(
-			poseStack = poseStack,
-			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderTypes.dragonRays()),
-			centerColor = centerColor,
-			outerColor = outerColor,
-			amountRays = amountRays,
-			rayLength = rayLength,
-			rayWidth = rayWidth
-		)
+		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.dragonRays()) { pose, vertexConsumer ->
+			val submittedPoseStack = PoseStack()
+			submittedPoseStack.last().set(pose)
+
+			renderRays(submittedPoseStack, time, vertexConsumer, centerColor, outerColor, amountRays, rayLength, rayWidth)
+		}
 	}
 
 	fun renderDragonRaysDepth(
 		poseStack: PoseStack,
 		time: Float,
-		bufferSource: MultiBufferSource,
+		submitNodeCollector: SubmitNodeCollector,
 		centerColor: Int = 0xFF000000.toInt(),
 		outerColor: Int = 0x002C6A70,
 		amountRays: Int = 15,
 		rayLength: Float = 0.325f,
 		rayWidth: Float = 0.15f
 	) {
-		renderRays(
-			poseStack = poseStack,
-			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderTypes.dragonRaysDepth()),
-			centerColor = centerColor,
-			outerColor = outerColor,
-			amountRays = amountRays,
-			rayLength = rayLength,
-			rayWidth = rayWidth
-		)
+		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.dragonRays()) { pose, vertexConsumer ->
+			val submittedPoseStack = PoseStack()
+			submittedPoseStack.last().set(pose)
+
+			renderRays(submittedPoseStack, time, vertexConsumer, centerColor, outerColor, amountRays, rayLength, rayWidth)
+		}
 	}
 
 	fun renderRays(
@@ -140,7 +126,7 @@ object AaronRenderUtil {
 					randomSource.nextFloat() * (Math.PI * 2).toFloat() + time * (Math.PI / 2).toFloat()
 				)
 
-			poseStack.mulPose(quaternionf)
+			poseStack.rotate(quaternionf)
 
 			vec1.set(-HALF_SQRT_3 * rayWidth, rayLength, -0.5F * rayWidth)
 			vec2.set(HALF_SQRT_3 * rayWidth, rayLength, -0.5F * rayWidth)
@@ -166,57 +152,41 @@ object AaronRenderUtil {
 
 	fun renderLineThroughWalls(
 		poseStack: PoseStack,
+		submitNodeCollector: SubmitNodeCollector,
 		start: Vec3,
 		end: Vec3,
 		color: Int
 	) {
-		renderLineThroughWalls(
-			poseStack = poseStack,
-			bufferSource = defaultBufferSource(),
-			start = start,
-			end = end,
-			color = color
-		)
-	}
+		submitNodeCollector.submitCustomGeometry(poseStack, AaronRenderTypes.LINES_THROUGH_WALLS) { pose, vertexConsumer ->
+			val normalVec = start.vectorTo(end).normalize()
 
-	fun renderLineThroughWalls(
-		poseStack: PoseStack,
-		bufferSource: MultiBufferSource,
-		start: Vec3,
-		end: Vec3,
-		color: Int
-	) {
-		val vertexConsumer = bufferSource
-			.getBuffer(AaronRenderTypes.LINES_THROUGH_WALLS)
+			addVertex(
+				pose,
+				vertexConsumer,
+				color,
+				start.x.toFloat(), start.y.toFloat(), start.z.toFloat(),
+				0f, 0f,
+				normalX = normalVec.x.toFloat(),
+				normalY = normalVec.y.toFloat(),
+				normalZ = normalVec.z.toFloat()
+			)
 
-		val pose = poseStack.last()
-		val normalVec = start.vectorTo(end).normalize()
-
-		addVertex(
-			pose,
-			vertexConsumer,
-			color,
-			start.x.toFloat(), start.y.toFloat(), start.z.toFloat(),
-			0f, 0f,
-			normalX = normalVec.x.toFloat(),
-			normalY = normalVec.y.toFloat(),
-			normalZ = normalVec.z.toFloat()
-		)
-
-		addVertex(
-			pose,
-			vertexConsumer,
-			color,
-			end.x.toFloat(), end.y.toFloat(), end.z.toFloat(),
-			0f, 0f,
-			normalX = normalVec.x.toFloat(),
-			normalY = normalVec.y.toFloat(),
-			normalZ = normalVec.z.toFloat()
-		)
+			addVertex(
+				pose,
+				vertexConsumer,
+				color,
+				end.x.toFloat(), end.y.toFloat(), end.z.toFloat(),
+				0f, 0f,
+				normalX = normalVec.x.toFloat(),
+				normalY = normalVec.y.toFloat(),
+				normalZ = normalVec.z.toFloat()
+			)
+		}
 	}
 
 	fun renderCubeWireframe(
 		poseStack: PoseStack,
+		submitNodeCollector: SubmitNodeCollector,
 		minX: Double,
 		minY: Double,
 		minZ: Double,
@@ -227,6 +197,7 @@ object AaronRenderUtil {
 	) {
 		renderCubeWireframe(
 			poseStack = poseStack,
+			submitNodeCollector = submitNodeCollector,
 			minX = minX.toFloat(),
 			minY = minY.toFloat(),
 			minZ = minZ.toFloat(),
@@ -240,6 +211,7 @@ object AaronRenderUtil {
 
 	fun renderCubeWireframeThroughWalls(
 		poseStack: PoseStack,
+		submitNodeCollector: SubmitNodeCollector,
 		minX: Double,
 		minY: Double,
 		minZ: Double,
@@ -250,6 +222,7 @@ object AaronRenderUtil {
 	) {
 		renderCubeWireframe(
 			poseStack = poseStack,
+			submitNodeCollector = submitNodeCollector,
 			minX = minX.toFloat(),
 			minY = minY.toFloat(),
 			minZ = minZ.toFloat(),
@@ -263,6 +236,7 @@ object AaronRenderUtil {
 
 	private fun renderCubeWireframe(
 		poseStack: PoseStack,
+		submitNodeCollector: SubmitNodeCollector,
 		minX: Float,
 		minY: Float,
 		minZ: Float,
@@ -272,30 +246,27 @@ object AaronRenderUtil {
 		color: Int,
 		renderType: RenderType
 	) {
-		val vertexConsumer = defaultBufferSource().getBuffer(renderType)
-		val pose = poseStack.last()
+		submitNodeCollector.submitCustomGeometry(poseStack, renderType) { pose, vertexConsumer ->
+			addLine(pose, vertexConsumer, color, minX, minY, minZ, maxX, minY, minZ)
+			addLine(pose, vertexConsumer, color, minX, minY, maxZ, maxX, minY, maxZ)
+			addLine(pose, vertexConsumer, color, minX, maxY, minZ, maxX, maxY, minZ)
+			addLine(pose, vertexConsumer, color, minX, maxY, maxZ, maxX, maxY, maxZ)
 
-		// X-axis edges
-		addLine(pose, vertexConsumer, color, minX, minY, minZ, maxX, minY, minZ)
-		addLine(pose, vertexConsumer, color, minX, minY, maxZ, maxX, minY, maxZ)
-		addLine(pose, vertexConsumer, color, minX, maxY, minZ, maxX, maxY, minZ)
-		addLine(pose, vertexConsumer, color, minX, maxY, maxZ, maxX, maxY, maxZ)
+			addLine(pose, vertexConsumer, color, minX, minY, minZ, minX, minY, maxZ)
+			addLine(pose, vertexConsumer, color, maxX, minY, minZ, maxX, minY, maxZ)
+			addLine(pose, vertexConsumer, color, minX, maxY, minZ, minX, maxY, maxZ)
+			addLine(pose, vertexConsumer, color, maxX, maxY, minZ, maxX, maxY, maxZ)
 
-		// Z-axis edges
-		addLine(pose, vertexConsumer, color, minX, minY, minZ, minX, minY, maxZ)
-		addLine(pose, vertexConsumer, color, maxX, minY, minZ, maxX, minY, maxZ)
-		addLine(pose, vertexConsumer, color, minX, maxY, minZ, minX, maxY, maxZ)
-		addLine(pose, vertexConsumer, color, maxX, maxY, minZ, maxX, maxY, maxZ)
-
-		// Y-axis edges
-		addLine(pose, vertexConsumer, color, minX, minY, minZ, minX, maxY, minZ)
-		addLine(pose, vertexConsumer, color, maxX, minY, minZ, maxX, maxY, minZ)
-		addLine(pose, vertexConsumer, color, minX, minY, maxZ, minX, maxY, maxZ)
-		addLine(pose, vertexConsumer, color, maxX, minY, maxZ, maxX, maxY, maxZ)
+			addLine(pose, vertexConsumer, color, minX, minY, minZ, minX, maxY, minZ)
+			addLine(pose, vertexConsumer, color, maxX, minY, minZ, maxX, maxY, minZ)
+			addLine(pose, vertexConsumer, color, minX, minY, maxZ, minX, maxY, maxZ)
+			addLine(pose, vertexConsumer, color, maxX, minY, maxZ, maxX, maxY, maxZ)
+		}
 	}
 
 	fun renderCubeThroughWalls(
 		poseStack: PoseStack,
+		submitNodeCollector: SubmitNodeCollector,
 		minX: Double,
 		minY: Double,
 		minZ: Double,
@@ -304,10 +275,6 @@ object AaronRenderUtil {
 		maxZ: Double,
 		color: Int
 	) {
-		val vertexConsumer = defaultBufferSource()
-			.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
-		val pose = poseStack.last()
-
 		val minXFloat = minX.toFloat()
 		val minYFloat = minY.toFloat()
 		val minZFloat = minZ.toFloat()
@@ -315,80 +282,55 @@ object AaronRenderUtil {
 		val maxYFloat = maxY.toFloat()
 		val maxZFloat = maxZ.toFloat()
 
-		addQuad(
-			pose, vertexConsumer, color,
-			minXFloat, maxYFloat, maxZFloat,
-			maxXFloat, maxYFloat, maxZFloat,
-			maxXFloat, maxYFloat, minZFloat,
-			minXFloat, maxYFloat, minZFloat
-		)
-		addQuad(
-			pose, vertexConsumer, color,
-			minXFloat, minYFloat, minZFloat,
-			maxXFloat, minYFloat, minZFloat,
-			maxXFloat, minYFloat, maxZFloat,
-			minXFloat, minYFloat, maxZFloat
-		)
-		addQuad(
-			pose, vertexConsumer, color,
-			maxXFloat, minYFloat, minZFloat,
-			minXFloat, minYFloat, minZFloat,
-			minXFloat, maxYFloat, minZFloat,
-			maxXFloat, maxYFloat, minZFloat
-		)
-		addQuad(
-			pose, vertexConsumer, color,
-			minXFloat, minYFloat, maxZFloat,
-			maxXFloat, minYFloat, maxZFloat,
-			maxXFloat, maxYFloat, maxZFloat,
-			minXFloat, maxYFloat, maxZFloat
-		)
-		addQuad(
-			pose, vertexConsumer, color,
-			maxXFloat, minYFloat, maxZFloat,
-			maxXFloat, minYFloat, minZFloat,
-			maxXFloat, maxYFloat, minZFloat,
-			maxXFloat, maxYFloat, maxZFloat
-		)
-		addQuad(
-			pose, vertexConsumer, color,
-			minXFloat, minYFloat, minZFloat,
-			minXFloat, minYFloat, maxZFloat,
-			minXFloat, maxYFloat, maxZFloat,
-			minXFloat, maxYFloat, minZFloat
-		)
+		submitNodeCollector.submitCustomGeometry(poseStack, AaronRenderTypes.QUADS_THROUGH_WALLS) { pose, vertexConsumer ->
+			addQuad(
+				pose, vertexConsumer, color,
+				minXFloat, maxYFloat, maxZFloat,
+				maxXFloat, maxYFloat, maxZFloat,
+				maxXFloat, maxYFloat, minZFloat,
+				minXFloat, maxYFloat, minZFloat
+			)
+			addQuad(
+				pose, vertexConsumer, color,
+				minXFloat, minYFloat, minZFloat,
+				maxXFloat, minYFloat, minZFloat,
+				maxXFloat, minYFloat, maxZFloat,
+				minXFloat, minYFloat, maxZFloat
+			)
+			addQuad(
+				pose, vertexConsumer, color,
+				maxXFloat, minYFloat, minZFloat,
+				minXFloat, minYFloat, minZFloat,
+				minXFloat, maxYFloat, minZFloat,
+				maxXFloat, maxYFloat, minZFloat
+			)
+			addQuad(
+				pose, vertexConsumer, color,
+				minXFloat, minYFloat, maxZFloat,
+				maxXFloat, minYFloat, maxZFloat,
+				maxXFloat, maxYFloat, maxZFloat,
+				minXFloat, maxYFloat, maxZFloat
+			)
+			addQuad(
+				pose, vertexConsumer, color,
+				maxXFloat, minYFloat, maxZFloat,
+				maxXFloat, minYFloat, minZFloat,
+				maxXFloat, maxYFloat, minZFloat,
+				maxXFloat, maxYFloat, maxZFloat
+			)
+			addQuad(
+				pose, vertexConsumer, color,
+				minXFloat, minYFloat, minZFloat,
+				minXFloat, minYFloat, maxZFloat,
+				minXFloat, maxYFloat, maxZFloat,
+				minXFloat, maxYFloat, minZFloat
+			)
+		}
 	}
 
 	fun renderTexturedCube(
 		poseStack: PoseStack,
-		renderType: RenderType,
-		topTextureLocation: Identifier,
-		bottomTextureLocation: Identifier,
-		northTextureLocation: Identifier,
-		southTextureLocation: Identifier,
-		eastTextureLocation: Identifier,
-		westTextureLocation: Identifier,
-		light: Int = FULL_BRIGHT,
-		overlay: Int = OverlayTexture.NO_OVERLAY
-	) {
-		renderTexturedCube(
-			poseStack = poseStack,
-			bufferSource = defaultBufferSource(),
-			renderType = renderType,
-			topTextureLocation = topTextureLocation,
-			bottomTextureLocation = bottomTextureLocation,
-			northTextureLocation = northTextureLocation,
-			southTextureLocation = southTextureLocation,
-			eastTextureLocation = eastTextureLocation,
-			westTextureLocation = westTextureLocation,
-			light = light,
-			overlay = overlay
-		)
-	}
-
-	fun renderTexturedCube(
-		poseStack: PoseStack,
-		bufferSource: MultiBufferSource,
+		submitNodeCollector: SubmitNodeCollector,
 		renderType: RenderType,
 		topTextureLocation: Identifier,
 		bottomTextureLocation: Identifier,
@@ -417,33 +359,30 @@ object AaronRenderUtil {
 			Direction.SOUTH to southSprite,
 		)
 
-		val vertexConsumer = bufferSource.getBuffer(renderType)
+		submitNodeCollector.submitCustomGeometry(poseStack, renderType) { pose, vertexConsumer ->
+			for ((direction, sprite) in map) {
+				val vertices = getVertices(direction, 1f, 1f, 1f)
+				val normal = direction.unitVec3i
 
-		val pose = poseStack.last()
+				for ((index, vector) in vertices.withIndex()) {
+					val u = if (index == 0 || index == 3) sprite.u0 else sprite.u1
+					val v = if (index == 0 || index == 1) sprite.v1 else sprite.v0
 
-		for ((direction, sprite) in map) {
-			val vertices = getVertices(direction, 1f, 1f, 1f)
-			val normal = direction.unitVec3i
-
-			for ((index, vector) in vertices.withIndex()) {
-				val u = if (index == 0 || index == 3) sprite.u0 else sprite.u1
-				val v = if (index == 0 || index == 1) sprite.v1 else sprite.v0
-
-				addVertex(
-					pose,
-					vertexConsumer,
-					0xFFFFFFFF.toInt(),
-					vector.x, vector.y, vector.z,
-					u, v,
-					normalX = normal.x.toFloat(),
-					normalY = normal.y.toFloat(),
-					normalZ = normal.z.toFloat(),
-					light = light,
-					overlay = overlay
-				)
+					addVertex(
+						pose,
+						vertexConsumer,
+						0xFFFFFFFF.toInt(),
+						vector.x, vector.y, vector.z,
+						u, v,
+						normalX = normal.x.toFloat(),
+						normalY = normal.y.toFloat(),
+						normalZ = normal.z.toFloat(),
+						light = light,
+						overlay = overlay
+					)
+				}
 			}
 		}
-
 	}
 
 	@Deprecated("Use getVertices(direction, width, height, depth) instead")

@@ -3,20 +3,21 @@ package dev.aaronhowser.mods.aaron.advancement
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.registry.actual.AaronCriterionTriggers
-import net.minecraft.advancements.Criterion
-import net.minecraft.advancements.criterion.BlockPredicate
-import net.minecraft.advancements.criterion.ContextAwarePredicate
-import net.minecraft.advancements.criterion.DataComponentMatchers
-import net.minecraft.advancements.criterion.EntityPredicate
-import net.minecraft.advancements.criterion.SimpleCriterionTrigger
-import net.minecraft.advancements.criterion.StatePropertiesPredicate
+import net.minecraft.advancements.predicates.BlockPredicate
+import net.minecraft.advancements.predicates.DataComponentMatchers
+import net.minecraft.advancements.predicates.StatePropertiesPredicate
+import net.minecraft.advancements.predicates.entity.EntityPredicate
+import net.minecraft.advancements.triggers.Criterion
+import net.minecraft.advancements.triggers.SimpleCriterionTrigger
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.core.HolderSet
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
 import java.util.Optional
 
 class BlockBrokenTrigger : SimpleCriterionTrigger<BlockBrokenTrigger.TriggerInstance>() {
@@ -28,11 +29,11 @@ class BlockBrokenTrigger : SimpleCriterionTrigger<BlockBrokenTrigger.TriggerInst
 	}
 
 	data class TriggerInstance(
-		private val playerPredicate: Optional<ContextAwarePredicate>,
+		private val playerPredicate: Optional<Holder<LootItemCondition>>,
 		val block: Optional<BlockPredicate>
 	) : SimpleInstance {
 
-		override fun player(): Optional<ContextAwarePredicate> = playerPredicate
+		override fun player(): Optional<Holder<LootItemCondition>> = playerPredicate
 
 		fun matches(level: ServerLevel, position: BlockPos): Boolean {
 			return block.isEmpty || block.get().matches(level, position)
@@ -41,7 +42,7 @@ class BlockBrokenTrigger : SimpleCriterionTrigger<BlockBrokenTrigger.TriggerInst
 		companion object {
 			val CODEC: Codec<TriggerInstance> = RecordCodecBuilder.create { instance ->
 				instance.group(
-					EntityPredicate.ADVANCEMENT_CODEC
+					LootItemCondition.CODEC
 						.optionalFieldOf("player")
 						.forGetter(TriggerInstance::playerPredicate),
 					BlockPredicate.CODEC
@@ -98,7 +99,7 @@ class BlockBrokenTrigger : SimpleCriterionTrigger<BlockBrokenTrigger.TriggerInst
 
 			private fun create(
 				block: Optional<BlockPredicate>,
-				player: Optional<ContextAwarePredicate> = Optional.empty()
+				player: Optional<Holder<LootItemCondition>> = Optional.empty()
 			): Criterion<TriggerInstance> {
 				return AaronCriterionTriggers.BLOCK_BROKEN.get()
 					.createCriterion(TriggerInstance(player, block))

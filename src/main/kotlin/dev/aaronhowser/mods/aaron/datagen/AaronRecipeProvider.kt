@@ -1,17 +1,19 @@
 package dev.aaronhowser.mods.aaron.datagen
 
-import net.minecraft.advancements.Criterion
-import net.minecraft.core.HolderLookup
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.triggers.Criterion
 import net.minecraft.data.recipes.*
+import net.minecraft.data.worldgen.BootstrapContext
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ItemLike
 
 abstract class AaronRecipeProvider(
-	registries: HolderLookup.Provider,
-	output: RecipeOutput
-) : RecipeProvider(registries, output) {
+	recipeOutput: BootstrapContext<Recipe<*>>,
+	advancementOutput: BootstrapContext<Advancement>
+) : RecipeProvider(recipeOutput, advancementOutput) {
 
 	protected fun shapelessRecipe(
 		output: ItemLike,

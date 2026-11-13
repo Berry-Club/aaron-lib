@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.aaron.registry.actual
 import dev.aaronhowser.mods.aaron.AaronLib
 import dev.aaronhowser.mods.aaron.advancement.BlockBrokenTrigger
 import dev.aaronhowser.mods.aaron.advancement.PlayerActionTrigger
-import net.minecraft.advancements.CriterionTrigger
+import net.minecraft.advancements.triggers.CriterionTrigger
 import net.minecraft.core.registries.BuiltInRegistries
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister

@@ -3,12 +3,13 @@ package dev.aaronhowser.mods.aaron.advancement
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.registry.actual.AaronCriterionTriggers
-import net.minecraft.advancements.Criterion
-import net.minecraft.advancements.criterion.ContextAwarePredicate
-import net.minecraft.advancements.criterion.EntityPredicate
-import net.minecraft.advancements.criterion.SimpleCriterionTrigger
+import net.minecraft.advancements.predicates.entity.EntityPredicate
+import net.minecraft.advancements.triggers.Criterion
+import net.minecraft.advancements.triggers.SimpleCriterionTrigger
+import net.minecraft.core.Holder
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
 import java.util.Optional
 
 class PlayerActionTrigger : SimpleCriterionTrigger<PlayerActionTrigger.TriggerInstance>() {
@@ -20,16 +21,16 @@ class PlayerActionTrigger : SimpleCriterionTrigger<PlayerActionTrigger.TriggerIn
 	}
 
 	data class TriggerInstance(
-		private val playerPredicate: Optional<ContextAwarePredicate>,
+		private val playerPredicate: Optional<Holder<LootItemCondition>>,
 		val action: Identifier
 	) : SimpleInstance {
 
-		override fun player(): Optional<ContextAwarePredicate> = playerPredicate
+		override fun player(): Optional<Holder<LootItemCondition>> = playerPredicate
 
 		companion object {
 			val CODEC: Codec<TriggerInstance> = RecordCodecBuilder.create { instance ->
 				instance.group(
-					EntityPredicate.ADVANCEMENT_CODEC
+					LootItemCondition.CODEC
 						.optionalFieldOf("player")
 						.forGetter(TriggerInstance::playerPredicate),
 					Identifier.CODEC
@@ -52,7 +53,7 @@ class PlayerActionTrigger : SimpleCriterionTrigger<PlayerActionTrigger.TriggerIn
 			}
 
 			private fun create(
-				player: Optional<ContextAwarePredicate>,
+				player: Optional<Holder<LootItemCondition>>,
 				action: Identifier
 			): Criterion<TriggerInstance> {
 				return AaronCriterionTriggers.PLAYER_ACTION.get()

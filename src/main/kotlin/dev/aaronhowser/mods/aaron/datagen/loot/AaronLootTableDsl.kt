@@ -7,9 +7,9 @@ import net.minecraft.world.level.storage.loot.LootPool
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem
 import net.minecraft.world.level.storage.loot.entries.LootItem
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders
 
 @DslMarker
 private annotation class LootTableDslMarker
@@ -58,13 +58,13 @@ object AaronLootTableDsl {
 		private val builder = LootPool.lootPool()
 
 		fun rolls(amount: Float) {
-			builder.setRolls(ConstantValue.exactly(amount))
+			builder.setRolls(ContextIntProviders.exactly(Mth.floor(amount)))
 		}
 
 		fun item(
 			item: ItemLike,
 			weight: Int? = null,
-			configure: LootPoolSingletonContainer.Builder<*>.() -> Unit = {}
+			configure: UniformContainerBase.Builder<*>.() -> Unit = {}
 		) {
 			val entry = LootItem.lootTableItem(item)
 			configure(entry)
@@ -75,7 +75,7 @@ object AaronLootTableDsl {
 		fun stack(
 			stack: ItemStack,
 			weight: Int? = null,
-			configure: LootPoolSingletonContainer.Builder<*>.() -> Unit = {}
+			configure: UniformContainerBase.Builder<*>.() -> Unit = {}
 		) {
 			val entry = LootItemStack.lootTableStack(stack)
 			configure(entry)

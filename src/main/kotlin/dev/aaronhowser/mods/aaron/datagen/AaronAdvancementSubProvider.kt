@@ -1,23 +1,26 @@
 package dev.aaronhowser.mods.aaron.datagen
 
 import dev.aaronhowser.mods.aaron.advancement.PlayerActionTrigger
-import net.minecraft.advancements.*
-import net.minecraft.advancements.criterion.ImpossibleTrigger
-import net.minecraft.advancements.criterion.InventoryChangeTrigger
-import net.minecraft.advancements.criterion.ItemPredicate
-import net.minecraft.core.HolderLookup
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.AdvancementRequirements
+import net.minecraft.advancements.AdvancementType
+import net.minecraft.advancements.predicates.ItemPredicate
+import net.minecraft.advancements.triggers.CriteriaTriggers
+import net.minecraft.advancements.triggers.Criterion
+import net.minecraft.advancements.triggers.ImpossibleTrigger
+import net.minecraft.advancements.triggers.InventoryChangeTrigger
 import net.minecraft.data.advancements.AdvancementSubProvider
+import net.minecraft.data.worldgen.BootstrapContext
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.level.ItemLike
-import java.util.concurrent.CompletableFuture
 
 abstract class AaronAdvancementSubProvider(
 	val modId: String,
-	val lookupProvider: CompletableFuture<HolderLookup.Provider>
-) : AdvancementSubProvider {
+	output: BootstrapContext<Advancement>
+) : AdvancementSubProvider(output) {
 
 	protected fun advancement(): Advancement.Builder = Advancement.Builder.advancement()
 
@@ -97,7 +100,6 @@ abstract class AaronAdvancementSubProvider(
 			icon.asItem(),
 			title,
 			description,
-			null,
 			type,
 			showToast,
 			announceToChat,
@@ -118,7 +120,6 @@ abstract class AaronAdvancementSubProvider(
 			ItemStackTemplate.fromNonEmptyStack(icon),
 			title,
 			description,
-			null,
 			type,
 			showToast,
 			announceToChat,
@@ -136,8 +137,8 @@ abstract class AaronAdvancementSubProvider(
 		announceToChat: Boolean = true,
 		hidden: Boolean = false
 	): Advancement.Builder {
-		return display(
-			icon,
+		return rootDisplay(
+			icon.asItem(),
 			title,
 			description,
 			background,
@@ -158,7 +159,7 @@ abstract class AaronAdvancementSubProvider(
 		announceToChat: Boolean = true,
 		hidden: Boolean = false
 	): Advancement.Builder {
-		return display(
+		return rootDisplay(
 			ItemStackTemplate.fromNonEmptyStack(icon),
 			title,
 			description,

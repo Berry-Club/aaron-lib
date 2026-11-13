@@ -25,7 +25,7 @@ class AaronLib(
 		AaronLootPoolEntryTypes.LOOT_POOL_ENTRY_TYPE_REGISTRY.register(MOD_BUS)
 		AaronCriterionTriggers.TRIGGER_REGISTRY.register(MOD_BUS)
 
-		modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG_SPEC)
+		modContainer.registerConfig(ModConfig.Type.SYNCED, ServerConfig.CONFIG_SPEC)
 	}
 
 	companion object {
