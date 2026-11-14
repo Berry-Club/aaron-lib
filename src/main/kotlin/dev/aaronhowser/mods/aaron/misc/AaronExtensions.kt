@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
 import net.minecraft.ChatFormatting
+import net.minecraft.commands.CommandSourceStack
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
@@ -276,6 +277,8 @@ object AaronExtensions {
 	}
 
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
+
+	fun CommandSourceStack.tell(message: String) = sendSystemMessage(Component.literal(message))
 
 	fun Player.allItemStacksSequence(): Sequence<ItemStack> {
 		return inventory.nonEquipmentItems.asSequence() + inventory.equipment.items.values.asSequence()

@@ -3,6 +3,7 @@
 - Renamed some methods (`closerThan` -> `isCloserThan` etc)
 - BlockPos.bottomCenter
 - BlockPos.center
+- CommandSourceStack#tell
 
 # 26.1-1.24.0
 
