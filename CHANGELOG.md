@@ -1,6 +1,8 @@
 # 26.3-1.25.0
 
 - Renamed some methods (`closerThan` -> `isCloserThan` etc)
+- BlockPos.bottomCenter
+- BlockPos.center
 
 # 26.1-1.24.0
 

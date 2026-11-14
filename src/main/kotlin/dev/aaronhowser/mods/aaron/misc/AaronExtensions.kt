@@ -313,6 +313,9 @@ object AaronExtensions {
 	fun BlockPos.isCloserThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) < distance.toDouble().pow(2)
 	fun BlockPos.isFurtherThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) > distance.toDouble().pow(2)
 
+	val BlockPos.bottomCenter: Vec3 get() = Vec3.atBottomCenterOf(this)
+	val BlockPos.center: Vec3 get() = Vec3.atCenterOf(this)
+
 	fun Vec3.isCloserThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) < distance.toDouble().pow(2)
 	fun Vec3.isFurtherThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) > distance.toDouble().pow(2)
 
