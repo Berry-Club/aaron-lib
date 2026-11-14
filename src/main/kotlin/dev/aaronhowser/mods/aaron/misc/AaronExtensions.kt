@@ -208,8 +208,7 @@ object AaronExtensions {
 	// Registries, tags, and resource holders
 
 	fun <T : Any> T.registryHolder(registry: Registry<T>): Holder.Reference<T> {
-		val identifier = registry.getKey(this)
-		if (identifier == null) throw NoSuchElementException()
+		val identifier = registry.getKey(this) ?: throw NoSuchElementException()
 
 		return registry.get(identifier).orElseThrow()
 	}
@@ -302,6 +301,13 @@ object AaronExtensions {
 	fun Player.status(message: Component) = this.sendOverlayMessage(message)
 	fun Player.status(message: String) = this.status(Component.literal(message))
 
+	fun InteractionHand.getEquipmentSlot(): EquipmentSlot {
+		return when (this) {
+			InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
+			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
+		}
+	}
+
 	// Positions, geometry, and random
 
 	fun BlockPos.closerThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) < distance.toDouble().pow(2)
@@ -338,25 +344,6 @@ object AaronExtensions {
 
 	fun Number.toDegrees(): Double = Math.toDegrees(this.toDouble())
 	fun Number.toRadians(): Double = Math.toRadians(this.toDouble())
-
-	inline fun <reified T : Enum<T>> T.nextEnum(): T {
-		val values = enumValues<T>()
-		val nextIndex = (ordinal + 1) % values.size
-		return values[nextIndex]
-	}
-
-	inline fun <reified T : Enum<T>> T.prevEnum(): T {
-		val values = enumValues<T>()
-		val previousIndex = (ordinal - 1 + values.size) % values.size
-		return values[previousIndex]
-	}
-
-	fun InteractionHand.getEquipmentSlot(): EquipmentSlot {
-		return when (this) {
-			InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
-			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
-		}
-	}
 
 	// Colors
 
@@ -403,6 +390,18 @@ object AaronExtensions {
 	}
 
 	// Collections
+
+	inline fun <reified T : Enum<T>> T.nextEnum(): T {
+		val values = enumValues<T>()
+		val nextIndex = (ordinal + 1) % values.size
+		return values[nextIndex]
+	}
+
+	inline fun <reified T : Enum<T>> T.prevEnum(): T {
+		val values = enumValues<T>()
+		val previousIndex = (ordinal - 1 + values.size) % values.size
+		return values[previousIndex]
+	}
 
 	fun <T> Collection<T>.random(random: RandomSource): T {
 		if (isEmpty()) throw NoSuchElementException("Collection is empty.")
