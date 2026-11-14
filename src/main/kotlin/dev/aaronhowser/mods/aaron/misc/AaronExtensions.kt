@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.*
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.ProblemReporter
@@ -437,6 +438,14 @@ object AaronExtensions {
 			InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
 			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
 		}
+	}
+
+	fun ServerLevel.setTime(totalTicks: Long) {
+		clockManager()
+			.setTotalTicks(
+				dimensionType().defaultClock.orElseThrow(),
+				totalTicks
+			)
 	}
 
 }

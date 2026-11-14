@@ -5,6 +5,7 @@
 - BlockPos.center
 - CommandSourceStack#tell
 - CommandSourceStack#status
+- ServerLevel#setTime
 
 # 26.1-1.24.0
 
