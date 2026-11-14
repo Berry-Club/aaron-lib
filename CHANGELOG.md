@@ -4,6 +4,7 @@
 - BlockPos.bottomCenter
 - BlockPos.center
 - CommandSourceStack#tell
+- CommandSourceStack#status
 
 # 26.1-1.24.0
 

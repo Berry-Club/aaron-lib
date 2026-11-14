@@ -279,6 +279,10 @@ object AaronExtensions {
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
 	fun CommandSourceStack.tell(message: String) = sendSystemMessage(Component.literal(message))
+	fun CommandSourceStack.status(message: String) {
+		val player = player ?: return
+		player.status(message)
+	}
 
 	fun Player.allItemStacksSequence(): Sequence<ItemStack> {
 		return inventory.nonEquipmentItems.asSequence() + inventory.equipment.items.values.asSequence()
