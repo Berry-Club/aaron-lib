@@ -278,8 +278,18 @@ object AaronExtensions {
 
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
+	fun Player.status(message: Component) = this.sendOverlayMessage(message)
+	fun Player.status(message: String) = this.status(Component.literal(message))
+
 	fun CommandSourceStack.tell(message: String) = sendSystemMessage(Component.literal(message))
+	fun CommandSourceStack.tell(message: Component) = sendSystemMessage(message)
+
 	fun CommandSourceStack.status(message: String) {
+		val player = player ?: return
+		player.status(message)
+	}
+
+	fun CommandSourceStack.status(message: Component) {
 		val player = player ?: return
 		player.status(message)
 	}
@@ -304,9 +314,6 @@ object AaronExtensions {
 		entity.setNoPickUpDelay()
 		return this.level().addFreshEntity(entity)
 	}
-
-	fun Player.status(message: Component) = this.sendOverlayMessage(message)
-	fun Player.status(message: String) = this.status(Component.literal(message))
 
 	fun InteractionHand.getEquipmentSlot(): EquipmentSlot {
 		return when (this) {
