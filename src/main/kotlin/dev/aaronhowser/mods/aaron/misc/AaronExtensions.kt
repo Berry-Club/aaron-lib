@@ -68,32 +68,6 @@ import kotlin.math.pow
 @Suppress("unused")
 object AaronExtensions {
 
-	// General
-
-	@Suppress("UNCHECKED_CAST")
-	fun <T> Any?.cast(): T = this as T
-
-	@OptIn(ExperimentalContracts::class)
-	fun Boolean?.isNotTrue(): Boolean {
-		contract {
-			returns(false) implies (this@isNotTrue != null)
-		}
-
-		return this != true
-	}
-
-	@OptIn(ExperimentalContracts::class)
-	fun Boolean?.isTrue(): Boolean {
-		contract {
-			returns(true) implies (this@isTrue != null)
-		}
-
-		return this == true
-	}
-
-	fun Either<*, *>.isLeft(): Boolean = this.left().isPresent
-	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
-
 	// Text and chat
 
 	fun String.toComponent(vararg args: Any): MutableComponent = Component.translatable(this, *args)
@@ -315,13 +289,6 @@ object AaronExtensions {
 		return this.level().addFreshEntity(entity)
 	}
 
-	fun InteractionHand.getEquipmentSlot(): EquipmentSlot {
-		return when (this) {
-			InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
-			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
-		}
-	}
-
 	// Positions, geometry, and random
 
 	fun BlockPos.isCloserThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) < distance.toDouble().pow(2)
@@ -436,6 +403,39 @@ object AaronExtensions {
 			val temp = this[i]
 			this[i] = this[j]
 			this[j] = temp
+		}
+	}
+
+	// Other
+
+	@Suppress("UNCHECKED_CAST")
+	fun <T> Any?.cast(): T = this as T
+
+	@OptIn(ExperimentalContracts::class)
+	fun Boolean?.isNotTrue(): Boolean {
+		contract {
+			returns(false) implies (this@isNotTrue != null)
+		}
+
+		return this != true
+	}
+
+	@OptIn(ExperimentalContracts::class)
+	fun Boolean?.isTrue(): Boolean {
+		contract {
+			returns(true) implies (this@isTrue != null)
+		}
+
+		return this == true
+	}
+
+	fun Either<*, *>.isLeft(): Boolean = this.left().isPresent
+	fun Either<*, *>.isRight(): Boolean = this.right().isPresent
+
+	fun InteractionHand.getEquipmentSlot(): EquipmentSlot {
+		return when (this) {
+			InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
+			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
 		}
 	}
 
