@@ -440,12 +440,14 @@ object AaronExtensions {
 		}
 	}
 
-	fun ServerLevel.setTime(totalTicks: Long) {
-		clockManager()
-			.setTotalTicks(
-				dimensionType().defaultClock.orElseThrow(),
-				totalTicks
-			)
-	}
+	var ServerLevel.dayTime: Long
+		get() = defaultClockTime
+		set(value) {
+			clockManager()
+				.setTotalTicks(
+					dimensionType().defaultClock.orElseThrow(),
+					value
+				)
+		}
 
 }
