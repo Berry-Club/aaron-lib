@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.aaron.misc
 
 import com.mojang.datafixers.util.Either
 import net.minecraft.ChatFormatting
+import net.minecraft.commands.CommandSourceStack
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
@@ -11,6 +12,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.*
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.util.ProblemReporter
@@ -286,6 +288,16 @@ object AaronExtensions {
 
 	fun LivingEntity.tell(message: String) = this.tell(Component.literal(message))
 
+	fun CommandSourceStack.tell(message: Component) = sendSystemMessage(message)
+	fun CommandSourceStack.tell(message: String) = tell(Component.literal(message))
+
+	fun CommandSourceStack.status(message: Component) {
+		val player = player ?: return
+		player.status(message)
+	}
+
+	fun CommandSourceStack.status(message: String) = status(Component.literal(message))
+
 	fun Player.allItemStacksSequence(): Sequence<ItemStack> {
 		return inventory.nonEquipmentItems.asSequence() + inventory.equipment.items.values.asSequence()
 	}
@@ -312,11 +324,14 @@ object AaronExtensions {
 
 	// Positions, geometry, and random
 
-	fun BlockPos.closerThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) < distance.toDouble().pow(2)
-	fun BlockPos.furtherThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) > distance.toDouble().pow(2)
+	fun BlockPos.isCloserThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) < distance.toDouble().pow(2)
+	fun BlockPos.isFurtherThan(other: BlockPos, distance: Number): Boolean = this.distSqr(other) > distance.toDouble().pow(2)
 
-	fun Vec3.closerThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) < distance.toDouble().pow(2)
-	fun Vec3.furtherThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) > distance.toDouble().pow(2)
+	val BlockPos.bottomCenter: Vec3 get() = Vec3.atBottomCenterOf(this)
+	val BlockPos.center: Vec3 get() = Vec3.atCenterOf(this)
+
+	fun Vec3.isCloserThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) < distance.toDouble().pow(2)
+	fun Vec3.isFurtherThan(other: Vec3, distance: Number): Boolean = this.distanceToSqr(other) > distance.toDouble().pow(2)
 
 	fun Vec3i.toVec3(): Vec3 {
 		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
@@ -365,6 +380,16 @@ object AaronExtensions {
 			InteractionHand.OFF_HAND -> EquipmentSlot.OFFHAND
 		}
 	}
+
+	var ServerLevel.dayTime: Long
+		get() = defaultClockTime
+		set(value) {
+			clockManager()
+				.setTotalTicks(
+					dimensionType().defaultClock.orElseThrow(),
+					value
+				)
+		}
 
 	// Colors
 

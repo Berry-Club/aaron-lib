@@ -1,3 +1,14 @@
+# 26.1-1.25.0
+
+- TagKey<Item>#asIngredient overloads for registry-aware lookups
+- AaronRecipeProvider helpers for tag ingredients, recipe keys, and saving recipes by Identifier
+- Renamed distance methods (`closerThan` -> `isCloserThan`, etc.)
+- BlockPos.bottomCenter
+- BlockPos.center
+- CommandSourceStack#tell
+- CommandSourceStack#status
+- ServerLevel.dayTime
+
 # 26.1-1.24.0
 
 - Removed entity predicate stuff because it sucks
