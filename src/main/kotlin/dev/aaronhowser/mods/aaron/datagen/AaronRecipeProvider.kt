@@ -15,6 +15,7 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ItemLike
@@ -58,13 +59,33 @@ abstract class AaronRecipeProvider(
 	) = shapelessRecipe(output, 1, requirements, unlockedByName, unlockedByCriterion)
 
 	protected fun shapedRecipe(
+		output: ItemStackTemplate,
+		patterns: List<String>,
+		definitions: Map<Char, Ingredient>,
+		unlockedByName: String = "has_log",
+		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
+	): ShapedRecipeBuilder {
+		val builder = shaped(RecipeCategory.MISC, output)
+
+		for (pattern in patterns) {
+			builder.pattern(pattern)
+		}
+
+		for ((symbol, ingredient) in definitions) {
+			builder.define(symbol, ingredient)
+		}
+
+		return builder.unlockedBy(unlockedByName, unlockedByCriterion)
+	}
+
+	protected fun shapedRecipe(
 		output: ItemStack,
 		patterns: List<String>,
 		definitions: Map<Char, Ingredient>,
 		unlockedByName: String = "has_log",
 		unlockedByCriterion: Criterion<*> = has(ItemTags.LOGS)
 	): ShapedRecipeBuilder {
-		var temp = shaped(RecipeCategory.MISC, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(output))
+		var temp = shaped(RecipeCategory.MISC, ItemStackTemplate.fromNonEmptyStack(output))
 
 		for (pattern in patterns) {
 			temp = temp.pattern(pattern)
