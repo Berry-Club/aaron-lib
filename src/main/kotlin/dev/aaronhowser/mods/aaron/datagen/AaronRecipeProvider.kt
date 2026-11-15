@@ -2,9 +2,20 @@ package dev.aaronhowser.mods.aaron.datagen
 
 import net.minecraft.advancements.Criterion
 import net.minecraft.core.HolderLookup
-import net.minecraft.data.recipes.*
+import net.minecraft.core.registries.Registries
+import net.minecraft.data.recipes.RecipeBuilder
+import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.data.recipes.RecipeOutput
+import net.minecraft.data.recipes.RecipeProvider
+import net.minecraft.data.recipes.ShapedRecipeBuilder
+import net.minecraft.data.recipes.ShapelessRecipeBuilder
+import net.minecraft.resources.Identifier
+import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.ItemTags
+import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ItemLike
 
@@ -12,6 +23,16 @@ abstract class AaronRecipeProvider(
 	registries: HolderLookup.Provider,
 	output: RecipeOutput
 ) : RecipeProvider(registries, output) {
+
+	protected fun TagKey<Item>.asIngredient(): Ingredient = tag(this)
+
+	protected fun recipeKey(identifier: Identifier): ResourceKey<Recipe<*>> {
+		return ResourceKey.create(Registries.RECIPE, identifier)
+	}
+
+	protected fun RecipeBuilder.save(identifier: Identifier) {
+		save(output, recipeKey(identifier))
+	}
 
 	protected fun shapelessRecipe(
 		output: ItemLike,
