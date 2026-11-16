@@ -108,6 +108,26 @@ abstract class AaronAdvancementSubProvider(
 	}
 
 	protected fun Advancement.Builder.display(
+		icon: ItemStackTemplate,
+		title: Component,
+		description: Component,
+		type: AdvancementType = AdvancementType.TASK,
+		showToast: Boolean = true,
+		announceToChat: Boolean = true,
+		hidden: Boolean = false
+	): Advancement.Builder {
+		return display(
+			icon,
+			title,
+			description,
+			type,
+			showToast,
+			announceToChat,
+			hidden
+		)
+	}
+
+	protected fun Advancement.Builder.display(
 		icon: ItemStack,
 		title: Component,
 		description: Component,
@@ -139,6 +159,28 @@ abstract class AaronAdvancementSubProvider(
 	): Advancement.Builder {
 		return rootDisplay(
 			icon.asItem(),
+			title,
+			description,
+			background,
+			type,
+			showToast,
+			announceToChat,
+			hidden
+		)
+	}
+
+	protected fun Advancement.Builder.displayWithBackground(
+		icon: ItemStackTemplate,
+		title: Component,
+		description: Component,
+		background: Identifier,
+		type: AdvancementType = AdvancementType.TASK,
+		showToast: Boolean = true,
+		announceToChat: Boolean = true,
+		hidden: Boolean = false
+	): Advancement.Builder {
+		return rootDisplay(
+			icon,
 			title,
 			description,
 			background,

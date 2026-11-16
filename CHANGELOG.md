@@ -1,11 +1,15 @@
 # 26.3-1.25.0
 
-- Renamed some methods (`closerThan` -> `isCloserThan` etc)
+- TagKey<Item>#asIngredient overloads for registry-aware lookups
+- AaronRecipeProvider helpers for tag ingredients, recipe keys, and saving recipes by Identifier
+- AaronRecipeProvider#shapedRecipe overload for ItemStackTemplate outputs
+- Renamed distance methods (`closerThan` -> `isCloserThan`, etc.)
 - BlockPos.bottomCenter
 - BlockPos.center
 - CommandSourceStack#tell
 - CommandSourceStack#status
 - ServerLevel.dayTime
+- Updated AaronRenderUtil ray helpers for the new SubmitNodeCollector rendering pipeline
 
 # 26.1-1.24.0
 

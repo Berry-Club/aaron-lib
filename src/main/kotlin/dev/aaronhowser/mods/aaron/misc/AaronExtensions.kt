@@ -6,6 +6,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.data.tags.TagAppender
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.*
@@ -84,6 +85,15 @@ object AaronExtensions {
 	// Items, blocks, and fluids
 
 	fun ItemLike.asIngredient(): Ingredient = Ingredient.of(this)
+
+	fun TagKey<Item>.asIngredient(items: HolderGetter<Item>): Ingredient {
+		return Ingredient.of(items.getOrThrow(this))
+	}
+
+	fun TagKey<Item>.asIngredient(registries: HolderLookup.Provider): Ingredient {
+		return asIngredient(registries.lookupOrThrow(Registries.ITEM))
+	}
+
 	fun ItemLike.getDefaultInstance(): ItemStack = this.asItem().defaultInstance
 
 	fun <T : Any> ItemLike.asIngredient(
@@ -163,8 +173,6 @@ object AaronExtensions {
 	fun Holder<Potion>.getAsStack(): ItemStack {
 		return PotionContents.createItemStack(Items.POTION, this)
 	}
-
-	fun TagKey<Item>.asIngredient(): Ingredient = Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(this))
 
 	fun BlockBehaviour.BlockStateBase.isBlock(block: Block): Boolean = this.`is`(block)
 	fun BlockBehaviour.BlockStateBase.isBlock(blockHolder: Holder<Block>): Boolean = this.`is`(blockHolder)
