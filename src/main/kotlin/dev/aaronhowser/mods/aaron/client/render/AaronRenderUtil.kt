@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -30,20 +31,20 @@ object AaronRenderUtil {
 			.bufferSource()
 	}
 
-	fun renderRaysDoubleLayer(
+	fun submitRaysDoubleLayer(
 		poseStack: PoseStack,
 		time: Float,
-		bufferSource: MultiBufferSource,
+		collector: SubmitNodeCollector,
 		centerColor: Int = 0xFF000000.toInt(),
 		outerColor: Int = 0x002C6A70,
 		amountRays: Int = 15,
 		rayLength: Float = 0.325f,
 		rayWidth: Float = 0.15f
 	) {
-		renderDragonRays(
+		submitDragonRays(
 			poseStack = poseStack,
 			time = time,
-			bufferSource = bufferSource,
+			collector = collector,
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -51,10 +52,10 @@ object AaronRenderUtil {
 			rayWidth = rayWidth
 		)
 
-		renderDragonRaysDepth(
+		submitDragonRaysDepth(
 			poseStack = poseStack,
 			time = time,
-			bufferSource = bufferSource,
+			collector = collector,
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -63,20 +64,21 @@ object AaronRenderUtil {
 		)
 	}
 
-	fun renderDragonRays(
+	fun submitDragonRays(
 		poseStack: PoseStack,
 		time: Float,
-		bufferSource: MultiBufferSource,
+		collector: SubmitNodeCollector,
 		centerColor: Int = 0xFF000000.toInt(),
 		outerColor: Int = 0x002C6A70,
 		amountRays: Int = 15,
 		rayLength: Float = 0.325f,
 		rayWidth: Float = 0.15f
 	) {
-		renderRays(
+		submitRays(
 			poseStack = poseStack,
 			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderTypes.dragonRays()),
+			collector = collector,
+			renderType = RenderTypes.dragonRays(),
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
@@ -85,30 +87,56 @@ object AaronRenderUtil {
 		)
 	}
 
-	fun renderDragonRaysDepth(
+	fun submitDragonRaysDepth(
 		poseStack: PoseStack,
 		time: Float,
-		bufferSource: MultiBufferSource,
+		collector: SubmitNodeCollector,
 		centerColor: Int = 0xFF000000.toInt(),
 		outerColor: Int = 0x002C6A70,
 		amountRays: Int = 15,
 		rayLength: Float = 0.325f,
 		rayWidth: Float = 0.15f
 	) {
-		renderRays(
+		submitRays(
 			poseStack = poseStack,
 			time = time,
-			vertexConsumer = bufferSource.getBuffer(RenderTypes.dragonRaysDepth()),
+			collector = collector,
+			renderType = RenderTypes.dragonRaysDepth(),
 			centerColor = centerColor,
 			outerColor = outerColor,
 			amountRays = amountRays,
 			rayLength = rayLength,
 			rayWidth = rayWidth
 		)
+	}
+
+	private fun submitRays(
+		poseStack: PoseStack,
+		time: Float,
+		collector: SubmitNodeCollector,
+		renderType: RenderType,
+		centerColor: Int = 0xFF000000.toInt(),
+		outerColor: Int = 0x002C6A70,
+		amountRays: Int = 15,
+		rayLength: Float = 0.325f,
+		rayWidth: Float = 0.15f
+	) {
+		collector.submitCustomGeometry(poseStack, renderType) { pose, vertexConsumer ->
+			renderRays(
+				pose = pose,
+				time = time,
+				vertexConsumer = vertexConsumer,
+				centerColor = centerColor,
+				outerColor = outerColor,
+				amountRays = amountRays,
+				rayLength = rayLength,
+				rayWidth = rayWidth
+			)
+		}
 	}
 
 	fun renderRays(
-		poseStack: PoseStack,
+		pose: PoseStack.Pose,
 		time: Float,
 		vertexConsumer: VertexConsumer,
 		centerColor: Int = 0xFF000000.toInt(),
@@ -117,17 +145,15 @@ object AaronRenderUtil {
 		rayLength: Float = 0.325f,
 		rayWidth: Float = 0.15f
 	) {
-		poseStack.pushPose()
-
 		val randomSource = RandomSource.create(432L)
-		val vec0 = Vector3f()
-		val vec1 = Vector3f()
-		val vec2 = Vector3f()
-		val vec3 = Vector3f()
-		val quaternionf = Quaternionf()
+		val center = Vector3f()
+		val first = Vector3f()
+		val second = Vector3f()
+		val third = Vector3f()
+		val rotation = Quaternionf()
 
 		for (rayIndex in 0 until amountRays) {
-			quaternionf
+			rotation
 				.identity()
 				.rotateXYZ(
 					randomSource.nextFloat() * (Math.PI * 2).toFloat(),
@@ -140,28 +166,26 @@ object AaronRenderUtil {
 					randomSource.nextFloat() * (Math.PI * 2).toFloat() + time * (Math.PI / 2).toFloat()
 				)
 
-			poseStack.mulPose(quaternionf)
+			first.set(-HALF_SQRT_3 * rayWidth, rayLength, -0.5f * rayWidth)
+			second.set(HALF_SQRT_3 * rayWidth, rayLength, -0.5f * rayWidth)
+			third.set(0f, rayLength, rayWidth)
 
-			vec1.set(-HALF_SQRT_3 * rayWidth, rayLength, -0.5F * rayWidth)
-			vec2.set(HALF_SQRT_3 * rayWidth, rayLength, -0.5F * rayWidth)
-			vec3.set(0.0F, rayLength, rayWidth)
+			rotation.transform(first)
+			rotation.transform(second)
+			rotation.transform(third)
 
-			val pose = poseStack.last()
+			vertexConsumer.addVertex(pose, center).setColor(centerColor)
+			vertexConsumer.addVertex(pose, first).setColor(outerColor)
+			vertexConsumer.addVertex(pose, second).setColor(outerColor)
 
-			vertexConsumer.addVertex(pose, vec0).setColor(centerColor)
-			vertexConsumer.addVertex(pose, vec1).setColor(outerColor)
-			vertexConsumer.addVertex(pose, vec2).setColor(outerColor)
+			vertexConsumer.addVertex(pose, center).setColor(centerColor)
+			vertexConsumer.addVertex(pose, second).setColor(outerColor)
+			vertexConsumer.addVertex(pose, third).setColor(outerColor)
 
-			vertexConsumer.addVertex(pose, vec0).setColor(centerColor)
-			vertexConsumer.addVertex(pose, vec2).setColor(outerColor)
-			vertexConsumer.addVertex(pose, vec3).setColor(outerColor)
-
-			vertexConsumer.addVertex(pose, vec0).setColor(centerColor)
-			vertexConsumer.addVertex(pose, vec3).setColor(outerColor)
-			vertexConsumer.addVertex(pose, vec1).setColor(outerColor)
+			vertexConsumer.addVertex(pose, center).setColor(centerColor)
+			vertexConsumer.addVertex(pose, third).setColor(outerColor)
+			vertexConsumer.addVertex(pose, first).setColor(outerColor)
 		}
-
-		poseStack.popPose()
 	}
 
 	fun renderLineThroughWalls(

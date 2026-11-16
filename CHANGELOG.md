@@ -9,6 +9,7 @@
 - CommandSourceStack#tell
 - CommandSourceStack#status
 - ServerLevel.dayTime
+- Updated AaronRenderUtil ray helpers for the new SubmitNodeCollector rendering pipeline
 
 # 26.1-1.24.0
 
